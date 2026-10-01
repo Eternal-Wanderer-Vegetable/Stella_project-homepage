@@ -127,6 +127,18 @@
     mask-image: linear-gradient(180deg, #000 80%, transparent 100%);
   }
   #heroCanvas { position: absolute; inset: 0; display: block; }
+
+  /* 背景层与文字层之间的模糊分隔层:星幕柔化为散景,文字与背景分离 */
+  .hero-frost {
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 100vh; min-height: 660px;
+    z-index: 0; pointer-events: none;
+    background: rgba(7, 10, 20, 0.26);
+    backdrop-filter: blur(8px) saturate(1.06) brightness(0.94);
+    -webkit-backdrop-filter: blur(8px) saturate(1.06) brightness(0.94);
+    -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 80%, transparent 100%);
+    mask-image: linear-gradient(180deg, #000 0%, #000 80%, transparent 100%);
+  }
   .hero .container { position: relative; z-index: 1; }
 
   .hero-eyebrow {
@@ -191,7 +203,7 @@
 
   .hero-art { max-width: 760px; margin: 0 auto 12px; }
   .hero-art img {
-    width: 100%; display: block;
+    width: 100%; height: auto; display: block;
     border-radius: 18px; border: 1px solid var(--border);
     box-shadow: 0 24px 70px rgba(0, 0, 0, 0.5), 0 0 0 6px rgba(255, 255, 255, 0.02);
   }
@@ -468,6 +480,7 @@
     <div class="hero-stage" aria-hidden="true">
       <canvas id="heroCanvas"></canvas>
     </div>
+    <div class="hero-frost" aria-hidden="true"></div>
     <div class="container">
       <div class="hero-eyebrow"><i></i>QQ 群聊 · 拟人化 · 记忆系统</div>
       <h1>Stella</h1>
@@ -492,18 +505,18 @@
       </div>
 
       <div class="hero-art">
-        <img src="https://github.com/Eternal-Wanderer-Vegetable/Stella_project/raw/main/assets/pic/Title_Image%28Second_Edition%29_Compressed_version.jpg"
+        <img src="assets/title-image.jpg"
              alt="Stella 项目标题图" loading="lazy" decoding="async"
-             width="1264" height="720"
+             width="3168" height="1344"
              onerror="this.parentElement.style.display='none'">
         <div class="cap">Stella — Title Image</div>
       </div>
 
       <div class="stats">
         <div class="stat reveal"><div class="num">8192</div><div class="lbl">token 上下文预算</div></div>
-        <div class="stat reveal"><div class="num">6 个</div><div class="lbl">独立可替换模型角色</div></div>
+        <div class="stat reveal"><div class="num">7 个</div><div class="lbl">可独立配端的模型角色</div></div>
         <div class="stat reveal"><div class="num">3 种</div><div class="lbl">部署模式</div></div>
-        <div class="stat reveal"><div class="num">1450+</div><div class="lbl">单元测试</div></div>
+        <div class="stat reveal"><div class="num">2600+</div><div class="lbl">单元测试</div></div>
       </div>
     </div>
   </header>
@@ -511,10 +524,10 @@
   <div class="marquee" aria-hidden="true">
     <div class="mq-track">
       <div class="mq-seq">
-        <span>NoneBot 2</span><i>✦</i><span>OneBot V11</span><i>✦</i><span>Python 3.10+</span><i>✦</i><span>Rust</span><i>✦</i><span>Tauri 2</span><i>✦</i><span>SQLite FTS5</span><i>✦</i><span>llama.cpp</span><i>✦</i><span>LM Studio</span><i>✦</i><span>AstrBot 插件生态</span><i>✦</i><span>Playwright</span><i>✦</i><span>Docker</span><i>✦</i><span>pytest × 1450</span><i>✦</i>
+        <span>NoneBot 2</span><i>✦</i><span>OneBot V11</span><i>✦</i><span>Python 3.10+</span><i>✦</i><span>Rust</span><i>✦</i><span>Tauri 2</span><i>✦</i><span>SQLite FTS5</span><i>✦</i><span>llama.cpp</span><i>✦</i><span>LM Studio</span><i>✦</i><span>AstrBot 插件生态</span><i>✦</i><span>Playwright</span><i>✦</i><span>Docker</span><i>✦</i><span>pytest × 2600</span><i>✦</i>
       </div>
       <div class="mq-seq">
-        <span>NoneBot 2</span><i>✦</i><span>OneBot V11</span><i>✦</i><span>Python 3.10+</span><i>✦</i><span>Rust</span><i>✦</i><span>Tauri 2</span><i>✦</i><span>SQLite FTS5</span><i>✦</i><span>llama.cpp</span><i>✦</i><span>LM Studio</span><i>✦</i><span>AstrBot 插件生态</span><i>✦</i><span>Playwright</span><i>✦</i><span>Docker</span><i>✦</i><span>pytest × 1450</span><i>✦</i>
+        <span>NoneBot 2</span><i>✦</i><span>OneBot V11</span><i>✦</i><span>Python 3.10+</span><i>✦</i><span>Rust</span><i>✦</i><span>Tauri 2</span><i>✦</i><span>SQLite FTS5</span><i>✦</i><span>llama.cpp</span><i>✦</i><span>LM Studio</span><i>✦</i><span>AstrBot 插件生态</span><i>✦</i><span>Playwright</span><i>✦</i><span>Docker</span><i>✦</i><span>pytest × 2600</span><i>✦</i>
       </div>
     </div>
   </div>
@@ -525,24 +538,24 @@
       <div class="sec-label reveal">01 · 核心理念</div>
       <h2 class="sec-title reveal">为什么是 8K 上下文?</h2>
       <p class="sec-desc reveal">
-        Stella 的设计前提是<strong>上下文窗口很小</strong>——基准上限是 <strong>8192 tokens</strong>。人格、记忆、历史对话、工具结果要在这么小的预算里共存,靠堆 prompt 是不可能的。Stella 的解法是把预算拆开:
+        Stella 的设计前提是<strong>上下文窗口很小</strong>——基准上限是 <strong>8192 tokens</strong>。人格、记忆、历史对话、工具结果要在这么小的预算里共存,靠堆 prompt 是不可能的。Stella 的解法是把预算拆开:窗口减去 <code>1000</code> 输出预留与 <code>200</code> 安全余量才是输入预算,超出就从最旧的尾巴开始丢。
       </p>
 
       <div class="grid-3">
         <div class="card reveal">
           <div class="icon">🧮</div>
           <h3>记忆在库里筛完才注入</h3>
-          <p>两层过滤在数据库层完成,候选与置信度不占对话预算,只有被晋升的长期记忆才会进入上下文。</p>
+          <p>过滤与排序在数据库层完成,候选与置信度不占对话预算;聊天素材区注入上限 <code>500</code> tokens(技术场景 <code>1000</code>),行为约束区只有 <code>150</code>。</p>
         </div>
         <div class="card blue reveal">
           <div class="icon">🧰</div>
           <h3>工具在聊天上下文之外执行</h3>
-          <p>插件调用不发生在对话窗口内,只把压缩后的一句结论交回给 Stella —— 插件装再多,占的也不是对话窗口。</p>
+          <p>插件调用不发生在对话窗口内,<code>Result.data</code> 全程不进 prompt,只把不超过 <code>300</code> 字的一句结论交回给 Stella —— 插件装再多,占的也不是对话窗口。</p>
         </div>
         <div class="card green reveal">
           <div class="icon">🗜️</div>
           <h3>滚出窗口的对话自动压缩</h3>
-          <p>三层上下文(会话摘要 / 原始尾巴 / 话题摘要)按消息 id 划分,绝不重叠,长对话也不会断线。</p>
+          <p>会话摘要 / 最近 <code>12</code> 条原始尾巴 / 话题摘要三层按消息 id 划分、绝不重叠;压缩在回复发出后异步进行,不阻塞当前回复,摘要下一轮生效。</p>
         </div>
       </div>
 
@@ -576,22 +589,22 @@
         <div class="card reveal">
           <div class="icon">🎯</div>
           <h3>记忆分区注入</h3>
-          <p>基础信息 / 关系 / 偏好 / 事件分库存储,注入时按相关度筛选。<code>敏感信息</code>永不作为聊天话题被主动提起。</p>
+          <p>记忆分七类(事实 / 偏好 / 事件 / 计划 / 关系 / 风格 / 群语境),带十种用途标签与四级可见性。<code>受限级</code>永不作为聊天素材,只用于行为约束。</p>
         </div>
         <div class="card blue reveal">
           <div class="icon">🧠</div>
           <h3>两层记忆过滤</h3>
-          <p>捕获宽松、晋升严格:先把可能的记忆收进候选池,再由置信度与交叉验证决定谁能转正,防止幻觉入库。</p>
+          <p>捕获宽松、晋升严格:候选每被复现一次置信度 +0.12,≥ 0.85 直接转正,0.6 – 0.85 进观察区等证据。宁可漏记,不可错记。</p>
         </div>
         <div class="card pink reveal">
           <div class="icon">🔄</div>
           <h3>模型可替换</h3>
-          <p>聊天、总结、embedding、Router 等六个角色可各自指定端点,本地 / 在线任意混搭,框架不绑定任何厂商。</p>
+          <p>CHAT / ROUTER / PLUGIN / COMPACT / CONSOLIDATION / EXTRACT / VISION 七个角色可各自指定端点,4 个端点槽本地 / 在线任意混搭,框架不绑定任何厂商。</p>
         </div>
         <div class="card green reveal">
-          <div class="icon">💰</div>
-          <h3>花了多少钱是可见的</h3>
-          <p>每个模型角色的 token 用量、前缀缓存命中率、每日预算全部可查,成本不糊账。</p>
+          <div class="icon">🌙</div>
+          <h3>有作息,也有账单</h3>
+          <p>默认 <code>23:30 – 07:30</code> 是睡觉时间(支持时区),被 @ 仍会回复;token 用量按角色 / 端点记日账,每日预算撞线默认只暂停记忆整理,群里照常说话。</p>
         </div>
       </div>
     </div>
@@ -609,13 +622,13 @@
       <div class="flow-wrap reveal">
         <div class="flow-title">记忆形成流程</div>
         <div class="flow">
-          <div class="fnode">群聊消息</div>
+          <div class="fnode">群聊消息<small>主动 @ / 被动旁听</small></div>
           <div class="farrow">→</div>
-          <div class="fnode">短期摘要</div>
+          <div class="fnode">两阶段抽取<small>小模型初筛 + 大模型精选</small></div>
           <div class="farrow">→</div>
-          <div class="fnode">记忆候选</div>
+          <div class="fnode">观察区<small>复现 1 次 +0.12</small></div>
           <div class="farrow">→</div>
-          <div class="fnode">置信度<small>+ 交叉验证</small></div>
+          <div class="fnode">Gate 1<small>≥0.85 转正 · 0.6–0.85 观察</small></div>
           <div class="farrow">→</div>
           <div class="fnode hot">长期记忆</div>
         </div>
@@ -630,32 +643,32 @@
         <div class="card reveal">
           <div class="icon">🔍</div>
           <h3>记忆需要证据</h3>
-          <p>每条记忆都附有来源消息与置信度,没有出处的记忆不进入注入管线。</p>
+          <p>来源分三级:对 Stella 亲口说的单次即可采信;旁听到的需复现确认;Stella 自己的话只作上下文,绝不产出候选。</p>
         </div>
         <div class="card blue reveal">
           <div class="icon">💬</div>
           <h3>主动获取信息</h3>
-          <p>Stella 会自己开口问。信息来自用户亲口所说,而不是模型的猜测。</p>
+          <p>Stella 会自己开口问:每日 2 次(高活跃群最多 +2),同一用户 2 小时冷却,连续 2 次没被回应就不再追问——信息来自用户亲口所说,而不是模型的猜测。</p>
         </div>
         <div class="card green reveal">
           <div class="icon">🏠</div>
           <h3>多群共享空间</h3>
-          <p>记忆空间按"人"组织而非按"群"隔离,换个群也能认出你,隐私分区仍受 Policy 约束。</p>
+          <p>记忆空间按"人"组织而非按"群"隔离,换个群也能认出你;消息尾巴与话题状态按群隔离,隐私分区仍受 Policy 约束。</p>
         </div>
         <div class="card pink reveal">
           <div class="icon">🔎</div>
-          <h3>混合检索</h3>
-          <p>SQLite FTS5 关键词 + 向量 embedding 双路召回,短词靠 FTS、语义靠向量,互补覆盖。</p>
+          <h3>六维加权检索</h3>
+          <p>SQLite FTS5 关键词 + 向量语义双路召回,按语义 0.35 / 上下文 0.25 / 用途 0.20 / 新近 0.10 / 置信 0.05 / 重要 0.05 排序,8 种行为模式动态决定取几条。</p>
         </div>
         <div class="card reveal">
           <div class="icon">♻️</div>
           <h3>会遗忘</h3>
-          <p>长期未被引用、置信度衰减的记忆会归档甚至清理,保持记忆库"新鲜"。</p>
+          <p>类型化生命周期:群语境 30 天、事件 / 计划 60 天、偏好 / 关系 180 天、风格 1 年、事实 2 年;每用户 25 条配额,超限竞争淘汰——但只归档,不物理删除。</p>
         </div>
         <div class="card blue reveal">
           <div class="icon">🧩</div>
           <h3>工程上可依赖</h3>
-          <p>1450+ 单元测试覆盖记忆管线,Pipeline hooks 提供扩展点,AstrBot 插件生态直接兼容。</p>
+          <p>2600+ 单元测试覆盖记忆晋升、防编造护栏、跨用户隔离与路由降级,全部不依赖真实机器人与网络;AstrBot 插件生态直接兼容。</p>
         </div>
       </div>
 
@@ -680,11 +693,12 @@
       <div class="tbl-wrap reveal">
         <table>
           <thead>
-            <tr><th>整合阶段</th><th>内容</th><th>上下文预算</th></tr>
+            <tr><th>注入分区</th><th>内容</th><th>上下文预算</th></tr>
           </thead>
           <tbody>
-            <tr><td>第一阶段</td><td>会话摘要 + 原始尾部</td><td class="pct">30%</td></tr>
-            <tr><td>第二阶段</td><td>话题摘要(按话题滚动压缩)</td><td class="pct">15%</td></tr>
+            <tr><td>聊天素材区</td><td>按六维排序筛出的记忆内容,与技术场景下放宽到 1000</td><td class="pct">≤ 500 tok</td></tr>
+            <tr><td>行为约束区</td><td>"Stella 应如何改变行为"的约束,与素材严格分离、绝不混合</td><td class="pct">≤ 150 tok</td></tr>
+            <tr><td>输出预留 + 安全余量</td><td>回复生成空间与截断保护,不参与输入</td><td class="pct">1200 tok</td></tr>
           </tbody>
         </table>
       </div>
@@ -697,26 +711,26 @@
       <div class="sec-label reveal">04 · 部署模式</div>
       <h2 class="sec-title reveal">三种模式,隐私与成本自己选</h2>
       <p class="sec-desc reveal">
-        聊天、记忆、embedding、总结、工具五个环节可以拆开,分别交给本地模型或在线 API。切换部署模式只需在安装器里<strong>一键预设</strong>。
+        <strong>4 个端点槽 × 7 个模型角色</strong>,聊天、记忆、整理、工具可以拆开,分别交给本地模型或在线 API。切换部署模式只需在安装器里<strong>一键预设</strong>,配置不丢数据。
       </p>
 
       <div class="grid-3">
         <div class="card deploy-card reveal">
           <span class="mode-tag">模式一</span>
           <div class="kw">关键词:零出网</div>
-          <p>聊天、记忆、embedding、总结、工具全部由本地模型完成。不需要任何 API key,消息不出家门,可在完全离线的环境运行;代价是响应延迟与硬件占用。</p>
+          <p>聊天、记忆、embedding、整理、工具全部由本地模型完成,不需要任何 API key。OneClick 包内置 llama.cpp CPU 后端与 qwen3-embedding 向量模型,消息不出家门,可在完全离线的环境运行;代价是响应延迟与硬件占用。</p>
           <div class="mode-rows">
             <div class="mr"><span>聊天</span><span class="local">本地</span></div>
             <div class="mr"><span>记忆 / embedding</span><span class="local">本地</span></div>
-            <div class="mr"><span>总结 / 工具</span><span class="local">本地</span></div>
+            <div class="mr"><span>整理 / 工具</span><span class="local">本地</span></div>
           </div>
         </div>
         <div class="card deploy-card rec reveal">
           <span class="mode-tag">模式二 · 推荐</span>
           <div class="kw">关键词:聊天与记忆分离</div>
-          <p>敏感的记忆整理与 embedding 留在本地小模型,出网的部分交给大模型 —— 即使使用在线 API,Stella 对用户的了解也不会以明文形式暴露给第三方。</p>
+          <p>只有对话生成出网,群聊原文不发给服务商;敏感的记忆整理留在本地。对话与记忆各用一把 key——两者提示词前缀完全不同,共用一把会互相冲刷厂商前缀缓存,命中率塌到接近 0。</p>
           <div class="mode-rows">
-            <div class="mr"><span>聊天 / 总结</span><span class="cloud">API</span></div>
+            <div class="mr"><span>聊天 / 整理</span><span class="cloud">API</span></div>
             <div class="mr"><span>记忆 / embedding</span><span class="local">本地</span></div>
             <div class="mr"><span>工具</span><span>本地 / API</span></div>
           </div>
@@ -724,9 +738,9 @@
         <div class="card deploy-card reveal">
           <span class="mode-tag">模式三</span>
           <div class="kw">关键词:最低硬件门槛</div>
-          <p>聊天、总结、embedding 全部由在线 API 完成,不需要本地大模型,树莓派也能跑。隐私信息仍会经手第三方,不满足零出网条件。</p>
+          <p>双 key 直连在线 API,不需要本地大模型,树莓派也能跑。隐私信息仍会经手第三方,不满足零出网条件。</p>
           <div class="mode-rows">
-            <div class="mr"><span>聊天 / 总结</span><span class="cloud">API</span></div>
+            <div class="mr"><span>聊天 / 整理</span><span class="cloud">API</span></div>
             <div class="mr"><span>记忆 / embedding</span><span class="cloud">API</span></div>
             <div class="mr"><span>工具</span><span class="cloud">API</span></div>
           </div>
@@ -734,9 +748,9 @@
       </div>
 
       <ul class="deploy-notes reveal">
-        <li>切换模式只需在安装器"选择部署模式"里一键预设,支持主 / 备双 API key 热切换。</li>
-        <li>混合模式下 embedding 恒定走本机模型,保证记忆向量空间一致。</li>
-        <li>全本地模式支持非流式输出,完全离线可用。</li>
+        <li>三种模式共用同一套记忆、人格与插件配置,换模式只改预设,数据不迁移。</li>
+        <li>向量检索恒定走本机模型:换 embedding 模型等于换向量维度、整库重算,不参与模式切换;未启用时退回 SQLite 全文索引。</li>
+        <li>每日 token 预算按本地日期零点翻滚、重启不清零;撞线后默认 pause_memory 只停记忆整理,群里照常说话。</li>
       </ul>
     </div>
   </section>
@@ -752,39 +766,39 @@
         <div class="step reveal">
           <div class="n">1</div>
           <div>
-            <h4>准备 NapCatQQ 与 LM Studio</h4>
-            <p>下载 <code>NapCatQQ</code>(QQ 协议端,2.x 及以上)与 <code>LM Studio</code>(本地模型运行时,0.3.x 及以上)。</p>
+            <h4>下载并安装 OneClick</h4>
+            <p>从 GitHub <a href="https://github.com/Eternal-Wanderer-Vegetable/Stella_project/releases" target="_blank" rel="noopener">Releases</a> 下载安装器,内置嵌入式 Python、llama.cpp CPU 后端、NapCat 与 <code>qwen3-embedding-0.6b</code> 向量模型;另有约 1GB 的全离线包与免安装 Standalone 版。</p>
           </div>
         </div>
         <div class="step reveal">
           <div class="n">2</div>
           <div>
-            <h4>下载最新版 Release</h4>
-            <p>从 GitHub <a href="https://github.com/Eternal-Wanderer-Vegetable/Stella_project/releases" target="_blank" rel="noopener">Releases</a> 下载并解压 <code>Stella-*-win64.zip</code>。</p>
+            <h4>NapCat 扫码登录 QQ</h4>
+            <p>在 NapCat WebUI 添加反向 WebSocket 客户端,指向 <code>ws://127.0.0.1:8080/onebot/v11/ws</code>。</p>
           </div>
         </div>
         <div class="step reveal">
           <div class="n">3</div>
           <div>
-            <h4>运行安装器</h4>
-            <p>双击 <code>Stella.exe</code> 打开图形界面(或运行 <code>start.bat</code>)。</p>
+            <h4>配置 Stella</h4>
+            <p>打开 <code>Stella.exe</code>:填监听端口与群号 → 「模型服务」点一键预设 —— 本地模式填 LM Studio 地址 + 模型 ID(可测试连接),在线模式填地址 + key + 模型 ID,对话与记忆两把 key。</p>
           </div>
         </div>
         <div class="step reveal">
           <div class="n">4</div>
           <div>
-            <h4>配置并启动</h4>
-            <p>在"基本设置"中配置端口与群号 → "选择部署模式"一键预设 → 保存并启动。</p>
+            <h4>保存并检查,启动</h4>
+            <p>「保存并检查」会自动运行 doctor 环境自检,通过后启动;在群里 <strong>@ 机器人</strong>即可对话。</p>
           </div>
         </div>
       </div>
 
       <h3 class="reveal" style="font-size:1.05rem;margin-bottom:16px">环境要求</h3>
       <div class="req-chips reveal">
-        <span class="chip"><b>Windows 10+</b> x64 / Ubuntu 22.04+</span>
-        <span class="chip">Python <b>3.10+</b></span>
+        <span class="chip"><b>Windows 10/11</b> x64 / Ubuntu 22.04+</span>
+        <span class="chip">Python <b>3.10+</b>(安装器已内置,CLI 部署需要)</span>
         <span class="chip">内存 ≥ <b>16 GB</b></span>
-        <span class="chip">显存 ≥ <b>8 GB</b>(可选,本地模型)</span>
+        <span class="chip">显存 ≥ <b>8 GB</b>(仅本地模式需要)</span>
         <span class="chip">磁盘 ≥ <b>30 GB</b></span>
       </div>
 
@@ -797,11 +811,14 @@ git clone https://github.com/Eternal-Wanderer-Vegetable/Stella_project.git
 cd Stella_project
 pip install -r requirements.txt
 
-<span class="cm"># 初始化并启动</span>
+<span class="cm"># 初始化(向导只要求回答 5 个必答项,生成 .env)</span>
 python -m deploy init
+<span class="cm"># 环境自检(分层:probe 采集 → checks 判断 → report 渲染)</span>
+python -m deploy doctor
+<span class="cm"># 启动</span>
 python -m deploy start</pre>
       </div>
-      <p class="code-note">也提供 Docker 一键部署,详见仓库 README。</p>
+      <p class="code-note">也提供 stella / napcat 双容器 Docker Compose 部署(可选 llama profile,镜像内置 Chromium 与中文字体),详见仓库 README。</p>
     </div>
   </section>
 
@@ -816,17 +833,19 @@ python -m deploy start</pre>
         <h4>Bot 后端 <span>核心运行时</span></h4>
         <div class="stack-chips">
           <span class="schip"><i></i>NoneBot 2</span>
-          <span class="schip"><i></i>OneBot V11</span>
+          <span class="schip"><i></i>OneBot V11(NapCat 等)</span>
           <span class="schip s-blue"><i></i>SQLite (FTS5)</span>
-          <span class="schip s-blue"><i></i>OpenAI 兼容 API</span>
+          <span class="schip s-blue"><i></i>OpenAI 兼容 API(LM Studio / llama.cpp / 在线)</span>
+          <span class="schip s-blue"><i></i>FastAPI WebUI(同端口管理面板)</span>
           <span class="schip s-blue"><i></i>APScheduler</span>
           <span class="schip s-blue"><i></i>httpx</span>
         </div>
       </div>
       <div class="stack-group reveal">
-        <h4>可选 Runtime <span>本地推理</span></h4>
+        <h4>可选 Runtime <span>本地推理与加速</span></h4>
         <div class="stack-chips">
-          <span class="schip s-green"><i></i>Rust runtime-manager</span>
+          <span class="schip s-green"><i></i>Rust runtime-manager(组件监督)</span>
+          <span class="schip s-green"><i></i>Rust 记忆检索后端(PyO3,可选)</span>
           <span class="schip s-green"><i></i>llama.cpp / llama-server</span>
         </div>
       </div>
@@ -839,10 +858,11 @@ python -m deploy start</pre>
         </div>
       </div>
       <div class="stack-group reveal">
-        <h4>桌面安装器 <span>Tauri 2 + Rust</span></h4>
+        <h4>桌面安装器与面板 <span>Tauri 2 + Rust</span></h4>
         <div class="stack-chips">
           <span class="schip"><i></i>Tauri 2</span>
           <span class="schip"><i></i>Rust</span>
+          <span class="schip"><i></i>Vue 3 + Vuetify 3 dashboard</span>
         </div>
       </div>
       <div class="stack-group reveal">
@@ -855,9 +875,17 @@ python -m deploy start</pre>
       <div class="stack-group reveal">
         <h4>开发与验证</h4>
         <div class="stack-chips">
-          <span class="schip s-green"><i></i>pytest(1450+ 测试)</span>
+          <span class="schip s-green"><i></i>pytest(2600+ 测试)</span>
           <span class="schip s-green"><i></i>ruff</span>
           <span class="schip s-green"><i></i>pyright</span>
+          <span class="schip s-green"><i></i>pip-audit + bandit</span>
+        </div>
+      </div>
+      <div class="stack-group reveal">
+        <h4>持续集成 <span>GitHub Actions</span></h4>
+        <div class="stack-chips">
+          <span class="schip"><i></i>6 个 job(lint / security / test ×3 / cli / windows 原生)</span>
+          <span class="schip"><i></i>Python 3.10 – 3.12 矩阵</span>
         </div>
       </div>
       <div class="stack-group reveal">
@@ -885,6 +913,8 @@ python -m deploy start</pre>
             <a href="https://github.com/Eternal-Wanderer-Vegetable/Stella_project" target="_blank" rel="noopener"><svg viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>GitHub 仓库</a>
             <a href="https://github.com/Eternal-Wanderer-Vegetable/Stella_project/releases" target="_blank" rel="noopener">Releases 下载</a>
             <a href="https://github.com/Eternal-Wanderer-Vegetable/Stella_project/blob/main/README.md" target="_blank" rel="noopener">完整文档(README)</a>
+            <a href="https://github.com/Eternal-Wanderer-Vegetable/Stella_project/tree/main/docs" target="_blank" rel="noopener">使用文档(docs)</a>
+            <a href="https://github.com/Eternal-Wanderer-Vegetable/Stella_project/tree/main/design_docs" target="_blank" rel="noopener">设计文档(design_docs)</a>
             <a href="https://github.com/Eternal-Wanderer-Vegetable/Stella_project/issues" target="_blank" rel="noopener">问题反馈</a>
           </div>
         </div>
@@ -1044,34 +1074,35 @@ python -m deploy start</pre>
     var c = document.createElement('canvas');
     c.width = BEAM.w; c.height = BEAM.h;
     var b = c.getContext('2d');
-    var oy = BEAM.h / 2, len = BEAM.w - 14;
+    var oy = BEAM.h / 2, len = BEAM.w - 6;
     b.globalCompositeOperation = 'lighter';
     if (typeof b.filter === 'string') b.filter = 'blur(7px)';
     var layers = [
-      { w: 62, wt: 22, a: 0.16 },   // 最宽最淡:柔边晕
-      { w: 44, wt: 15, a: 0.22 },
-      { w: 30, wt: 10, a: 0.30 },
-      { w: 19, wt: 6, a: 0.42 },
-      { w: 11, wt: 3, a: 0.58 }     // 窄亮核心
+      { w: 34, a: 0.10 },   // 等宽平行边:光条形状沿长度对称
+      { w: 25, a: 0.14 },
+      { w: 17, a: 0.19 },
+      { w: 10, a: 0.26 },
+      { w: 5, a: 0.36 }     // 窄亮核心
     ];
     for (var i = 0; i < layers.length; i++) {
       var ly = layers[i];
       var g = b.createLinearGradient(0, oy, len, oy);
-      g.addColorStop(0, 'rgba(255,236,190,0.9)');
-      g.addColorStop(0.3, 'rgba(250,215,150,0.45)');
-      g.addColorStop(0.65, 'rgba(246,201,107,0.16)');
+      g.addColorStop(0, 'rgba(255,236,190,0.55)');
+      g.addColorStop(0.5, 'rgba(250,215,150,0.32)');
+      g.addColorStop(0.85, 'rgba(246,201,107,0.10)');
       g.addColorStop(1, 'rgba(246,201,107,0)');
       b.fillStyle = g;
       b.beginPath();
       b.moveTo(0, oy - ly.w);
-      b.lineTo(len, oy - ly.wt);
-      b.lineTo(len, oy + ly.wt);
-      b.lineTo(0, oy + ly.wt);
+      b.lineTo(len, oy - ly.w);
+      b.lineTo(len, oy + ly.w);
+      b.lineTo(0, oy + ly.w);
       b.closePath();
       b.fill();
     }
     b.filter = 'none';
     beamSprite = c;
+    window.beamSprite = c;   // 诊断用:暴露贴图供外部采样验证
   }
 
   // 罗盘玫瑰:4 长臂(基本方位)+ 4 短臂(斜方位)的折纸风菱形,明暗双面交替,中心轴帽
@@ -1184,8 +1215,8 @@ python -m deploy start</pre>
     // ---- 主星光晕 ----
     var sx = star.x + px * 18, sy = star.y + py * 14;
     var halo = ctx.createRadialGradient(sx, sy, 0, sx, sy, star.r * 2.5);
-    halo.addColorStop(0, 'rgba(246,201,107,0.15)');
-    halo.addColorStop(0.5, 'rgba(246,201,107,0.05)');
+    halo.addColorStop(0, 'rgba(246,201,107,0.08)');
+    halo.addColorStop(0.5, 'rgba(246,201,107,0.03)');
     halo.addColorStop(1, 'rgba(246,201,107,0)');
     ctx.fillStyle = halo;
     ctx.fillRect(sx - star.r * 2.5, sy - star.r * 2.5, star.r * 5, star.r * 5);
@@ -1200,11 +1231,11 @@ python -m deploy start</pre>
       var sc = r / 100;   // 贴图按 r=100 基准烘焙
       for (var f = 0; f < 8; f++) {
         var ang = rot + f * Math.PI / 4;        // 4 正 4 斜
-        var aMul = (f % 2 === 0) ? 1 : 0.45;
+        var aMul = (f % 2 === 0) ? 1 : 0.35;
         ctx.save();
         ctx.globalCompositeOperation = 'lighter';
         if (typeof ctx.filter === 'string') ctx.filter = 'blur(3px)';
-        ctx.globalAlpha = (reduced ? 1 : 0.8 + 0.2 * Math.sin(time / 700 + ang * 2)) * aMul;
+        ctx.globalAlpha = (reduced ? 0.75 : 0.5 + 0.12 * Math.sin(time / 700 + ang * 2)) * aMul;
         ctx.translate(sx, sy);
         ctx.rotate(ang);
         ctx.drawImage(beamSprite, 0, -BEAM.h / 2 * sc, BEAM.w * sc, BEAM.h * sc);
@@ -1214,8 +1245,8 @@ python -m deploy start</pre>
 
     // ---- 罗盘玫瑰星体 ----
     ctx.save();
-    ctx.shadowColor = 'rgba(246,201,107,0.5)';
-    ctx.shadowBlur = 42;
+    ctx.shadowColor = 'rgba(246,201,107,0.22)';
+    ctx.shadowBlur = 16;
     compassRose(sx, sy, r, rot);
     ctx.restore();
 
@@ -1223,8 +1254,8 @@ python -m deploy start</pre>
     ctx.save();
     ctx.globalCompositeOperation = 'lighter';
     var core = ctx.createRadialGradient(sx, sy, 0, sx, sy, r * 0.75);
-    core.addColorStop(0, 'rgba(255,244,214,0.42)');
-    core.addColorStop(0.55, 'rgba(246,201,107,0.16)');
+    core.addColorStop(0, 'rgba(255,244,214,0.22)');
+    core.addColorStop(0.55, 'rgba(246,201,107,0.08)');
     core.addColorStop(1, 'rgba(246,201,107,0)');
     ctx.fillStyle = core;
     ctx.beginPath();
