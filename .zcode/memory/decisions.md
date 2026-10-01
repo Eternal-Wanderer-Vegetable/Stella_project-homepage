@@ -20,3 +20,5 @@ status: active
 - [2026-10-01] **docs 以快照进版本库而非运行时热链** — `npm run sync-docs` 拉取上游生成 docs-content/ + manifest,构建部署不依赖网络;上游更新后重跑即可
 - [2026-10-01] **每篇文档单独懒加载 chunk** — configuration.md 单篇 103KB/全量 1.6MB,`import.meta.glob` 非 eager 按需加载;manifest(48 条)静态内联
 - [2026-10-01] **style.css 逐行原样保留是硬约束** — 裸元素选择器会劫持新组件(文档侧栏用 `<nav>` 被站点顶栏 `nav{position:fixed}` 劫持);新增样式一律放独立 css 文件,新组件避开裸语义标签
+- [2026-10-01] **侧边 rail 导航整体移除,页签上顶栏(用户拍板)** — 顶栏 z-index 提到 300 高于面板,面板打开时仍可切换页面;关闭钮移到顶栏;panel-head 删除;窄屏页签横向滑动
+- [2026-10-01] **文档页只保留核心文档(用户拍板)** — sync-docs 只拉 docs/ 顶层 *.md,排除 migration/examples/plans 与 migration-report-template;13 篇 + 8 英文版
