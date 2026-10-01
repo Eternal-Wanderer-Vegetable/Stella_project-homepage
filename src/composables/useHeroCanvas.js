@@ -403,8 +403,15 @@ export function useHeroCanvas(canvasRef) {
     buildBeamSprite()
     resize()
     let rsTimer
-    const onResize = function () { clearTimeout(rsTimer); rsTimer = setTimeout(resize, 160) }
-    window.addEventListener('resize', onResize)
+    const scheduleResize = function () { clearTimeout(rsTimer); rsTimer = setTimeout(resize, 160) }
+    window.addEventListener('resize', scheduleResize)
+    // 拆分后样式表与模块并行加载:CSS 未生效时首测可能拿到最小钳制尺寸,
+    // ResizeObserver 在容器真实尺寸确定后再补一次测量(守卫保证只在真变时重设)
+    let ro = null
+    if ('ResizeObserver' in window) {
+      ro = new ResizeObserver(scheduleResize)
+      ro.observe(canvas.parentElement)
+    }
 
     let observer = null
     if ('IntersectionObserver' in window) {
@@ -443,7 +450,8 @@ export function useHeroCanvas(canvasRef) {
     if (hero) hero.addEventListener('click', onHeroClick)
 
     cleanup = function () {
-      window.removeEventListener('resize', onResize)
+      window.removeEventListener('resize', scheduleResize)
+      if (ro) ro.disconnect()
       window.removeEventListener('mousemove', onMouseMove)
       if (hero) hero.removeEventListener('click', onHeroClick)
       if (observer) observer.disconnect()
