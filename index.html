@@ -61,17 +61,6 @@
     background: rgba(6, 9, 17, 0.68);
     backdrop-filter: blur(22px) saturate(1.05);
     -webkit-backdrop-filter: blur(22px) saturate(1.05);
-    /* 与渐变层同款星形镂空:面板左上区域星空透出,向左上消散 */
-    -webkit-mask-image: linear-gradient(#000, #000), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 720 560'%3E%3Cdefs%3E%3Cpath id='s' d='M12 0C13.2 7.6 16.4 10.8 24 12C16.4 13.2 13.2 16.4 12 24C10.8 16.4 7.6 13.2 0 12C7.6 10.8 10.8 7.6 12 0Z'/%3E%3ClinearGradient id='g' gradientUnits='userSpaceOnUse' x1='206' y1='246' x2='660' y2='530'%3E%3Cstop offset='0' stop-color='white' stop-opacity='0.9'/%3E%3Cstop offset='0.55' stop-color='white' stop-opacity='0.45'/%3E%3Cstop offset='1' stop-color='white' stop-opacity='0.03'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cg fill='url(%23g)'%3E%3Cuse href='%23s' transform='translate(206 246) scale(1.5)'/%3E%3Cuse href='%23s' transform='translate(238 278) scale(1.3)'/%3E%3Cuse href='%23s' transform='translate(270 262) scale(1.2)'/%3E%3Cuse href='%23s' transform='translate(300 310) scale(1.2)'/%3E%3Cuse href='%23s' transform='translate(356 296) scale(1)'/%3E%3Cuse href='%23s' transform='translate(368 356) scale(1.1)'/%3E%3Cuse href='%23s' transform='translate(432 344) scale(0.9)'/%3E%3Cuse href='%23s' transform='translate(444 408) scale(1)'/%3E%3Cuse href='%23s' transform='translate(512 398) scale(0.8)'/%3E%3Cuse href='%23s' transform='translate(524 466) scale(0.9)'/%3E%3Cuse href='%23s' transform='translate(594 458) scale(0.6)'/%3E%3Cuse href='%23s' transform='translate(608 527) scale(0.6)'/%3E%3Cuse href='%23s' transform='translate(660 300) scale(0.5)'/%3E%3Cuse href='%23s' transform='translate(690 380) scale(0.45)'/%3E%3C/g%3E%3C/svg%3E");
-    mask-image: linear-gradient(#000, #000), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 720 560'%3E%3Cdefs%3E%3Cpath id='s' d='M12 0C13.2 7.6 16.4 10.8 24 12C16.4 13.2 13.2 16.4 12 24C10.8 16.4 7.6 13.2 0 12C7.6 10.8 10.8 7.6 12 0Z'/%3E%3ClinearGradient id='g' gradientUnits='userSpaceOnUse' x1='206' y1='246' x2='660' y2='530'%3E%3Cstop offset='0' stop-color='white' stop-opacity='0.9'/%3E%3Cstop offset='0.55' stop-color='white' stop-opacity='0.45'/%3E%3Cstop offset='1' stop-color='white' stop-opacity='0.03'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cg fill='url(%23g)'%3E%3Cuse href='%23s' transform='translate(206 246) scale(1.5)'/%3E%3Cuse href='%23s' transform='translate(238 278) scale(1.3)'/%3E%3Cuse href='%23s' transform='translate(270 262) scale(1.2)'/%3E%3Cuse href='%23s' transform='translate(300 310) scale(1.2)'/%3E%3Cuse href='%23s' transform='translate(356 296) scale(1)'/%3E%3Cuse href='%23s' transform='translate(368 356) scale(1.1)'/%3E%3Cuse href='%23s' transform='translate(432 344) scale(0.9)'/%3E%3Cuse href='%23s' transform='translate(444 408) scale(1)'/%3E%3Cuse href='%23s' transform='translate(512 398) scale(0.8)'/%3E%3Cuse href='%23s' transform='translate(524 466) scale(0.9)'/%3E%3Cuse href='%23s' transform='translate(594 458) scale(0.6)'/%3E%3Cuse href='%23s' transform='translate(608 527) scale(0.6)'/%3E%3Cuse href='%23s' transform='translate(660 300) scale(0.5)'/%3E%3Cuse href='%23s' transform='translate(690 380) scale(0.45)'/%3E%3C/g%3E%3C/svg%3E");
-    -webkit-mask-composite: source-over, destination-out;
-    mask-composite: add, subtract;
-    -webkit-mask-size: 100% 100%, 72% 88%;
-    mask-size: 100% 100%, 72% 88%;
-    -webkit-mask-position: 0 0, left top;
-    mask-position: 0 0, left top;
-    -webkit-mask-repeat: no-repeat;
-    mask-repeat: no-repeat;
     opacity: 0; visibility: hidden; transform: translateY(26px);
     transition: opacity .45s ease, transform .45s ease, visibility 0s linear .45s;
   }
@@ -208,23 +197,12 @@
   .hero-stage { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
   #heroCanvas { position: absolute; inset: 0; display: block; }
 
-  /* 全页渐变分隔层:右下深→左上浅,深部调浅让碎星透出,分界擦过罗盘星旁。
-     左上部分叠加星形镂空遮罩(subtract),镂空强度向左上逐渐消散 */
+  /* 全页渐变分隔层:右下深→左上浅,加强模糊让星幕化为柔光散景 */
   .hero-frost {
     position: absolute; inset: 0; z-index: 0; pointer-events: none;
     background: linear-gradient(315deg, rgba(6, 9, 18, 0.74) 0%, rgba(6, 9, 18, 0.48) 55%, rgba(6, 9, 18, 0.14) 100%);
-    -webkit-mask-image: linear-gradient(315deg, #000 62%, transparent 92%), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 720 560'%3E%3Cdefs%3E%3Cpath id='s' d='M12 0C13.2 7.6 16.4 10.8 24 12C16.4 13.2 13.2 16.4 12 24C10.8 16.4 7.6 13.2 0 12C7.6 10.8 10.8 7.6 12 0Z'/%3E%3ClinearGradient id='g' gradientUnits='userSpaceOnUse' x1='206' y1='246' x2='660' y2='530'%3E%3Cstop offset='0' stop-color='white' stop-opacity='0.9'/%3E%3Cstop offset='0.55' stop-color='white' stop-opacity='0.45'/%3E%3Cstop offset='1' stop-color='white' stop-opacity='0.03'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cg fill='url(%23g)'%3E%3Cuse href='%23s' transform='translate(206 246) scale(1.5)'/%3E%3Cuse href='%23s' transform='translate(238 278) scale(1.3)'/%3E%3Cuse href='%23s' transform='translate(270 262) scale(1.2)'/%3E%3Cuse href='%23s' transform='translate(300 310) scale(1.2)'/%3E%3Cuse href='%23s' transform='translate(356 296) scale(1)'/%3E%3Cuse href='%23s' transform='translate(368 356) scale(1.1)'/%3E%3Cuse href='%23s' transform='translate(432 344) scale(0.9)'/%3E%3Cuse href='%23s' transform='translate(444 408) scale(1)'/%3E%3Cuse href='%23s' transform='translate(512 398) scale(0.8)'/%3E%3Cuse href='%23s' transform='translate(524 466) scale(0.9)'/%3E%3Cuse href='%23s' transform='translate(594 458) scale(0.6)'/%3E%3Cuse href='%23s' transform='translate(608 527) scale(0.6)'/%3E%3Cuse href='%23s' transform='translate(660 300) scale(0.5)'/%3E%3Cuse href='%23s' transform='translate(690 380) scale(0.45)'/%3E%3C/g%3E%3C/svg%3E");
-    mask-image: linear-gradient(315deg, #000 62%, transparent 92%), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 720 560'%3E%3Cdefs%3E%3Cpath id='s' d='M12 0C13.2 7.6 16.4 10.8 24 12C16.4 13.2 13.2 16.4 12 24C10.8 16.4 7.6 13.2 0 12C7.6 10.8 10.8 7.6 12 0Z'/%3E%3ClinearGradient id='g' gradientUnits='userSpaceOnUse' x1='206' y1='246' x2='660' y2='530'%3E%3Cstop offset='0' stop-color='white' stop-opacity='0.9'/%3E%3Cstop offset='0.55' stop-color='white' stop-opacity='0.45'/%3E%3Cstop offset='1' stop-color='white' stop-opacity='0.03'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cg fill='url(%23g)'%3E%3Cuse href='%23s' transform='translate(206 246) scale(1.5)'/%3E%3Cuse href='%23s' transform='translate(238 278) scale(1.3)'/%3E%3Cuse href='%23s' transform='translate(270 262) scale(1.2)'/%3E%3Cuse href='%23s' transform='translate(300 310) scale(1.2)'/%3E%3Cuse href='%23s' transform='translate(356 296) scale(1)'/%3E%3Cuse href='%23s' transform='translate(368 356) scale(1.1)'/%3E%3Cuse href='%23s' transform='translate(432 344) scale(0.9)'/%3E%3Cuse href='%23s' transform='translate(444 408) scale(1)'/%3E%3Cuse href='%23s' transform='translate(512 398) scale(0.8)'/%3E%3Cuse href='%23s' transform='translate(524 466) scale(0.9)'/%3E%3Cuse href='%23s' transform='translate(594 458) scale(0.6)'/%3E%3Cuse href='%23s' transform='translate(608 527) scale(0.6)'/%3E%3Cuse href='%23s' transform='translate(660 300) scale(0.5)'/%3E%3Cuse href='%23s' transform='translate(690 380) scale(0.45)'/%3E%3C/g%3E%3C/svg%3E");
-    -webkit-mask-composite: source-over, destination-out;
-    mask-composite: add, subtract;
-    -webkit-mask-size: 100% 100%, 100% 100%;
-    mask-size: 100% 100%, 100% 100%;
-    -webkit-mask-position: 0 0, left top;
-    mask-position: 0 0, left top;
-    -webkit-mask-repeat: no-repeat;
-    mask-repeat: no-repeat;
-    backdrop-filter: blur(6px) saturate(1.06);
-    -webkit-backdrop-filter: blur(6px) saturate(1.06);
+    backdrop-filter: blur(12px) saturate(1.06);
+    -webkit-backdrop-filter: blur(12px) saturate(1.06);
   }
 
   /* 左上角星芒渐散花纹:渐变层之上、文字之下,从角落向外渐稀渐淡 */
@@ -236,11 +214,6 @@
   .corner-stars .tw { animation: twinkle 5.5s ease-in-out infinite; }
   @keyframes twinkle { 0%, 100% { opacity: .3; } 50% { opacity: .95; } }
   @media (prefers-reduced-motion: reduce) { .corner-stars .tw { animation: none; } }
-
-  /* 镂空描边:与遮罩星形逐星对齐的淡金轮廓(frost 全页拉伸 / panel 左上 72%×88%) */
-  .cutout-strokes, .panel-strokes { pointer-events: none; }
-  .cutout-strokes { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; }
-  .panel-strokes { position: absolute; top: 0; left: 0; width: 72%; height: 88%; z-index: 1; }
 
   .hero .container {
     position: relative; z-index: 1;
@@ -636,27 +609,6 @@
         <circle cx="300" cy="480" r="1.1" opacity="0.14"/><circle cx="480" cy="480" r="1" opacity="0.12"/>
       </g>
     </svg>
-    <svg class="cutout-strokes" viewBox="0 0 720 560" preserveAspectRatio="none" aria-hidden="true">
-      <defs>
-        <path id="spko" vector-effect="non-scaling-stroke" d="M12 0C13.2 7.6 16.4 10.8 24 12C16.4 13.2 13.2 16.4 12 24C10.8 16.4 7.6 13.2 0 12C7.6 10.8 10.8 7.6 12 0Z"/>
-      </defs>
-      <g fill="none" stroke="#ffe3a3" stroke-width="1">
-        <use href="#spko" transform="translate(206 246) scale(1.5)" opacity="0.3"/>
-        <use href="#spko" transform="translate(238 278) scale(1.3)" opacity="0.27"/>
-        <use href="#spko" transform="translate(270 262) scale(1.2)" opacity="0.25"/>
-        <use href="#spko" transform="translate(300 310) scale(1.2)" opacity="0.23"/>
-        <use href="#spko" transform="translate(356 296) scale(1)" opacity="0.21"/>
-        <use href="#spko" transform="translate(368 356) scale(1.1)" opacity="0.19"/>
-        <use href="#spko" transform="translate(432 344) scale(0.9)" opacity="0.17"/>
-        <use href="#spko" transform="translate(444 408) scale(1)" opacity="0.15"/>
-        <use href="#spko" transform="translate(512 398) scale(0.8)" opacity="0.13"/>
-        <use href="#spko" transform="translate(524 466) scale(0.9)" opacity="0.11"/>
-        <use href="#spko" transform="translate(594 458) scale(0.6)" opacity="0.09"/>
-        <use href="#spko" transform="translate(608 527) scale(0.6)" opacity="0.08"/>
-        <use href="#spko" transform="translate(660 300) scale(0.5)" opacity="0.07"/>
-        <use href="#spko" transform="translate(690 380) scale(0.45)" opacity="0.06"/>
-      </g>
-    </svg>
     <div class="container">
       <div class="hero-eyebrow"><i></i>QQ 群聊 · 拟人化 · 记忆系统</div>
       <h1>Stella</h1>
@@ -690,24 +642,6 @@
 
   <!-- ================= 详情面板(单页主体,点击按钮后展示) ================= -->
   <div class="panel" id="panel" aria-hidden="true">
-    <svg class="panel-strokes" viewBox="0 0 720 560" preserveAspectRatio="none" aria-hidden="true">
-      <g fill="none" stroke="#ffe3a3" stroke-width="1">
-        <use href="#spko" transform="translate(206 246) scale(1.5)" opacity="0.3"/>
-        <use href="#spko" transform="translate(238 278) scale(1.3)" opacity="0.27"/>
-        <use href="#spko" transform="translate(270 262) scale(1.2)" opacity="0.25"/>
-        <use href="#spko" transform="translate(300 310) scale(1.2)" opacity="0.23"/>
-        <use href="#spko" transform="translate(356 296) scale(1)" opacity="0.21"/>
-        <use href="#spko" transform="translate(368 356) scale(1.1)" opacity="0.19"/>
-        <use href="#spko" transform="translate(432 344) scale(0.9)" opacity="0.17"/>
-        <use href="#spko" transform="translate(444 408) scale(1)" opacity="0.15"/>
-        <use href="#spko" transform="translate(512 398) scale(0.8)" opacity="0.13"/>
-        <use href="#spko" transform="translate(524 466) scale(0.9)" opacity="0.11"/>
-        <use href="#spko" transform="translate(594 458) scale(0.6)" opacity="0.09"/>
-        <use href="#spko" transform="translate(608 527) scale(0.6)" opacity="0.08"/>
-        <use href="#spko" transform="translate(660 300) scale(0.5)" opacity="0.07"/>
-        <use href="#spko" transform="translate(690 380) scale(0.45)" opacity="0.06"/>
-      </g>
-    </svg>
     <div class="panel-head">
       <div class="brand"><span class="star">✦</span><b>Stella</b><span class="panel-tag">深入了解</span></div>
       <button class="panel-close" type="button" aria-label="关闭详情">✕</button>
