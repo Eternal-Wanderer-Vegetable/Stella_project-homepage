@@ -51,12 +51,83 @@
   a { color: inherit; text-decoration: none; }
   code, pre { font-family: var(--mono); }
 
-  /* ================= scroll progress ================= */
-  #progress {
-    position: fixed; top: 0; left: 0; right: 0; height: 2px; z-index: 300;
-    background: linear-gradient(90deg, #c99b3f, var(--gold), #fff2d0);
-    transform-origin: 0 50%; transform: scaleX(0);
-    box-shadow: 0 0 10px rgba(246, 201, 107, 0.55);
+  /* ================= 单页布局:页面本体不滚动,详情为互斥页面 ================= */
+  html, body { height: 100%; overflow: hidden; }
+
+  /* ================= 详情面板(点击按钮后展示) ================= */
+  .panel {
+    position: fixed; inset: 0; z-index: 150;
+    overflow: hidden;
+    background: rgba(6, 9, 17, 0.68);
+    backdrop-filter: blur(22px) saturate(1.05);
+    -webkit-backdrop-filter: blur(22px) saturate(1.05);
+    opacity: 0; visibility: hidden; transform: translateY(26px);
+    transition: opacity .45s ease, transform .45s ease, visibility 0s linear .45s;
+  }
+  /* 按钮切换的互斥页面:面板本体不滚动,单页超高时页内滚动 */
+  .panel .page {
+    position: absolute; left: 0; right: 0; top: 62px; bottom: 0;
+    overflow-y: auto; overscroll-behavior: contain;
+    display: none; flex-direction: column;
+    padding: 10px 56px 28px 24px;
+    scrollbar-width: thin; scrollbar-color: rgba(246, 201, 107, 0.35) transparent;
+  }
+  .panel .page::-webkit-scrollbar { width: 8px; }
+  .panel .page::-webkit-scrollbar-thumb { background: rgba(246, 201, 107, 0.28); border-radius: 4px; }
+  .panel .page::before, .panel .page::after { content: ""; flex: 1 0 0; }
+  .panel .page.active { display: flex; animation: pageIn .4s ease; }
+  @keyframes pageIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .panel .page.active { animation: none; } }
+  .panel.open {
+    opacity: 1; visibility: visible; transform: none;
+    transition: opacity .45s ease, transform .45s ease;
+  }
+  .panel-head {
+    position: relative; z-index: 5; height: 62px;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 26px;
+    background: linear-gradient(180deg, rgba(6, 9, 17, 0.95) 30%, rgba(6, 9, 17, 0.7) 75%, transparent);
+  }
+  .panel-head .panel-tag { font-size: 0.8rem; letter-spacing: 0.24em; color: var(--muted); margin-left: 14px; }
+  .panel-close {
+    width: 38px; height: 38px; border-radius: 50%;
+    border: 1px solid var(--border); background: rgba(255, 255, 255, 0.05);
+    color: var(--text); font-size: 1rem; cursor: pointer; line-height: 1;
+    transition: background .25s, border-color .25s, transform .25s;
+  }
+  .panel-close:hover { background: rgba(246, 201, 107, 0.14); border-color: rgba(246, 201, 107, 0.5); transform: rotate(90deg); }
+
+  /* ================= 侧边竖排导航 + 进度 ================= */
+  .rail {
+    position: fixed; right: 20px; top: 50%; transform: translateY(-50%);
+    z-index: 200; display: flex; gap: 9px; align-items: stretch;
+    max-height: 88vh;
+  }
+  .rail-progress {
+    width: 2px; border-radius: 1px; position: relative;
+    background: rgba(255, 255, 255, 0.10); overflow: hidden;
+  }
+  .rail-progress i {
+    position: absolute; top: 0; left: 0; right: 0; height: 0%;
+    background: linear-gradient(180deg, #c99b3f, var(--gold), #fff2d0);
+    box-shadow: 0 0 8px rgba(246, 201, 107, 0.55);
+    transition: height .15s linear;
+  }
+  .rail-nav { display: flex; flex-direction: column; gap: 8px; }
+  .rail-nav button {
+    flex: 0 0 auto; display: flex; align-items: center; justify-content: center;
+    writing-mode: vertical-rl; letter-spacing: 0.22em;
+    font-size: 0.76rem; font-family: inherit;
+    color: var(--muted); background: none; border: none; cursor: pointer;
+    border-radius: 999px; padding: 8px 7px;
+    transition: color .25s, background .25s;
+  }
+  .rail-nav button:hover { color: var(--text); background: rgba(255, 255, 255, 0.07); }
+  .rail-nav button.active { color: var(--gold-2); background: var(--gold-dim); }
+  @media (max-width: 640px) {
+    .rail { right: 10px; }
+    .rail-nav button { font-size: 0; padding: 8px 5px; letter-spacing: 0; }
+    .rail-nav button::before { content: "✦"; font-size: 0.68rem; }
   }
 
   /* ================= nav ================= */
@@ -118,48 +189,73 @@
   .sec-desc strong { color: var(--gold-2); font-weight: 600; }
 
   /* ================= hero ================= */
-  .hero { position: relative; padding: calc(var(--nav-h) + 72px) 0 26px; text-align: center; }
-  .hero-stage {
-    position: absolute; top: 0; left: 0; right: 0;
-    height: 100vh; min-height: 660px;
-    z-index: 0; pointer-events: none;
-    -webkit-mask-image: linear-gradient(180deg, #000 80%, transparent 100%);
-    mask-image: linear-gradient(180deg, #000 80%, transparent 100%);
+  .hero {
+    position: relative; height: 100vh; min-height: 640px;
+    display: flex; align-items: center;
+    padding: var(--nav-h) 0 0; text-align: center;
   }
+  .hero-stage { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
   #heroCanvas { position: absolute; inset: 0; display: block; }
 
-  /* 背景层与文字层之间的模糊分隔层:星幕柔化为散景,文字与背景分离 */
+  /* 全页渐变分隔层:右下深→左上浅,深部调浅让碎星透出,分界擦过罗盘星旁。
+     左上部分叠加星形镂空遮罩(subtract),镂空强度向左上逐渐消散 */
   .hero-frost {
-    position: absolute; top: 0; left: 0; right: 0;
-    height: 100vh; min-height: 660px;
-    z-index: 0; pointer-events: none;
-    background: rgba(7, 10, 20, 0.26);
-    backdrop-filter: blur(8px) saturate(1.06) brightness(0.94);
-    -webkit-backdrop-filter: blur(8px) saturate(1.06) brightness(0.94);
-    -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 80%, transparent 100%);
-    mask-image: linear-gradient(180deg, #000 0%, #000 80%, transparent 100%);
+    position: absolute; inset: 0; z-index: 0; pointer-events: none;
+    background: linear-gradient(315deg, rgba(6, 9, 18, 0.74) 0%, rgba(6, 9, 18, 0.48) 55%, rgba(6, 9, 18, 0.14) 100%);
+    -webkit-mask-image: linear-gradient(315deg, #000 62%, transparent 92%), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 720 560'%3E%3Cdefs%3E%3Cpath id='s' d='M12 0C13.2 7.6 16.4 10.8 24 12C16.4 13.2 13.2 16.4 12 24C10.8 16.4 7.6 13.2 0 12C7.6 10.8 10.8 7.6 12 0Z'/%3E%3ClinearGradient id='g' gradientUnits='userSpaceOnUse' x1='720' y1='560' x2='0' y2='0'%3E%3Cstop offset='0' stop-color='white' stop-opacity='0.95'/%3E%3Cstop offset='0.55' stop-color='white' stop-opacity='0.8'/%3E%3Cstop offset='1' stop-color='white' stop-opacity='0.05'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cg fill='url(%23g)'%3E%3Cuse href='%23s' transform='translate(340 150) scale(2.3)'/%3E%3Cuse href='%23s' transform='translate(430 118) scale(1.6)'/%3E%3Cuse href='%23s' transform='translate(250 248) scale(2.6)'/%3E%3Cuse href='%23s' transform='translate(182 198) scale(2.1)'/%3E%3Cuse href='%23s' transform='translate(382 258) scale(1.8)'/%3E%3Cuse href='%23s' transform='translate(462 218) scale(1.3)'/%3E%3Cuse href='%23s' transform='translate(302 338) scale(2.1)'/%3E%3Cuse href='%23s' transform='translate(152 318) scale(1.3)'/%3E%3Cuse href='%23s' transform='translate(222 398) scale(1.6)'/%3E%3Cuse href='%23s' transform='translate(92 248) scale(1.2)'/%3E%3Cuse href='%23s' transform='translate(122 148) scale(1)'/%3E%3Cuse href='%23s' transform='translate(62 178) scale(0.9)'/%3E%3Cuse href='%23s' transform='translate(332 58) scale(1.3)'/%3E%3Cuse href='%23s' transform='translate(202 88) scale(1.2)'/%3E%3C/g%3E%3C/svg%3E");
+    mask-image: linear-gradient(315deg, #000 62%, transparent 92%), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 720 560'%3E%3Cdefs%3E%3Cpath id='s' d='M12 0C13.2 7.6 16.4 10.8 24 12C16.4 13.2 13.2 16.4 12 24C10.8 16.4 7.6 13.2 0 12C7.6 10.8 10.8 7.6 12 0Z'/%3E%3ClinearGradient id='g' gradientUnits='userSpaceOnUse' x1='720' y1='560' x2='0' y2='0'%3E%3Cstop offset='0' stop-color='white' stop-opacity='0.95'/%3E%3Cstop offset='0.55' stop-color='white' stop-opacity='0.8'/%3E%3Cstop offset='1' stop-color='white' stop-opacity='0.05'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cg fill='url(%23g)'%3E%3Cuse href='%23s' transform='translate(340 150) scale(2.3)'/%3E%3Cuse href='%23s' transform='translate(430 118) scale(1.6)'/%3E%3Cuse href='%23s' transform='translate(250 248) scale(2.6)'/%3E%3Cuse href='%23s' transform='translate(182 198) scale(2.1)'/%3E%3Cuse href='%23s' transform='translate(382 258) scale(1.8)'/%3E%3Cuse href='%23s' transform='translate(462 218) scale(1.3)'/%3E%3Cuse href='%23s' transform='translate(302 338) scale(2.1)'/%3E%3Cuse href='%23s' transform='translate(152 318) scale(1.3)'/%3E%3Cuse href='%23s' transform='translate(222 398) scale(1.6)'/%3E%3Cuse href='%23s' transform='translate(92 248) scale(1.2)'/%3E%3Cuse href='%23s' transform='translate(122 148) scale(1)'/%3E%3Cuse href='%23s' transform='translate(62 178) scale(0.9)'/%3E%3Cuse href='%23s' transform='translate(332 58) scale(1.3)'/%3E%3Cuse href='%23s' transform='translate(202 88) scale(1.2)'/%3E%3C/g%3E%3C/svg%3E");
+    -webkit-mask-composite: source-over, destination-out;
+    mask-composite: add, subtract;
+    -webkit-mask-size: 100% 100%, 78% 88%;
+    mask-size: 100% 100%, 78% 88%;
+    -webkit-mask-position: 0 0, left top;
+    mask-position: 0 0, left top;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    backdrop-filter: blur(6px) saturate(1.06);
+    -webkit-backdrop-filter: blur(6px) saturate(1.06);
   }
-  .hero .container { position: relative; z-index: 1; }
+
+  /* 左上角星芒渐散花纹:渐变层之上、文字之下,从角落向外渐稀渐淡 */
+  .corner-stars {
+    position: absolute; top: 0; left: 0;
+    width: min(56vw, 720px); height: auto;
+    z-index: 0; pointer-events: none;
+  }
+  .corner-stars .tw { animation: twinkle 5.5s ease-in-out infinite; }
+  @keyframes twinkle { 0%, 100% { opacity: .3; } 50% { opacity: .95; } }
+  @media (prefers-reduced-motion: reduce) { .corner-stars .tw { animation: none; } }
+
+  .hero .container {
+    position: relative; z-index: 1;
+    transition: opacity .45s ease, filter .45s ease;
+  }
+  body.panel-open .hero .container { opacity: 0.16; filter: blur(3px); }
+  .hero .sub strong, .hero .what strong { color: var(--gold-2); font-weight: 600; }
 
   .hero-eyebrow {
-    display: inline-flex; align-items: center; gap: 8px;
-    font-size: 0.8rem; letter-spacing: 0.24em; color: var(--muted);
-    border: 1px solid var(--border); border-radius: 999px;
-    padding: 6px 18px; background: rgba(10, 15, 29, 0.55);
-    backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
-    margin-bottom: 24px;
+    display: inline-flex; align-items: center; gap: 10px;
+    font-size: 0.95rem; letter-spacing: 0.24em; color: var(--muted);
+    margin-bottom: 36px;
   }
   .hero-eyebrow i { width: 7px; height: 7px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 8px rgba(246, 201, 107, 0.8); }
   .hero h1 {
+    position: relative; display: block; width: fit-content;
+    margin: 0 auto 36px;
     font-family: var(--serif); font-style: italic; font-weight: 600;
     font-size: clamp(3.2rem, 9vw, 5.4rem); line-height: 1.12; letter-spacing: 0.02em;
     background: linear-gradient(120deg, #ffffff 12%, var(--gold-2) 46%, var(--gold) 64%, #c99b3f 96%);
     -webkit-background-clip: text; background-clip: text;
     -webkit-text-fill-color: transparent; color: transparent;
-    margin-bottom: 14px;
   }
-  .hero .tagline { font-size: clamp(1.05rem, 2.4vw, 1.26rem); font-weight: 600; margin-bottom: 10px; }
-  .hero .sub { color: var(--muted); font-size: 1rem; max-width: 620px; margin: 0 auto 26px; }
+  .hero .what {
+    width: fit-content; margin: 0 auto 16px;
+    font-size: 1.15rem; letter-spacing: 0.04em;
+  }
+  .hero .sub {
+    font-size: 2rem; line-height: 1.55; font-weight: 500;
+    max-width: 1000px; margin: 0 auto 40px;
+  }
   .badges { display: flex; flex-wrap: wrap; gap: 9px; justify-content: center; margin-bottom: 32px; }
   .badge {
     display: inline-flex; align-items: center; gap: 7px;
@@ -177,9 +273,9 @@
   .badge.b-blue i { background: var(--blue); }
   .cta-row { display: flex; gap: 13px; justify-content: center; flex-wrap: wrap; margin-bottom: 52px; }
   .btn {
-    display: inline-flex; align-items: center; gap: 9px;
-    padding: 13px 30px; border-radius: 999px;
-    font-size: 0.95rem; font-weight: 600;
+    display: inline-flex; align-items: center; gap: 14px;
+    padding: 18px 46px; border-radius: 999px;
+    font-size: 1.5rem; font-weight: 600;
     transition: transform .2s, box-shadow .2s, background .2s, border-color .2s;
     position: relative; overflow: hidden;
   }
@@ -454,19 +550,11 @@
 </style>
 </head>
 <body>
-<div id="progress" aria-hidden="true"></div>
-
   <!-- ================= NAV ================= -->
   <nav>
     <div class="nav-inner">
       <a class="brand" href="#top"><span class="star">✦</span><b>Stella</b></a>
       <div class="nav-links">
-        <a href="#philosophy">理念</a>
-        <a href="#features">特性</a>
-        <a href="#memory">记忆系统</a>
-        <a href="#deploy">部署</a>
-        <a href="#quickstart">快速开始</a>
-        <a href="#stack">技术栈</a>
         <a class="gh-btn" href="https://github.com/Eternal-Wanderer-Vegetable/Stella_project" target="_blank" rel="noopener">
           <svg viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
           GitHub
@@ -481,45 +569,111 @@
       <canvas id="heroCanvas"></canvas>
     </div>
     <div class="hero-frost" aria-hidden="true"></div>
+    <svg class="corner-stars" viewBox="0 0 720 560" aria-hidden="true">
+      <defs>
+        <path id="spk" d="M12 0C13.2 7.6 16.4 10.8 24 12C16.4 13.2 13.2 16.4 12 24C10.8 16.4 7.6 13.2 0 12C7.6 10.8 10.8 7.6 12 0Z"/>
+      </defs>
+      <!-- 角落密丛:大而亮 -->
+      <use href="#spk" fill="#fff2d0" transform="translate(26 18) scale(0.9)" opacity="0.95"/>
+      <use href="#spk" fill="#f6c96b" transform="translate(84 52) scale(0.42)" opacity="0.8"/>
+      <use href="#spk" fill="#f6c96b" transform="translate(138 26) scale(0.55)" opacity="0.85" class="tw"/>
+      <use href="#spk" fill="#fff2d0" transform="translate(48 98) scale(0.3)" opacity="0.7"/>
+      <use href="#spk" fill="#c99b3f" transform="translate(110 108) scale(0.26)" opacity="0.55"/>
+      <use href="#spk" fill="#f6c96b" transform="translate(138 128) scale(0.45)" opacity="0.65"/>
+      <use href="#spk" fill="#fff2d0" transform="translate(188 68) scale(0.36)" opacity="0.7" class="tw" style="animation-delay:-2s"/>
+      <use href="#spk" fill="#f6c96b" transform="translate(18 178) scale(0.4)" opacity="0.7"/>
+      <use href="#spk" fill="#c99b3f" transform="translate(76 198) scale(0.22)" opacity="0.5"/>
+      <use href="#spk" fill="#fff2d0" transform="translate(138 140) scale(0.28)" opacity="0.55" class="tw" style="animation-delay:-4s"/>
+      <!-- 向外渐散:渐稀渐淡 -->
+      <use href="#spk" fill="#f6c96b" transform="translate(368 32) scale(0.44)" opacity="0.6"/>
+      <use href="#spk" fill="#fff2d0" transform="translate(306 58) scale(0.26)" opacity="0.45"/>
+      <use href="#spk" fill="#f6c96b" transform="translate(430 82) scale(0.22)" opacity="0.4" class="tw" style="animation-delay:-1s"/>
+      <use href="#spk" fill="#f6c96b" transform="translate(508 112) scale(0.34)" opacity="0.32"/>
+      <use href="#spk" fill="#c99b3f" transform="translate(560 62) scale(0.26)" opacity="0.26"/>
+      <use href="#spk" fill="#f6c96b" transform="translate(380 168) scale(0.3)" opacity="0.36"/>
+      <use href="#spk" fill="#fff2d0" transform="translate(462 152) scale(0.24)" opacity="0.3"/>
+      <use href="#spk" fill="#f6c96b" transform="translate(556 204) scale(0.2)" opacity="0.24"/>
+      <use href="#spk" fill="#c99b3f" transform="translate(614 66) scale(0.26)" opacity="0.24"/>
+      <use href="#spk" fill="#f6c96b" transform="translate(646 152) scale(0.2)" opacity="0.18"/>
+      <use href="#spk" fill="#f6c96b" transform="translate(418 276) scale(0.22)" opacity="0.24"/>
+      <use href="#spk" fill="#fff2d0" transform="translate(500 302) scale(0.26)" opacity="0.2" class="tw" style="animation-delay:-3s"/>
+      <use href="#spk" fill="#c99b3f" transform="translate(580 332) scale(0.18)" opacity="0.16"/>
+      <use href="#spk" fill="#f6c96b" transform="translate(662 276) scale(0.2)" opacity="0.14"/>
+      <use href="#spk" fill="#f6c96b" transform="translate(348 342) scale(0.18)" opacity="0.18"/>
+      <use href="#spk" fill="#f6c96b" transform="translate(298 422) scale(0.2)" opacity="0.14"/>
+      <use href="#spk" fill="#fff2d0" transform="translate(452 422) scale(0.16)" opacity="0.12"/>
+      <use href="#spk" fill="#c99b3f" transform="translate(558 442) scale(0.24)" opacity="0.12"/>
+      <use href="#spk" fill="#f6c96b" transform="translate(622 482) scale(0.16)" opacity="0.1"/>
+      <use href="#spk" fill="#f6c96b" transform="translate(238 482) scale(0.2)" opacity="0.12"/>
+      <use href="#spk" fill="#f6c96b" transform="translate(138 422) scale(0.26)" opacity="0.16"/>
+      <use href="#spk" fill="#fff2d0" transform="translate(88 322) scale(0.3)" opacity="0.3"/>
+      <use href="#spk" fill="#f6c96b" transform="translate(38 298) scale(0.26)" opacity="0.36"/>
+      <use href="#spk" fill="#c99b3f" transform="translate(58 258) scale(0.18)" opacity="0.4"/>
+      <!-- 微尘星点 -->
+      <g fill="#f6c96b">
+        <circle cx="70" cy="140" r="1.3" opacity="0.4"/><circle cx="180" cy="110" r="1.1" opacity="0.35"/>
+        <circle cx="260" cy="40" r="1.2" opacity="0.3"/><circle cx="340" cy="110" r="1" opacity="0.28"/>
+        <circle cx="470" cy="50" r="1.2" opacity="0.25"/><circle cx="540" cy="150" r="1" opacity="0.2"/>
+        <circle cx="600" cy="230" r="1.1" opacity="0.18"/><circle cx="330" cy="250" r="1" opacity="0.22"/>
+        <circle cx="420" cy="350" r="1.2" opacity="0.18"/><circle cx="520" cy="380" r="1" opacity="0.15"/>
+        <circle cx="180" cy="360" r="1.2" opacity="0.25"/><circle cx="60" cy="360" r="1" opacity="0.3"/>
+        <circle cx="300" cy="480" r="1.1" opacity="0.14"/><circle cx="480" cy="480" r="1" opacity="0.12"/>
+      </g>
+    </svg>
     <div class="container">
       <div class="hero-eyebrow"><i></i>QQ 群聊 · 拟人化 · 记忆系统</div>
       <h1>Stella</h1>
-      <p class="tagline">一个依托记忆系统进行拟人化聊天的 QQ 群聊机器人</p>
-      <p class="sub">为 8K 上下文窗口而设计,可以同时兼容本地小模型与在线 API —— 基于 NoneBot 2 与 OneBot V11 构建,支持 AstrBot 插件生态。</p>
-      <div class="badges">
-        <span class="badge"><i></i>CI</span>
-        <span class="badge b-gold"><i></i>License: AGPL v3.0</span>
-        <span class="badge b-blue"><i></i>Python 3.10+</span>
-        <span class="badge b-blue"><i></i>NoneBot 2</span>
-        <span class="badge b-blue"><i></i>OneBot V11</span>
-        <span class="badge"><i></i>Rust</span>
-        <span class="badge"><i></i>Tauri 2</span>
-        <span class="badge"><i></i>Docker</span>
-      </div>
+      <p class="what">一个依托记忆系统进行<strong>拟人化</strong>聊天的 <strong>QQ 群聊机器人</strong></p>
+      <p class="sub">只要 <strong>8192</strong> tokens 的上下文预算——小到<strong>几乎能在任何模型上工作</strong>,本地小模型或在线大 API,随意混搭。</p>
       <div class="cta-row">
-        <a class="btn btn-primary" href="https://github.com/Eternal-Wanderer-Vegetable/Stella_project" target="_blank" rel="noopener">
-          <svg viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+        <button class="btn btn-primary" type="button" data-open-panel>深入了解 →</button>
+        <a class="btn btn-ghost" href="https://github.com/Eternal-Wanderer-Vegetable/Stella_project" target="_blank" rel="noopener">
+          <svg viewBox="0 0 16 16" width="24" height="24" fill="currentColor" style="vertical-align:-3px"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
           前往 GitHub
         </a>
-        <a class="btn btn-ghost" href="#quickstart">快速开始 →</a>
       </div>
 
-      <div class="hero-art">
-        <img src="assets/title-image.jpg"
-             alt="Stella 项目标题图" loading="lazy" decoding="async"
-             width="3168" height="1344"
-             onerror="this.parentElement.style.display='none'">
-        <div class="cap">Stella — Title Image</div>
-      </div>
-
-      <div class="stats">
-        <div class="stat reveal"><div class="num">8192</div><div class="lbl">token 上下文预算</div></div>
-        <div class="stat reveal"><div class="num">7 个</div><div class="lbl">可独立配端的模型角色</div></div>
-        <div class="stat reveal"><div class="num">3 种</div><div class="lbl">部署模式</div></div>
-        <div class="stat reveal"><div class="num">2600+</div><div class="lbl">单元测试</div></div>
-      </div>
     </div>
   </header>
+
+  <!-- ================= 侧边竖排导航 + 进度 ================= -->
+  <aside class="rail" aria-label="内容导航">
+    <div class="rail-nav">
+      <button type="button" data-target="overview"><span>概览</span></button>
+      <button type="button" data-target="philosophy"><span>核心理念</span></button>
+      <button type="button" data-target="features"><span>特性</span></button>
+      <button type="button" data-target="memory"><span>记忆系统</span></button>
+      <button type="button" data-target="deploy"><span>部署模式</span></button>
+      <button type="button" data-target="quickstart"><span>快速开始</span></button>
+      <button type="button" data-target="stack"><span>技术栈</span></button>
+      <button type="button" data-target="about"><span>关于</span></button>
+    </div>
+    <div class="rail-progress" aria-hidden="true"><i id="railFill"></i></div>
+  </aside>
+
+  <!-- ================= 详情面板(单页主体,点击按钮后展示) ================= -->
+  <div class="panel" id="panel" aria-hidden="true">
+    <div class="panel-head">
+      <div class="brand"><span class="star">✦</span><b>Stella</b><span class="panel-tag">深入了解</span></div>
+      <button class="panel-close" type="button" aria-label="关闭详情">✕</button>
+    </div>
+    <div class="page" id="overview">
+      <div class="container">
+        <div class="hero-art">
+          <img src="assets/title-image.jpg"
+               alt="Stella 项目标题图" loading="lazy" decoding="async"
+               width="3168" height="1344"
+               onerror="this.parentElement.style.display='none'">
+          <div class="cap">Stella — Title Image</div>
+        </div>
+
+        <div class="stats">
+          <div class="stat"><div class="num">8192</div><div class="lbl">token 上下文预算</div></div>
+          <div class="stat"><div class="num">7 个</div><div class="lbl">可独立配端的模型角色</div></div>
+          <div class="stat"><div class="num">3 种</div><div class="lbl">部署模式</div></div>
+          <div class="stat"><div class="num">2600+</div><div class="lbl">单元测试</div></div>
+        </div>
+      </div>
 
   <div class="marquee" aria-hidden="true">
     <div class="mq-track">
@@ -532,8 +686,10 @@
     </div>
   </div>
 
+  </div><!-- /page overview -->
+
   <!-- ================= PHILOSOPHY ================= -->
-  <section id="philosophy" class="section-pad">
+  <section id="philosophy" class="page section-pad">
     <div class="container">
       <div class="sec-label reveal">01 · 核心理念</div>
       <h2 class="sec-title reveal">为什么是 8K 上下文?</h2>
@@ -567,7 +723,7 @@
   </section>
 
   <!-- ================= FEATURES ================= -->
-  <section id="features" class="section-pad">
+  <section id="features" class="page section-pad">
     <div class="container">
       <div class="sec-label reveal">02 · 特性</div>
       <h2 class="sec-title reveal">在 8192 tokens 的预算里工作</h2>
@@ -611,7 +767,7 @@
   </section>
 
   <!-- ================= MEMORY ================= -->
-  <section id="memory" class="section-pad">
+  <section id="memory" class="page section-pad">
     <div class="container">
       <div class="sec-label reveal">03 · 记忆系统</div>
       <h2 class="sec-title reveal">记忆是沉淀出来的,不是堆出来的</h2>
@@ -706,7 +862,7 @@
   </section>
 
   <!-- ================= DEPLOY ================= -->
-  <section id="deploy" class="section-pad">
+  <section id="deploy" class="page section-pad">
     <div class="container">
       <div class="sec-label reveal">04 · 部署模式</div>
       <h2 class="sec-title reveal">三种模式,隐私与成本自己选</h2>
@@ -756,7 +912,7 @@
   </section>
 
   <!-- ================= QUICKSTART ================= -->
-  <section id="quickstart" class="section-pad">
+  <section id="quickstart" class="page section-pad">
     <div class="container">
       <div class="sec-label reveal">05 · 快速开始</div>
       <h2 class="sec-title reveal">Windows 桌面版,四步跑起来</h2>
@@ -823,7 +979,7 @@ python -m deploy start</pre>
   </section>
 
   <!-- ================= STACK ================= -->
-  <section id="stack" class="section-pad">
+  <section id="stack" class="page section-pad">
     <div class="container">
       <div class="sec-label reveal">06 · 技术栈</div>
       <h2 class="sec-title reveal">模型无关,工程可验证</h2>
@@ -899,7 +1055,8 @@ python -m deploy start</pre>
     </div>
   </section>
 
-  <!-- ================= FOOTER ================= -->
+  <!-- ================= 关于(页脚) ================= -->
+  <div class="page" id="about">
   <footer>
     <div class="container">
       <div class="foot-grid">
@@ -938,8 +1095,13 @@ python -m deploy start</pre>
       </p>
     </div>
   </footer>
+  </div><!-- /page about -->
+  </div><!-- /panel -->
 
 <script>
+/* 错误钩子:诊断用 */
+window.__errs = [];
+window.addEventListener('error', function (e) { window.__errs.push(e.message + ' @' + e.lineno); });
 /* ================================================================
    首屏星幕:扎哈式流线 + 主星 + S 形碎星带 + 视差 + 点击迸发
    ================================================================ */
@@ -1373,47 +1535,59 @@ python -m deploy start</pre>
   });
 })();
 
-/* ================= 滚动进度条 ================= */
+/* ================= 详情面板 + 侧边导航/进度(纯按钮切换,无滑动) ================= */
 (function () {
-  var bar = document.getElementById('progress');
-  if (!bar) return;
-  var ticking = false;
-  function update() {
-    var max = document.documentElement.scrollHeight - window.innerHeight;
-    var p = max > 0 ? window.scrollY / max : 0;
-    bar.style.transform = 'scaleX(' + p + ')';
-    ticking = false;
-  }
-  window.addEventListener('scroll', function () {
-    if (!ticking) { ticking = true; requestAnimationFrame(update); }
-  }, { passive: true });
-  update();
-})();
+  var panel = document.getElementById('panel');
+  var fill = document.getElementById('railFill');
+  var btns = Array.prototype.slice.call(document.querySelectorAll('.rail-nav button[data-target]'));
+  if (!panel || !btns.length) return;
+  var ids = btns.map(function (b) { return b.getAttribute('data-target'); });
+  var current = 0;
 
-/* ================= 导航高亮(scrollspy) ================= */
-(function () {
-  var links = document.querySelectorAll('.nav-links a[href^="#"]');
-  if (!links.length || !('IntersectionObserver' in window)) return;
-  var map = {};
-  links.forEach(function (a) { map[a.getAttribute('href').slice(1)] = a; });
-  var io = new IntersectionObserver(function (entries) {
-    entries.forEach(function (en) {
-      if (en.target.id === 'top') {
-        if (en.isIntersecting) links.forEach(function (a) { a.classList.remove('active'); });
-        return;
-      }
-      if (en.isIntersecting && map[en.target.id]) {
-        links.forEach(function (a) { a.classList.remove('active'); });
-        map[en.target.id].classList.add('active');
+  function showPage(idx) {
+    current = Math.max(0, Math.min(ids.length - 1, idx));
+    var id = ids[current];
+    ids.forEach(function (pid) {
+      var el = document.getElementById(pid);
+      if (el) {
+        el.classList.toggle('active', pid === id);
+        if (pid !== id) el.scrollTop = 0;   // 离开的页回到页首
       }
     });
-  }, { rootMargin: '-40% 0px -55% 0px' });
-  Object.keys(map).forEach(function (id) {
-    var sec = document.getElementById(id);
-    if (sec) io.observe(sec);
+    btns.forEach(function (b, i) { b.classList.toggle('active', i === current); });
+    if (fill) fill.style.height = (ids.length > 1 ? current / (ids.length - 1) * 100 : 0).toFixed(2) + '%';
+  }
+  function openPanel(target) {
+    panel.classList.add('open');
+    panel.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('panel-open');
+    var idx = target ? ids.indexOf(target) : 0;
+    showPage(idx < 0 ? 0 : idx);
+  }
+  function closePanel() {
+    panel.classList.remove('open');
+    panel.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('panel-open');
+    showPage(0);   // 关闭后回到概览,下次打开从头开始
+  }
+
+  document.querySelectorAll('[data-open-panel]').forEach(function (el) {
+    el.addEventListener('click', function () { openPanel(el.getAttribute('data-target')); });
   });
-  var heroEl = document.getElementById('top');
-  if (heroEl) io.observe(heroEl);
+  var closeBtn = panel.querySelector('.panel-close');
+  if (closeBtn) closeBtn.addEventListener('click', closePanel);
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && panel.classList.contains('open')) closePanel();
+  });
+
+  btns.forEach(function (b, i) {
+    b.addEventListener('click', function () {
+      if (!panel.classList.contains('open')) { openPanel(ids[i]); return; }
+      showPage(i);
+    });
+  });
+
+  showPage(0);
 })();
 
 /* ================= 点击涟漪 ================= */
