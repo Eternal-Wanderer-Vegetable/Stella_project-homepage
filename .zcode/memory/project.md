@@ -14,7 +14,7 @@ status: active
 ## 结构
 
 - `index.html`——Vite 入口(meta/标题/favicon + `#app` 挂载点)
-- `src/`——Vue 3 源码:`App.vue`(面板状态中枢)、`components/`(SiteNav 含顶栏页签 / HeroSection / DetailPanel)、`components/pages/`(9 个互斥页组件,含 DocsPage)、`composables/useHeroCanvas.js`(画布动画)、`directives/`(v-reveal、v-ripple)、`style.css`(原版 CSS 逐行保留)、`topnav.css`(顶栏页签)、`docs.css`(文档页专用,勿改 style.css)、`assets/title-image.jpg`
+- `src/`——Vue 3 源码:`App.vue`(面板状态中枢)、`components/`(SiteNav 含顶栏页签 / HeroSection / DetailPanel)、`components/pages/`(仅 QuickstartPage + DocsPage,其余 7 页已删)、`composables/useHeroCanvas.js`(画布动画)、`directives/`(v-reveal、v-ripple)、`style.css`(原版 CSS 逐行保留)、`topnav.css`(顶栏页签)、`docs.css`(文档页专用,勿改 style.css)、`assets/title-image.jpg`
 - `scripts/sync-docs.mjs` + `docs-content/`——从上游 Stella_project 同步 docs 快照与 manifest;`npm run sync-docs` 刷新
 - `vite.config.js`——`base: '/Stella_project-homepage/'`;`.github/workflows/deploy.yml`——Actions 发布
 - `serve.py`——本地预览 dist/(子路径访问,端口 8645);上游项目 `Stella_project` 未在本地
