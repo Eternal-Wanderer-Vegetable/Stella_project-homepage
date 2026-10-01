@@ -32,7 +32,7 @@ function copyCode() {
 <template>
   <section ref="root" id="quickstart" class="page section-pad" :class="{ active: active }">
     <div class="container">
-      <div class="sec-label reveal" v-reveal>05 · 快速开始</div>
+      <div class="sec-label reveal" v-reveal>快速开始</div>
       <h2 class="sec-title reveal" v-reveal>Windows 桌面版,四步跑起来</h2>
       <p class="sec-desc reveal" v-reveal>桌面安装器基于 Tauri 2 构建,图形界面完成全部配置;Linux 用户与开发者可直接使用命令行部署。</p>
 

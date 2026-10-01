@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, watch, provide, onMounted, onUnmounted } from 'vue'
+import { ref, watch, onMounted, onUnmounted } from 'vue'
 import { PAGES } from './pages.js'
 import SiteNav from './components/SiteNav.vue'
 import HeroSection from './components/HeroSection.vue'
@@ -23,9 +23,6 @@ function onSelect(i) {
 }
 
 watch(panelOpen, function (v) { document.body.classList.toggle('panel-open', v) })
-
-// 供面板内页面(如关于页脚)直达指定分页
-provide('openPanelPage', openPanel)
 
 function onKey(e) {
   if (e.key === 'Escape' && panelOpen.value) closePanel()
