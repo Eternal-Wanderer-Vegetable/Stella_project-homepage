@@ -14,13 +14,12 @@ status: active
 ## 结构
 
 - `index.html`——Vite 入口(meta/标题/favicon + `#app` 挂载点)
-- `src/`——Vue 3 源码:`App.vue`(面板状态中枢)、`components/`(SiteNav / HeroSection / RailNav / DetailPanel)、`components/pages/`(8 个互斥页组件)、`composables/useHeroCanvas.js`(画布动画,自原单文件页原样迁移)、`directives/`(v-reveal 滚动渐显、v-ripple 涟漪)、`style.css`(原版 CSS 逐行保留)、`assets/title-image.jpg`
-- `vite.config.js`——`base: '/Stella_project-homepage/'` 适配 GitHub Pages 项目站点
-- `.github/workflows/deploy.yml`——构建并发布 dist/ 到 GitHub Pages
-- `serve.py`——本地预览 dist/(以 GitHub Pages 同款子路径访问,端口 8645)
-- `.zcode/memory/`——meow-handoff 记忆库
-- 上游项目 `Stella_project` 未在本地,内容以 GitHub README 为准
+- `src/`——Vue 3 源码:`App.vue`(面板状态中枢)、`components/`(SiteNav / HeroSection / RailNav / DetailPanel)、`components/pages/`(9 个互斥页组件,含 DocsPage)、`composables/useHeroCanvas.js`(画布动画)、`directives/`(v-reveal、v-ripple)、`style.css`(原版 CSS 逐行保留)、`docs.css`(文档页专用,勿改 style.css)、`assets/title-image.jpg`
+- `scripts/sync-docs.mjs` + `docs-content/`——从上游 Stella_project 同步 docs 快照与 manifest;`npm run sync-docs` 刷新
+- `vite.config.js`——`base: '/Stella_project-homepage/'`;`.github/workflows/deploy.yml`——Actions 发布
+- `serve.py`——本地预览 dist/(子路径访问,端口 8645);上游项目 `Stella_project` 未在本地
 
 ## 进行中
 
-- [2026-10-01] Vue 3 + Vite 改写 | 已上线(2e14cac)| Pages 构建源已切 GitHub Actions,推送 main 自动部署;线上已验证画布修复(ResizeObserver 补测)
+- [2026-10-01] 文档页上线(61b27b2)| 39 篇文档四分类、懒加载 chunk、中英切换、站内互链 | 已验证线上
+- [2026-10-01] 罗盘画布修复(2e14cac)| ResizeObserver 补测 CSS 迟加载导致的尺寸误判
