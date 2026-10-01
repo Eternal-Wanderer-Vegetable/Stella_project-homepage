@@ -23,4 +23,4 @@ status: active
 
 ## 进行中
 
-- [2026-10-01] Vue 3 + Vite 改写 | 已完成并本地验证(截图+文本双重比对一致) | 待提交推送与 GitHub Pages 启用(Actions 工作流已就位)
+- [2026-10-01] Vue 3 + Vite 改写 | 已上线(2e14cac)| Pages 构建源已切 GitHub Actions,推送 main 自动部署;线上已验证画布修复(ResizeObserver 补测)
