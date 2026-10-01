@@ -237,6 +237,11 @@
   @keyframes twinkle { 0%, 100% { opacity: .3; } 50% { opacity: .95; } }
   @media (prefers-reduced-motion: reduce) { .corner-stars .tw { animation: none; } }
 
+  /* 镂空描边:与遮罩星形逐星对齐的淡金轮廓(frost 全页拉伸 / panel 左上 72%×88%) */
+  .cutout-strokes, .panel-strokes { pointer-events: none; }
+  .cutout-strokes { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; }
+  .panel-strokes { position: absolute; top: 0; left: 0; width: 72%; height: 88%; z-index: 1; }
+
   .hero .container {
     position: relative; z-index: 1;
     transition: opacity .45s ease, filter .45s ease;
@@ -631,6 +636,27 @@
         <circle cx="300" cy="480" r="1.1" opacity="0.14"/><circle cx="480" cy="480" r="1" opacity="0.12"/>
       </g>
     </svg>
+    <svg class="cutout-strokes" viewBox="0 0 720 560" preserveAspectRatio="none" aria-hidden="true">
+      <defs>
+        <path id="spko" vector-effect="non-scaling-stroke" d="M12 0C13.2 7.6 16.4 10.8 24 12C16.4 13.2 13.2 16.4 12 24C10.8 16.4 7.6 13.2 0 12C7.6 10.8 10.8 7.6 12 0Z"/>
+      </defs>
+      <g fill="none" stroke="#ffe3a3" stroke-width="1">
+        <use href="#spko" transform="translate(206 246) scale(1.5)" opacity="0.3"/>
+        <use href="#spko" transform="translate(238 278) scale(1.3)" opacity="0.27"/>
+        <use href="#spko" transform="translate(270 262) scale(1.2)" opacity="0.25"/>
+        <use href="#spko" transform="translate(300 310) scale(1.2)" opacity="0.23"/>
+        <use href="#spko" transform="translate(356 296) scale(1)" opacity="0.21"/>
+        <use href="#spko" transform="translate(368 356) scale(1.1)" opacity="0.19"/>
+        <use href="#spko" transform="translate(432 344) scale(0.9)" opacity="0.17"/>
+        <use href="#spko" transform="translate(444 408) scale(1)" opacity="0.15"/>
+        <use href="#spko" transform="translate(512 398) scale(0.8)" opacity="0.13"/>
+        <use href="#spko" transform="translate(524 466) scale(0.9)" opacity="0.11"/>
+        <use href="#spko" transform="translate(594 458) scale(0.6)" opacity="0.09"/>
+        <use href="#spko" transform="translate(608 527) scale(0.6)" opacity="0.08"/>
+        <use href="#spko" transform="translate(660 300) scale(0.5)" opacity="0.07"/>
+        <use href="#spko" transform="translate(690 380) scale(0.45)" opacity="0.06"/>
+      </g>
+    </svg>
     <div class="container">
       <div class="hero-eyebrow"><i></i>QQ 群聊 · 拟人化 · 记忆系统</div>
       <h1>Stella</h1>
@@ -664,6 +690,24 @@
 
   <!-- ================= 详情面板(单页主体,点击按钮后展示) ================= -->
   <div class="panel" id="panel" aria-hidden="true">
+    <svg class="panel-strokes" viewBox="0 0 720 560" preserveAspectRatio="none" aria-hidden="true">
+      <g fill="none" stroke="#ffe3a3" stroke-width="1">
+        <use href="#spko" transform="translate(206 246) scale(1.5)" opacity="0.3"/>
+        <use href="#spko" transform="translate(238 278) scale(1.3)" opacity="0.27"/>
+        <use href="#spko" transform="translate(270 262) scale(1.2)" opacity="0.25"/>
+        <use href="#spko" transform="translate(300 310) scale(1.2)" opacity="0.23"/>
+        <use href="#spko" transform="translate(356 296) scale(1)" opacity="0.21"/>
+        <use href="#spko" transform="translate(368 356) scale(1.1)" opacity="0.19"/>
+        <use href="#spko" transform="translate(432 344) scale(0.9)" opacity="0.17"/>
+        <use href="#spko" transform="translate(444 408) scale(1)" opacity="0.15"/>
+        <use href="#spko" transform="translate(512 398) scale(0.8)" opacity="0.13"/>
+        <use href="#spko" transform="translate(524 466) scale(0.9)" opacity="0.11"/>
+        <use href="#spko" transform="translate(594 458) scale(0.6)" opacity="0.09"/>
+        <use href="#spko" transform="translate(608 527) scale(0.6)" opacity="0.08"/>
+        <use href="#spko" transform="translate(660 300) scale(0.5)" opacity="0.07"/>
+        <use href="#spko" transform="translate(690 380) scale(0.45)" opacity="0.06"/>
+      </g>
+    </svg>
     <div class="panel-head">
       <div class="brand"><span class="star">✦</span><b>Stella</b><span class="panel-tag">深入了解</span></div>
       <button class="panel-close" type="button" aria-label="关闭详情">✕</button>
