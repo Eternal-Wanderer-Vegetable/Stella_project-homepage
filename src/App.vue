@@ -3,14 +3,10 @@ import { ref, computed, watch, provide, onMounted, onUnmounted } from 'vue'
 import { PAGES } from './pages.js'
 import SiteNav from './components/SiteNav.vue'
 import HeroSection from './components/HeroSection.vue'
-import RailNav from './components/RailNav.vue'
 import DetailPanel from './components/DetailPanel.vue'
 
 const panelOpen = ref(false)
 const current = ref(0)
-
-const fillHeight = computed(() =>
-  (PAGES.length > 1 ? (current.value / (PAGES.length - 1)) * 100 : 0).toFixed(2) + '%')
 
 function openPanel(target) {
   panelOpen.value = true
@@ -21,9 +17,9 @@ function closePanel() {
   panelOpen.value = false
   current.value = 0   // 关闭后回到概览,下次打开从头开始
 }
-function onRailSelect(i) {
-  if (!panelOpen.value) { openPanel(PAGES[i].id); return }
-  current.value = i
+// 顶栏页签:面板未开时打开对应页;已开时直接切换
+function onSelect(i) {
+  openPanel(PAGES[i].id)
 }
 
 watch(panelOpen, function (v) { document.body.classList.toggle('panel-open', v) })
@@ -39,8 +35,7 @@ onUnmounted(function () { document.removeEventListener('keydown', onKey) })
 </script>
 
 <template>
-  <SiteNav />
+  <SiteNav :current="current" :open="panelOpen" @select="onSelect" @close="closePanel" />
   <HeroSection @open="openPanel()" />
-  <RailNav :current="current" :fill-height="fillHeight" @select="onRailSelect" />
   <DetailPanel :open="panelOpen" :current="current" @close="closePanel" />
 </template>

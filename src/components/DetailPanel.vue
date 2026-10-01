@@ -13,15 +13,10 @@ defineProps({
   open: { type: Boolean, default: false },
   current: { type: Number, required: true },
 })
-defineEmits(['close'])
 </script>
 
 <template>
   <div class="panel" id="panel" :class="{ open }" :aria-hidden="String(!open)">
-    <div class="panel-head">
-      <div class="brand"><span class="star">✦</span><b>Stella</b><span class="panel-tag">深入了解</span></div>
-      <button class="panel-close" type="button" aria-label="关闭详情" @click="$emit('close')">✕</button>
-    </div>
     <OverviewPage :active="current === 0" />
     <PhilosophyPage :active="current === 1" />
     <FeaturesPage :active="current === 2" />

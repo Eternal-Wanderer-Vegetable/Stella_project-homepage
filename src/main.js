@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import './style.css'
+import './topnav.css'
 import './docs.css'
 import reveal from './directives/reveal'
 import ripple from './directives/ripple'
