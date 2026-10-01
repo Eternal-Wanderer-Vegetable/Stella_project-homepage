@@ -7,5 +7,6 @@ export const PAGES = [
   { id: 'deploy', label: '部署模式' },
   { id: 'quickstart', label: '快速开始' },
   { id: 'stack', label: '技术栈' },
+  { id: 'docs', label: '文档' },
   { id: 'about', label: '关于' },
 ]

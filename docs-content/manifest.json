@@ -1,0 +1,292 @@
+{
+  "source": {
+    "repo": "Eternal-Wanderer-Vegetable/Stella_project",
+    "ref": "main",
+    "syncedAt": "2026-10-01T13:22:58.955Z"
+  },
+  "githubBase": "https://github.com/Eternal-Wanderer-Vegetable/Stella_project/blob/main/",
+  "categories": [
+    {
+      "id": "core",
+      "label": "核心文档",
+      "items": [
+        {
+          "path": "docs/architecture.md",
+          "file": "architecture.md",
+          "size": 60484,
+          "title": "架构说明",
+          "en": "docs/architecture.en.md",
+          "sizeEn": 70518
+        },
+        {
+          "path": "docs/memory-system.md",
+          "file": "memory-system.md",
+          "size": 22148,
+          "title": "记忆系统",
+          "en": "docs/memory-system.en.md",
+          "sizeEn": 28092
+        },
+        {
+          "path": "docs/capability-system.md",
+          "file": "capability-system.md",
+          "size": 31903,
+          "title": "能力系统（Capability Router 与 Comes）",
+          "en": "docs/capability-system.en.md",
+          "sizeEn": 38235
+        },
+        {
+          "path": "docs/plugin-spec.md",
+          "file": "plugin-spec.md",
+          "size": 38752,
+          "title": "插件接入规范 v1.0",
+          "en": "docs/plugin-spec.en.md",
+          "sizeEn": 43160
+        },
+        {
+          "path": "docs/configuration.md",
+          "file": "configuration.md",
+          "size": 103076,
+          "title": "配置参考",
+          "en": "docs/configuration.en.md",
+          "sizeEn": 122626
+        },
+        {
+          "path": "docs/deployment-docker.md",
+          "file": "deployment-docker.md",
+          "size": 13518,
+          "title": "Docker 部署指南",
+          "en": "docs/deployment-docker.en.md",
+          "sizeEn": 15525
+        },
+        {
+          "path": "docs/development.md",
+          "file": "development.md",
+          "size": 51634,
+          "title": "开发指南",
+          "en": "docs/development.en.md",
+          "sizeEn": 61823
+        },
+        {
+          "path": "docs/cometa.md",
+          "file": "cometa.md",
+          "size": 4629,
+          "title": "Cometa 外部 Agent 任务层：安装与认证",
+          "en": "docs/cometa.en.md",
+          "sizeEn": 5162
+        },
+        {
+          "path": "docs/scheduling.md",
+          "file": "scheduling.md",
+          "size": 7846,
+          "title": "定时任务：群级 Cron 提醒与有界主动 Agent"
+        },
+        {
+          "path": "docs/skills.md",
+          "file": "skills.md",
+          "size": 7004,
+          "title": "Anthropic 风格 Skills 与受控沙盒"
+        },
+        {
+          "path": "docs/knowledge-base.md",
+          "file": "knowledge-base.md",
+          "size": 9458,
+          "title": "独立知识库（Knowledge Base）"
+        },
+        {
+          "path": "docs/webui.md",
+          "file": "webui.md",
+          "size": 2864,
+          "title": "WebUI（v2 控制面）"
+        },
+        {
+          "path": "docs/memory-rust-backend.md",
+          "file": "memory-rust-backend.md",
+          "size": 3075,
+          "title": "Rust Memory Backend"
+        }
+      ]
+    },
+    {
+      "id": "migration",
+      "label": "迁移档案",
+      "items": [
+        {
+          "path": "docs/migration-report-template.md",
+          "file": "migration-report-template.md",
+          "size": 1667,
+          "title": "Stella 配置导入报告（模板）"
+        },
+        {
+          "path": "docs/migration/cortico/baseline-report.md",
+          "file": "migration/cortico/baseline-report.md",
+          "size": 5253,
+          "title": "Baseline Report（M0）"
+        },
+        {
+          "path": "docs/migration/cortico/behavior-contract.md",
+          "file": "migration/cortico/behavior-contract.md",
+          "size": 8942,
+          "title": "Behavior Contract（M0 冻结）"
+        },
+        {
+          "path": "docs/migration/cortico/compatibility-spike.md",
+          "file": "migration/cortico/compatibility-spike.md",
+          "size": 6079,
+          "title": "Compatibility Spike（M1 阻断门槛）结论"
+        },
+        {
+          "path": "docs/migration/cortico/feature-parity.md",
+          "file": "migration/cortico/feature-parity.md",
+          "size": 22383,
+          "title": "Feature Parity 清单（M0 冻结）"
+        }
+      ]
+    },
+    {
+      "id": "examples",
+      "label": "插件模板示例",
+      "items": [
+        {
+          "path": "docs/examples/astrbot_plugin_stella_template/README.md",
+          "file": "examples/astrbot_plugin_stella_template/README.md",
+          "size": 3538,
+          "title": "astrbot_plugin_stella_template"
+        },
+        {
+          "path": "docs/examples/astrbot_plugin_stella_template/_conf_schema.json",
+          "file": "examples/astrbot_plugin_stella_template/_conf_schema.json",
+          "size": 486,
+          "kind": "code",
+          "lang": "",
+          "title": "_conf_schema.json"
+        },
+        {
+          "path": "docs/examples/astrbot_plugin_stella_template/capability.toml",
+          "file": "examples/astrbot_plugin_stella_template/capability.toml",
+          "size": 2590,
+          "kind": "code",
+          "lang": "",
+          "title": "capability.toml"
+        },
+        {
+          "path": "docs/examples/astrbot_plugin_stella_template/main.py",
+          "file": "examples/astrbot_plugin_stella_template/main.py",
+          "size": 4845,
+          "kind": "code",
+          "lang": "",
+          "title": "main.py"
+        },
+        {
+          "path": "docs/examples/astrbot_plugin_stella_template/metadata.yaml",
+          "file": "examples/astrbot_plugin_stella_template/metadata.yaml",
+          "size": 783,
+          "kind": "code",
+          "lang": "",
+          "title": "metadata.yaml"
+        }
+      ]
+    },
+    {
+      "id": "plans",
+      "label": "开发计划",
+      "items": [
+        {
+          "path": "docs/plans/2026-10-01-gitnexus-plan-cometa-codex-auth-webui.md",
+          "file": "plans/2026-10-01-gitnexus-plan-cometa-codex-auth-webui.md",
+          "size": 40641,
+          "title": "GitNexus Engineering Plan"
+        },
+        {
+          "path": "docs/plans/2026-09-28-s10-s11-plan-data-root-uninstall-upgrade.md",
+          "file": "plans/2026-09-28-s10-s11-plan-data-root-uninstall-upgrade.md",
+          "size": 10156,
+          "title": "S10/S11 实施计划：数据根显式化、卸载/升级契约（含 .nsi 已核实事实）"
+        },
+        {
+          "path": "docs/plans/2026-09-28-gitnexus-plan-s11-launcher-signing-vm.md",
+          "file": "plans/2026-09-28-gitnexus-plan-s11-launcher-signing-vm.md",
+          "size": 40666,
+          "title": "GitNexus Engineering Plan — S11 Phase 2 / S14 签名 / S15 VM 矩阵"
+        },
+        {
+          "path": "docs/plans/2026-09-28-gitnexus-plan-nsis-installation-reliability.md",
+          "file": "plans/2026-09-28-gitnexus-plan-nsis-installation-reliability.md",
+          "size": 108752,
+          "title": "Stella NSIS 安装可靠性工程计划"
+        },
+        {
+          "path": "docs/plans/2026-09-27-gitnexus-plan-social-learning-feedback-loop.md",
+          "file": "plans/2026-09-27-gitnexus-plan-social-learning-feedback-loop.md",
+          "size": 88619,
+          "title": "Stella 社交学习与反馈闭环实施计划"
+        },
+        {
+          "path": "docs/plans/2026-09-27-gitnexus-plan-cortico-runtime-migration.md",
+          "file": "plans/2026-09-27-gitnexus-plan-cortico-runtime-migration.md",
+          "size": 98590,
+          "title": "Stella → Cortico 整体运行时迁移计划"
+        },
+        {
+          "path": "docs/plans/2026-09-22-gitnexus-plan-user-cron-agent.md",
+          "file": "plans/2026-09-22-gitnexus-plan-user-cron-agent.md",
+          "size": 54254,
+          "title": "GitNexus Engineering Plan"
+        },
+        {
+          "path": "docs/plans/2026-09-21-gitnexus-plan-independent-knowledge-base.md",
+          "file": "plans/2026-09-21-gitnexus-plan-independent-knowledge-base.md",
+          "size": 17500,
+          "title": "GitNexus Engineering Plan"
+        },
+        {
+          "path": "docs/plans/2026-09-21-gitnexus-plan-anthropic-skills-sandbox.md",
+          "file": "plans/2026-09-21-gitnexus-plan-anthropic-skills-sandbox.md",
+          "size": 38323,
+          "title": "GitNexus 计划：Anthropic 风格 Skills 与受控沙盒执行"
+        },
+        {
+          "path": "docs/plans/2026-09-12-gitnexus-plan-v401-release-channels.md",
+          "file": "plans/2026-09-12-gitnexus-plan-v401-release-channels.md",
+          "size": 47412,
+          "title": "GitNexus Engineering Plan"
+        },
+        {
+          "path": "docs/plans/2026-09-11-gitnexus-plan-rust-memory-parallel-release.md",
+          "file": "plans/2026-09-11-gitnexus-plan-rust-memory-parallel-release.md",
+          "size": 49122,
+          "title": "GitNexus Engineering Plan"
+        },
+        {
+          "path": "docs/plans/2026-09-11-gitnexus-plan-rust-memory-benchmark.md",
+          "file": "plans/2026-09-11-gitnexus-plan-rust-memory-benchmark.md",
+          "size": 36006,
+          "title": "GitNexus Engineering Plan"
+        },
+        {
+          "path": "docs/plans/2026-09-11-gitnexus-plan-runtime-supervisor-rollout.md",
+          "file": "plans/2026-09-11-gitnexus-plan-runtime-supervisor-rollout.md",
+          "size": 100387,
+          "title": "GitNexus Engineering Plan"
+        },
+        {
+          "path": "docs/plans/2026-09-10-gitnexus-plan-personalized-addressing-system.md",
+          "file": "plans/2026-09-10-gitnexus-plan-personalized-addressing-system.md",
+          "size": 48588,
+          "title": "GitNexus Engineering Plan"
+        },
+        {
+          "path": "docs/plans/2026-09-10-gitnexus-plan-optional-model-plugin-runtime.md",
+          "file": "plans/2026-09-10-gitnexus-plan-optional-model-plugin-runtime.md",
+          "size": 60751,
+          "title": "GitNexus Engineering Plan"
+        },
+        {
+          "path": "docs/plans/2026-09-08-gitnexus-plan-natural-proactive-at.md",
+          "file": "plans/2026-09-08-gitnexus-plan-natural-proactive-at.md",
+          "size": 37348,
+          "title": "GitNexus Engineering Plan"
+        }
+      ]
+    }
+  ]
+}

@@ -6,6 +6,7 @@ import MemoryPage from './pages/MemoryPage.vue'
 import DeployPage from './pages/DeployPage.vue'
 import QuickstartPage from './pages/QuickstartPage.vue'
 import StackPage from './pages/StackPage.vue'
+import DocsPage from './pages/DocsPage.vue'
 import AboutPage from './pages/AboutPage.vue'
 
 defineProps({
@@ -28,6 +29,7 @@ defineEmits(['close'])
     <DeployPage :active="current === 4" />
     <QuickstartPage :active="current === 5" />
     <StackPage :active="current === 6" />
-    <AboutPage :active="current === 7" />
+    <DocsPage :active="current === 7" />
+    <AboutPage :active="current === 8" />
   </div>
 </template>
