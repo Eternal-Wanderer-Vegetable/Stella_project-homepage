@@ -15,3 +15,5 @@ status: active
 - [2026-09-29] **动画循环暂停条件用 IntersectionObserver,不用 document.hidden** — 内嵌浏览器 document.hidden 恒 true,会导致循环刚启动即退出
 - [2026-09-29] **碎星带随滚动沿 S 线向下游移(pathFlow 惰性跟随 scrollY)** — 用户要求"碎星跟随页面滑动而飘散",沿曲线滑移比四散乱飘更贴题
 - [2026-09-29] **单文件零依赖主页** — GitHub Pages 托管,无构建步骤;标题图热链上游仓库 raw 并带 onerror 兜底隐藏
+- [2026-10-01] **主页改写为 Vue 3 + Vite 工程(推翻"单文件零依赖"决策)** — 用户要求整个项目改写为 Vue 框架静态页且页面原样不动;CSS 逐行保留为全局样式、画布逻辑原样迁入 composable,部署改为 Actions 构建 dist 发布
+- [2026-10-01] **截图验证需注入样式覆盖禁用 pageIn/reveal 入场动画** — 内嵌浏览器 document.hidden 恒 true 导致 CSS 动画时钟暂停,`.page.active` 冻结在 opacity 0;真实浏览器不受影响,两版行为一致
