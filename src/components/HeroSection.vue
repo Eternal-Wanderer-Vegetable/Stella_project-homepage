@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useHeroCanvas } from '../composables/useHeroCanvas.js'
+import FlowDiagram from './FlowDiagram.vue'
 
 defineEmits(['open'])
 
@@ -66,18 +67,61 @@ useHeroCanvas(canvas)
       </g>
     </svg>
     <div class="container">
-      <div class="hero-eyebrow"><i></i>QQ 群聊 · 拟人化 · 记忆系统</div>
-      <h1>Stella</h1>
-      <p class="what">一个依托记忆系统进行<strong>拟人化</strong>聊天的 <strong>QQ 群聊机器人</strong></p>
-      <p class="sub">只要 <strong>8192</strong> tokens 的上下文预算——小到<strong>几乎能在任何模型上工作</strong>,本地小模型或在线大 API,随意混搭。</p>
-      <div class="cta-row">
-        <button v-ripple class="btn btn-primary" type="button" data-open-panel @click="$emit('open')">快速开始 →</button>
-        <a v-ripple class="btn btn-ghost" href="https://github.com/Eternal-Wanderer-Vegetable/Stella_project" target="_blank" rel="noopener">
-          <svg viewBox="0 0 16 16" width="24" height="24" fill="currentColor" style="vertical-align:-3px"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
-          前往 GitHub
-        </a>
+      <div class="hero-grid">
+        <div class="hero-brand">
+          <div class="hero-eyebrow"><i></i>QQ 群聊 · 拟人化 · 记忆系统</div>
+          <h1>Stella</h1>
+          <p class="brand-line">依托<strong>记忆系统</strong>的 <strong>QQ 群聊拟人化 AI</strong></p>
+          <div class="badges hero-badges">
+            <span class="badge b-gold"><i></i>本地小模型</span>
+            <span class="badge b-blue"><i></i>在线大 API</span>
+            <span class="badge"><i></i>任意混搭</span>
+          </div>
+          <div class="cta-row">
+            <button v-ripple class="btn btn-primary" type="button" data-open-panel @click="$emit('open')">快速开始 →</button>
+            <a v-ripple class="btn btn-ghost" href="https://github.com/Eternal-Wanderer-Vegetable/Stella_project" target="_blank" rel="noopener">
+              <svg viewBox="0 0 16 16" width="24" height="24" fill="currentColor" style="vertical-align:-3px"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+              前往 GitHub
+            </a>
+          </div>
+        </div>
+        <FlowDiagram class="hero-flow" />
       </div>
-
     </div>
   </header>
 </template>
+
+<style scoped>
+/* 左右两栏:左=项目名,右=实现流程图 */
+.hero { text-align: left; }
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  gap: 46px;
+  align-items: center;
+  width: 100%;
+}
+.hero-eyebrow {
+  margin-bottom: 22px;
+  /* 罗盘光晕垫在标题后方,小字加深色描影保证可读 */
+  text-shadow: 0 1px 6px rgba(7, 10, 20, 0.95), 0 0 16px rgba(7, 10, 20, 0.85);
+}
+.hero h1 { margin: 0 0 14px; }
+.brand-line {
+  font-size: 1.06rem; color: var(--muted);
+  margin-bottom: 22px; letter-spacing: 0.02em;
+  text-shadow: 0 1px 6px rgba(7, 10, 20, 0.9), 0 0 14px rgba(7, 10, 20, 0.8);
+}
+.brand-line strong { color: var(--gold-2); font-weight: 600; }
+.hero-brand .badges { justify-content: flex-start; margin-bottom: 28px; }
+.hero-brand .cta-row { justify-content: flex-start; margin-bottom: 0; }
+.hero-brand .btn { font-size: 1.15rem; padding: 14px 32px; gap: 10px; }
+
+@media (max-width: 980px) {
+  .hero { text-align: center; }
+  .hero-grid { grid-template-columns: 1fr; gap: 34px; }
+  .hero h1 { margin-inline: auto; }
+  .hero-brand .badges, .hero-brand .cta-row { justify-content: center; }
+  .hero-flow { margin: 0 auto; }
+}
+</style>

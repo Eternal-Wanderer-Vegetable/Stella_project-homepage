@@ -1,5 +1,6 @@
 <script setup>
 import { ref, watch } from 'vue'
+import BudgetRing from '../BudgetRing.vue'
 
 const props = defineProps({ active: { type: Boolean, default: false } })
 const root = ref(null)
@@ -66,6 +67,10 @@ function copyCode() {
           </div>
         </div>
       </div>
+
+      <h3 class="reveal" v-reveal style="font-size:1.05rem;margin-bottom:2px">8192 tokens 都花在哪了?</h3>
+      <p class="code-note reveal" v-reveal style="margin-bottom:4px">整颗"心智"的预算分配——记忆只占其中一小块,这就是 8K 也够用的原因。</p>
+      <BudgetRing />
 
       <h3 class="reveal" v-reveal style="font-size:1.05rem;margin-bottom:16px">环境要求</h3>
       <div class="req-chips reveal" v-reveal>
