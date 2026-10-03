@@ -9,7 +9,7 @@ defineProps({
 </script>
 
 <template>
-  <div class="panel" id="panel" :class="{ open }" :aria-hidden="String(!open)">
+  <div class="panel" id="panel" :class="{ open }" :aria-hidden="String(!open)" tabindex="-1">
     <QuickstartPage :active="current === 0" />
     <DocsPage :active="current === 1" />
   </div>

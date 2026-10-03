@@ -16,6 +16,7 @@ const lang = ref('zh')                                          // 'zh' | 'en'
 const loading = ref(false)
 const html = ref('')
 const filter = ref('')
+const sideOpen = ref(false)   // 移动端目录折叠开关
 
 // 按需懒加载:每篇文档单独成 chunk,首次打开才下载
 const mdModules = import.meta.glob('../../../docs-content/**/*.md', { query: '?raw', import: 'default' })
@@ -104,14 +105,20 @@ function postProcess() {
 
 watch([currentPath, lang], refresh, { immediate: true })
 
-// 离开的页回到页首;回到文档页时不强制重置所选文档
-watch(() => props.active, (now, was) => {
-  if (was && !now && root.value) root.value.scrollTop = 0
+// 离开时记住阅读位置,回来接着看;所选文档与语言保持不变
+let savedTop = 0
+watch(() => props.active, async (now, was) => {
+  if (was && !now && root.value) savedTop = root.value.scrollTop
+  else if (now && !was && root.value) {
+    await nextTick()
+    root.value.scrollTop = savedTop
+  }
 })
 
 function open(it) {
   currentPath.value = it.path
   if (lang.value === 'en' && !it.en) lang.value = 'zh'
+  sideOpen.value = false   // 移动端选完自动收起目录,正文立即可读
 }
 function switchLang(v) {
   lang.value = v
@@ -127,7 +134,13 @@ const ghUrl = computed(() => manifest.githubBase + (lang.value === 'en' && curre
 
 <template>
   <div ref="root" class="page docs-page" id="docs" :class="{ active: active }">
-    <aside class="docs-side">
+    <!-- 窄屏时目录折叠在这个开关后面,不再把正文顶下去一整屏 -->
+    <button class="docs-toggle" type="button"
+            :aria-expanded="sideOpen ? 'true' : 'false'" aria-controls="docsSide"
+            @click="sideOpen = !sideOpen">
+      <span aria-hidden="true">☰</span> 文档目录<em v-if="currentItem"> · {{ currentItem.title }}</em>
+    </button>
+    <aside id="docsSide" class="docs-side" :class="{ open: sideOpen }">
       <input v-model="filter" class="docs-search" type="text" placeholder="筛选文档…" aria-label="筛选文档">
       <!-- 用 div 而非 nav:原版 style.css 的裸元素选择器 nav{position:fixed} 会劫持文档侧栏 -->
       <div class="docs-nav" role="navigation" aria-label="文档目录">
@@ -138,6 +151,7 @@ const ghUrl = computed(() => manifest.githubBase + (lang.value === 'en' && curre
                   :title="it.title" @click="open(it)">
             <span class="t">{{ it.title }}</span>
             <span v-if="it.en" class="en-flag" aria-hidden="true">EN</span>
+            <span v-else class="en-flag off" aria-hidden="true" title="暂无英文版">EN</span>
           </button>
         </template>
         <div v-if="!filteredCats.length" class="docs-empty">没有匹配的文档</div>

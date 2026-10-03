@@ -38,6 +38,8 @@
     overflow-x: hidden;
   }
   ::selection { background: rgba(246, 201, 107, 0.28); color: #fff; }
+  /* 键盘可达性:Tab 聚焦时给出金色描边,鼠标点击不触发 */
+  :focus-visible { outline: 2px solid rgba(246, 201, 107, 0.75); outline-offset: 2px; }
   a { color: inherit; text-decoration: none; }
   code, pre { font-family: var(--mono); }
 
@@ -58,10 +60,18 @@
   .panel .page {
     position: absolute; left: 0; right: 0; top: 62px; bottom: 0;
     overflow-y: auto; overscroll-behavior: contain;
+    /* 禁止内容(如环形图的侧标)把页面撑出横向滚动 */
+    overflow-x: hidden; overflow-x: clip;
     display: none; flex-direction: column;
     padding: 10px 56px 28px 24px;
     scrollbar-width: thin; scrollbar-color: rgba(246, 201, 107, 0.35) transparent;
   }
+  @media (max-width: 640px) {
+    .panel .page { padding: 10px 16px 24px 14px; }
+  }
+  .panel:focus { outline: none; }
+  /* 面板页是 flex 容器:显式宽度截断 pre 长行经 min-content 把整页撑破 */
+  .panel .page > .container { width: 100%; }
   .panel .page::-webkit-scrollbar { width: 8px; }
   .panel .page::-webkit-scrollbar-thumb { background: rgba(246, 201, 107, 0.28); border-radius: 4px; }
   .panel .page::before, .panel .page::after { content: ""; flex: 1 0 0; }
@@ -238,8 +248,8 @@
   .badges { display: flex; flex-wrap: wrap; gap: 9px; justify-content: center; margin-bottom: 32px; }
   .badge {
     display: inline-flex; align-items: center; gap: 7px;
-    font-size: 0.78rem; font-weight: 600;
-    padding: 5px 14px; border-radius: 999px;
+    font-size: 0.82rem; font-weight: 600;
+    padding: 6px 16px; border-radius: 999px;
     border: 1px solid var(--border);
     background: rgba(255, 255, 255, 0.03);
     color: var(--muted);
@@ -431,6 +441,7 @@
   .steps { display: grid; gap: 14px; margin-bottom: 46px; }
   .step {
     display: flex; gap: 20px; align-items: flex-start;
+    min-width: 0;
     background: var(--card); border: 1px solid var(--border-soft);
     border-radius: var(--radius); padding: 22px 26px;
     transition: transform .22s, border-color .22s, background .22s;
@@ -445,7 +456,7 @@
   }
   .step h4 { font-size: 1rem; margin-bottom: 5px; }
   .step p { font-size: 0.92rem; color: var(--muted); }
-  .step p code { font-size: 0.84em; color: var(--gold-2); background: rgba(246, 201, 107, 0.09); padding: 1px 7px; border-radius: 7px; border: 1px solid rgba(246, 201, 107, 0.16); }
+  .step p code { font-size: 0.84em; color: var(--gold-2); background: rgba(246, 201, 107, 0.09); padding: 1px 7px; border-radius: 7px; border: 1px solid rgba(246, 201, 107, 0.16); overflow-wrap: anywhere; }
   .step p a { color: var(--gold-2); border-bottom: 1px dotted var(--gold); }
   .req-chips { display: flex; flex-wrap: wrap; gap: 9px; margin: 8px 0 40px; }
   .chip { font-size: 0.8rem; color: var(--muted); border: 1px solid var(--border); border-radius: 999px; padding: 5px 15px; background: rgba(255, 255, 255, 0.02); }

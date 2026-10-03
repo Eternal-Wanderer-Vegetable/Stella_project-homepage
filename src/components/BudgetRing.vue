@@ -105,4 +105,8 @@ onMounted(() => {
 @media (max-height: 760px) {
   .ring-wrap { width: 216px; margin-bottom: 4px; }
 }
+/* 窄屏收窄:给溢出 viewBox 的两侧文字标注留出空间,避免贴边裁切 */
+@media (max-width: 640px) {
+  .ring-wrap { width: 216px; }
+}
 </style>

@@ -1,12 +1,17 @@
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, watch, nextTick } from 'vue'
 import BudgetRing from '../BudgetRing.vue'
 
 const props = defineProps({ active: { type: Boolean, default: false } })
 const root = ref(null)
-// 离开的页回到页首(与原版一致)
-watch(() => props.active, (now, was) => {
-  if (was && !now && root.value) root.value.scrollTop = 0
+// 离开时记住阅读位置,回来接着看(不再强制回到页首)
+let savedTop = 0
+watch(() => props.active, async (now, was) => {
+  if (was && !now && root.value) savedTop = root.value.scrollTop
+  else if (now && !was && root.value) {
+    await nextTick()
+    root.value.scrollTop = savedTop
+  }
 })
 
 const devcode = ref(null)
