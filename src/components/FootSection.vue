@@ -49,6 +49,8 @@ const emit = defineEmits(['open'])
 .foot-brand {
   font-family: var(--serif); font-style: italic; font-weight: 600;
   font-size: clamp(2.6rem, 6.5vw, 4rem); line-height: 1.1;
+  /* 同 .hook-num:斜体墨迹伸出盒外,background-clip:text 需内边距外扩涂色区 */
+  padding: 0 0.1em;
   background: linear-gradient(120deg, #ffffff 12%, var(--gold-2) 46%, var(--gold) 64%, #c99b3f 96%);
   -webkit-background-clip: text; background-clip: text;
   -webkit-text-fill-color: transparent; color: transparent;

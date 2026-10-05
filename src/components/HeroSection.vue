@@ -116,7 +116,10 @@ function toMechanism() {
 .hook-num {
   font-family: var(--serif); font-style: italic; font-weight: 700;
   font-size: clamp(5.6rem, 17vw, 12.5rem);
-  line-height: 0.95; letter-spacing: 0.015em; padding-left: 0.015em;
+  line-height: 0.95; letter-spacing: 0.015em;
+  /* 斜体末笔的墨迹会伸出元素盒,background-clip:text 只涂盒内——
+     对称内边距把涂色区外扩,否则「2」的右侧尖端被裁掉;对称保证光学居中 */
+  padding: 0 0.1em;
   background: linear-gradient(120deg, #ffffff 8%, var(--gold-2) 42%, var(--gold) 66%, #c99b3f 96%);
   -webkit-background-clip: text; background-clip: text;
   -webkit-text-fill-color: transparent; color: transparent;

@@ -23,6 +23,8 @@ status: active
 - [2026-10-05] index.html 标题/描述改为 8192 钩子定位,补 OG/Twitter 卡片
 - [2026-10-05] 浏览器实证:桌面 1440×900 五屏截图、移动 390×844 四屏截图全部达标;面板开合/hash 直链/Esc 关闭/滚动锁/文档表格样式全过;window.__errs 恒空
 - [2026-10-05] 用户反馈瑕疵①「分页应不连续」已修:根节点 CSS scroll-snap(y mandatory + stop always),五屏一屏一页,手势不足一屏也吸附整屏边界;收尾屏 96svh 补成 100svh 使末页对齐滚动终点;`main > *, footer.foot` 的 scroll-margin-top:0 需压过全局 section 的 scroll-margin(故置于文件末尾)。实测手势序列 900→1800→2700→回退 1800→末页 3600 全部精确落界
+- [2026-10-05] 用户反馈瑕疵②「8192 的 2 右侧缺一小块」已修:background-clip:text 的涂色区=元素盒,斜体末笔墨迹伸出盒外即透明。给 .hook-num/.fd-num/.foot-brand 三个"斜体+渐变裁剪"元素加对称 `padding: 0 0.1em` 外扩涂色区(对称保证光学居中不变)。放大截图取证:修复前「2」右上为垂直切边,修复后钩形收笔完整
+- [2026-10-05] IAB 截图二次踩坑:getBoundingClientRect().top 是视口坐标,滚动位置不对时 clip 会截到别的层;先 scrollTo 再量再截
 
 ## Decisions
 
