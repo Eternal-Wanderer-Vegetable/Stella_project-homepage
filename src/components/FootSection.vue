@@ -27,8 +27,8 @@ const emit = defineEmits(['open'])
 
 <style scoped>
 .foot {
-  min-height: 96vh;
-  min-height: 96svh;
+  min-height: 100vh;
+  min-height: 100svh;
   display: flex; align-items: center; justify-content: center;
   text-align: center;
   position: relative;

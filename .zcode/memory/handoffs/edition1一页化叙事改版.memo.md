@@ -22,6 +22,7 @@ status: active
 - [2026-10-05] style.css:解除 html,body overflow:hidden,新增 body.panel-open 滚动锁;删除全部死样式(rail/stats/marquee/cards/quote/flow/principles/deploy/stack/旧footer/badges/hero-art);保留 table(steps 文档面板 Markdown 表格依赖全局 th/td)
 - [2026-10-05] index.html 标题/描述改为 8192 钩子定位,补 OG/Twitter 卡片
 - [2026-10-05] 浏览器实证:桌面 1440×900 五屏截图、移动 390×844 四屏截图全部达标;面板开合/hash 直链/Esc 关闭/滚动锁/文档表格样式全过;window.__errs 恒空
+- [2026-10-05] 用户反馈瑕疵①「分页应不连续」已修:根节点 CSS scroll-snap(y mandatory + stop always),五屏一屏一页,手势不足一屏也吸附整屏边界;收尾屏 96svh 补成 100svh 使末页对齐滚动终点;`main > *, footer.foot` 的 scroll-margin-top:0 需压过全局 section 的 scroll-margin(故置于文件末尾)。实测手势序列 900→1800→2700→回退 1800→末页 3600 全部精确落界
 
 ## Decisions
 
