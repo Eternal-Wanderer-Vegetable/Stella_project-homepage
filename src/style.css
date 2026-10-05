@@ -280,10 +280,14 @@
   }
 
   /* ================= 分页滚动:一屏一页,不连续游走 ================= */
-  /* 放在文件末尾:scroll-margin 需压过上方 section 规则,整屏对齐视口顶(顶栏悬浮其上) */
-  html { scroll-snap-type: y mandatory; }
-  main > *, footer.foot {
-    scroll-snap-align: start;
-    scroll-snap-stop: always;
-    scroll-margin-top: 0;
+  /* 触屏设备:原生 scroll-snap 惯性翻页。
+     精确指针设备(桌面)由 usePageGlide.js 接管滚轮/键盘做整页缓动——
+     mandatory snap 会把逐帧滚动强行吸回整屏位,与 JS 动画天然打架,故不在此开启 */
+  @media (pointer: coarse) {
+    html { scroll-snap-type: y mandatory; }
+    main > *, footer.foot {
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+      scroll-margin-top: 0;
+    }
   }

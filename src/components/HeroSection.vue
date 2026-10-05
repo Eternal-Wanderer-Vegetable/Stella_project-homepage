@@ -4,15 +4,11 @@ import { useHeroCanvas } from '../composables/useHeroCanvas.js'
 
 // 首屏即钩子:8192 → Enough to remember you. → Stella 一句话 → 行动
 // 往下滚交给第二屏解释"为什么 8192 就够"
+defineProps({ glideTo: { type: Function, default: null } })
 const emit = defineEmits(['open'])
 
 const canvas = ref(null)
 useHeroCanvas(canvas)
-
-function toMechanism() {
-  const el = document.getElementById('mechanism')
-  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-}
 </script>
 
 <template>
@@ -88,7 +84,7 @@ function toMechanism() {
         </div>
       </div>
     </div>
-    <button class="scroll-cue" type="button" aria-label="向下滚动:为什么 8192 就够" @click="toMechanism">
+    <button class="scroll-cue" type="button" aria-label="向下滚动:为什么 8192 就够" @click="glideTo && glideTo(1)">
       <span>为什么 8192 就够？</span>
       <svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true">
         <path d="M5 9l7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>

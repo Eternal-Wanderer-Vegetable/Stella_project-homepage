@@ -8,10 +8,16 @@ import MemorySection from './components/MemorySection.vue'
 import DeploySection from './components/DeploySection.vue'
 import FootSection from './components/FootSection.vue'
 import DetailPanel from './components/DetailPanel.vue'
+import { usePageGlide } from './composables/usePageGlide.js'
+
+usePageGlide()
 
 const panelOpen = ref(false)
 const current = ref(0)
 let lastTrigger = null   // 打开面板时的触发元素,关闭后把焦点还给它
+
+// 整页平滑翻页(滚轮/键盘接管),滚动暗示按钮共用同一缓动通道
+const { glideTo } = usePageGlide()
 
 // —— 面板状态 ↔ URL hash:#quickstart / #docs 可直链分享,浏览器返回键可退出面板 ——
 function pageFromHash() {
@@ -86,7 +92,7 @@ onUnmounted(function () {
 <template>
   <SiteNav :current="current" :open="panelOpen" @select="onSelect" @close="closePanel" />
   <main>
-    <HeroSection @open="openPanel" />
+    <HeroSection :glide-to="glideTo" @open="openPanel" />
     <MechanismSection />
     <MemorySection />
     <DeploySection @open="openPanel" />
