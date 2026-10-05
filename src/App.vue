@@ -3,6 +3,10 @@ import { ref, watch, nextTick, onMounted, onUnmounted } from 'vue'
 import { PAGES } from './pages.js'
 import SiteNav from './components/SiteNav.vue'
 import HeroSection from './components/HeroSection.vue'
+import MechanismSection from './components/MechanismSection.vue'
+import MemorySection from './components/MemorySection.vue'
+import DeploySection from './components/DeploySection.vue'
+import FootSection from './components/FootSection.vue'
 import DetailPanel from './components/DetailPanel.vue'
 
 const panelOpen = ref(false)
@@ -81,6 +85,12 @@ onUnmounted(function () {
 
 <template>
   <SiteNav :current="current" :open="panelOpen" @select="onSelect" @close="closePanel" />
-  <HeroSection @open="openPanel()" />
+  <main>
+    <HeroSection @open="openPanel" />
+    <MechanismSection />
+    <MemorySection />
+    <DeploySection @open="openPanel" />
+  </main>
+  <FootSection @open="openPanel" />
   <DetailPanel :open="panelOpen" :current="current" @close="closePanel" />
 </template>
