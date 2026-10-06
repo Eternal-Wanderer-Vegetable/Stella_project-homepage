@@ -2,15 +2,19 @@ import { onMounted, onUnmounted } from 'vue'
 
 /* ================================================================
    整页翻页(滚轮/键盘),三段式手感:
-   ① 阻力进入:滚轮增量先累积并让当前屏微幅位移(≤9px)——稍微滚一下
+   ① 阻力进入:滚轮增量先累积并让当前屏微幅位移(≤7px)——稍微滚一下
       只会被"顶住"后弹回,不会误翻页;增量过阈值才放行;
    ② 快速切换:过阈值整页滑动,rAF + postMessage 双驱动 easeOutQuart,
       起步即快;
    ③ 阻力收停:曲线尾段强减速,平稳落在整屏吸附点后自然停住。
+
+   阻力段不用 setTimeout:后台标签页/内嵌 webview 会把定时器钳到 1 秒
+   以上、把 rAF 整体冻结,弹回会严重滞后。故弹回与增量衰减统一放进
+   rAF + postMessage 双通道驱动的弹簧模拟(两通道互相取消,postMessage
+   已实证不被节流);CSS 过渡动画本身不受节流,视觉无碍。
+
    触屏设备保留 CSS scroll-snap 原生翻页;面板打开/减弱动效时不接管。
-   后台标签页/内嵌 webview 的 rAF 会冻结(document.hidden 恒 true),
-   双通道互相取消兜底;所有滚动显式 instant,避免被 html 的
-   scroll-behavior:smooth 冻结成 no-op。
+   所有滚动显式 instant,避免被 html 的 scroll-behavior:smooth 冻结。
    ================================================================ */
 export function usePageGlide() {
   let sections = []
@@ -18,16 +22,19 @@ export function usePageGlide() {
   let acc = 0                 // 滚轮增量累积:过阈值才翻页
   let settleUntil = 0         // 翻页结束后的静默期:吞掉触摸板惯性尾
   let nudgeEl = null          // 正被"顶住"微位移的当前屏
-  let nudgeTimer = 0
+  let nudgeOffset = 0         // 当前微位移 px(弹簧模拟值)
+  let lastInput = 0           // 最后一次滚轮输入时间
 
-  const THRESHOLD = 130       // 累积增量阈值:约 1.5 个滚轮刻度/一小段触屏滑动
-  const PULL_RATE = 0.06      // 阻力位移比例:每单位增量顶住 0.06px
-  const MAX_PULL = 9          // 阻力位移上限
+  const THRESHOLD = 85        // 累积增量阈值:单格滚轮(≈100)即放行,轻扫半格仍顶住弹回
+  const PULL_RATE = 0.045     // 阻力位移比例:每单位增量顶住 0.045px
+  const MAX_PULL = 7          // 阻力位移上限
   const DUR = 560             // 翻页动画时长
+  const IDLE_MS = 150         // 输入停止多久视为"松手":弹回 + 增量衰减
 
-  const TOKEN = 'stella-glide-frame:' + Math.random().toString(36).slice(2)
-  let rafId = 0
-  let onMsg = null
+  const GLIDE_TOKEN = 'stella-glide-frame:' + Math.random().toString(36).slice(2)
+  const SPRING_TOKEN = 'stella-glide-spring:' + Math.random().toString(36).slice(2)
+  let rafId = 0, glideMsg = null
+  let springRaf = 0, springMsg = null, springLast = 0, springRunning = false
 
   const finePointer = () => window.matchMedia('(pointer: fine)').matches
   const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -48,11 +55,19 @@ export function usePageGlide() {
     return best
   }
 
-  // 松开阻力:顶住的位移弹回;animated=弹簧过渡,否则立即复位
-  function releaseNudge(animated) {
-    clearTimeout(nudgeTimer)
+  // ---- 阻力弹簧:位移追随输入;输入停即弹回归零,增量同步衰减 ----
+  function cancelSpringDrive() {
+    cancelAnimationFrame(springRaf)
+    if (springMsg) { window.removeEventListener('message', springMsg); springMsg = null }
+  }
+
+  // 松开阻力:animated=CSS 弹簧过渡弹回,否则立即复位
+  function stopSpring(animated) {
+    cancelSpringDrive()
+    springRunning = false
     const el = nudgeEl
     nudgeEl = null
+    nudgeOffset = 0
     if (!el) return
     if (!animated) {
       el.style.transition = ''
@@ -67,22 +82,51 @@ export function usePageGlide() {
     }, 220)
   }
 
-  // 增量衰减链:输入停止 150ms 后开始衰减,直到归零。
-  // 只在闲置时衰减、事件间不衰减——否则滚轮"咔哒"节奏(>150ms/格)会被
-  // 双重衰减扣光,永远攒不过阈值。衰减链保证半截增量不会隔秒误触发。
-  function armDecay() {
-    clearTimeout(nudgeTimer)
-    nudgeTimer = setTimeout(function decay() {
-      releaseNudge(true)   // 输入已停:顶住的位移弹回(清的是已执行的定时器,无碍)
-      acc *= 0.35
-      if (Math.abs(acc) < 25) acc = 0
-      else nudgeTimer = setTimeout(decay, 150)
-    }, 150)
+  function springTick(now) {
+    cancelSpringDrive()   // 双通道互斥:谁先触发就取消另一个,保证单链推进
+    if (gliding) { springRunning = false; return }   // 翻页动画已接管:弹簧退出
+    const dt = Math.min(50, Math.max(1, now - springLast))
+    springLast = now
+    const idle = now - lastInput > IDLE_MS
+    if (idle) {
+      acc *= Math.pow(0.35, dt / IDLE_MS)   // 松手后增量指数衰减:每 150ms 剩 35%
+      if (Math.abs(acc) < 2) acc = 0
+    }
+    const target = idle ? 0 : Math.max(-MAX_PULL, Math.min(MAX_PULL, -acc * PULL_RATE))
+    nudgeOffset += (target - nudgeOffset) * Math.min(1, dt * 0.02)
+    if (nudgeEl) {
+      if (idle && acc === 0 && Math.abs(nudgeOffset) < 0.05) {
+        // 归位完成:弹簧自然收摊
+        nudgeEl.style.transition = ''
+        nudgeEl.style.transform = ''
+        nudgeEl = null
+        springRunning = false
+        return
+      }
+      nudgeEl.style.transform = 'translate3d(0,' + nudgeOffset.toFixed(2) + 'px,0)'
+    } else if (acc === 0) {
+      springRunning = false
+      return
+    }
+    springRaf = requestAnimationFrame(springTick)
+    springMsg = function (e) {
+      if (e.data === SPRING_TOKEN) springTick(performance.now())
+    }
+    window.addEventListener('message', springMsg)
+    window.postMessage(SPRING_TOKEN)
   }
 
-  function cancelDrive() {
+  function ensureSpring() {
+    if (springRunning) return
+    springRunning = true
+    springLast = performance.now()
+    springTick(springLast)
+  }
+
+  // ---- 翻页滑动 ----
+  function cancelGlideDrive() {
     cancelAnimationFrame(rafId)
-    if (onMsg) window.removeEventListener('message', onMsg)
+    if (glideMsg) { window.removeEventListener('message', glideMsg); glideMsg = null }
   }
 
   function glideTo(i) {
@@ -93,7 +137,7 @@ export function usePageGlide() {
     // 必须显式 instant:html 的 scroll-behavior:smooth 会让无 behavior 的
     // scrollTo 变成平滑动画,在后台标签页/内嵌 webview 里被冻结成 no-op
     if (reduced() || !finePointer()) {
-      releaseNudge(false)
+      stopSpring(false)
       window.scrollTo({ top: targetY, behavior: 'instant' })
       return
     }
@@ -102,17 +146,15 @@ export function usePageGlide() {
     const startY = window.scrollY
     const delta = targetY - startY
     if (!delta) { gliding = false; return }
-    releaseNudge(true)   // 弹回与翻页叠合,衔接成"松阻放行"
+    stopSpring(true)   // 弹回与翻页叠合,衔接成"松阻放行"
     const t0 = performance.now()
     const ease = t => 1 - Math.pow(1 - t, 4)   // easeOutQuart:起步即快,尾段强减速
     let lastT = -1
     function tick(now) {
-      cancelDrive()   // 双通道互斥:谁先触发就取消另一个,保证单链推进
+      cancelGlideDrive()
       const t = Math.min(1, (now - t0) / DUR)
       if (t > lastT) {
         lastT = t
-        // 显式 instant:否则两参 scrollTo 继承 html 的 scroll-behavior:smooth,
-        // 在 rAF 冻结的环境里每帧动画都启动即冻结,页面纹丝不动
         window.scrollTo({ top: Math.round(startY + delta * ease(t)), behavior: 'instant' })
       }
       if (t < 1) schedule()
@@ -123,11 +165,11 @@ export function usePageGlide() {
     }
     function schedule() {
       rafId = requestAnimationFrame(tick)
-      onMsg = function (e) {
-        if (e.data === TOKEN) tick(performance.now())
+      glideMsg = function (e) {
+        if (e.data === GLIDE_TOKEN) tick(performance.now())
       }
-      window.addEventListener('message', onMsg)
-      window.postMessage(TOKEN, '*')
+      window.addEventListener('message', glideMsg)
+      window.postMessage(GLIDE_TOKEN)
     }
     schedule()
   }
@@ -142,22 +184,23 @@ export function usePageGlide() {
     if (gliding || performance.now() < settleUntil) return
     const d = e.deltaMode === 1 ? e.deltaY * 33 : e.deltaY   // 行模式的滚轮(如 Firefox)
     acc += d
-    // ① 阻力进入:内容随输入被"顶住"微幅位移,增量过阈值才放行翻页
+    lastInput = performance.now()
+    // ① 阻力进入:内容随输入被"顶住"微幅位移(弹簧模拟渲染),过阈值才放行
     const cur = sections[currentIndex()]
     if (cur) {
-      if (nudgeEl && nudgeEl !== cur) releaseNudge(false)
+      if (nudgeEl && nudgeEl !== cur) {
+        nudgeEl.style.transition = ''
+        nudgeEl.style.transform = ''
+      }
       nudgeEl = cur
       cur.style.transition = 'none'
-      cur.style.transform = 'translate3d(0,' +
-        Math.max(-MAX_PULL, Math.min(MAX_PULL, -acc * PULL_RATE)).toFixed(1) + 'px,0)'
+      ensureSpring()
     }
     if (Math.abs(acc) >= THRESHOLD) {
       const dir = acc > 0 ? 1 : -1
       acc = 0
-      releaseNudge(true)
+      stopSpring(true)
       turn(dir)
-    } else {
-      armDecay()
     }
   }
 
@@ -179,8 +222,8 @@ export function usePageGlide() {
     document.addEventListener('keydown', onKey)
   })
   onUnmounted(() => {
-    cancelDrive()
-    releaseNudge(false)
+    cancelGlideDrive()
+    stopSpring(false)
     window.removeEventListener('wheel', onWheel)
     document.removeEventListener('keydown', onKey)
   })
