@@ -1,21 +1,29 @@
 import { onMounted, onUnmounted } from 'vue'
 
 /* ================================================================
-   整页平滑翻页:一次手势(滚轮/键盘)= 一整页,自绘 easeInOutCubic 缓动。
-   不用原生 smooth scroll:部分环境完全失效,且 mandatory snap 会把逐帧
-   滚动强行吸回整屏位,与动画天然打架。因此精确指针设备上关闭 CSS snap、
-   由本模块接管;触屏设备保留 CSS scroll-snap 走原生惯性翻页,本模块不介入。
-
-   动画驱动为 rAF + postMessage 双通道:后台标签页/内嵌 webview 的
-   document.hidden 恒为 true 时 rAF 会被冻结,而 postMessage 任务不受
-   节流——两通道互相取消,正常环境走 rAF 档,冻结环境自动落到消息档。
+   整页翻页(滚轮/键盘),三段式手感:
+   ① 阻力进入:滚轮增量先累积并让当前屏微幅位移(≤9px)——稍微滚一下
+      只会被"顶住"后弹回,不会误翻页;增量过阈值才放行;
+   ② 快速切换:过阈值整页滑动,rAF + postMessage 双驱动 easeOutQuart,
+      起步即快;
+   ③ 阻力收停:曲线尾段强减速,平稳落在整屏吸附点后自然停住。
+   触屏设备保留 CSS scroll-snap 原生翻页;面板打开/减弱动效时不接管。
+   后台标签页/内嵌 webview 的 rAF 会冻结(document.hidden 恒 true),
+   双通道互相取消兜底;所有滚动显式 instant,避免被 html 的
+   scroll-behavior:smooth 冻结成 no-op。
    ================================================================ */
 export function usePageGlide() {
   let sections = []
   let gliding = false
-  let acc = 0                 // 滚轮增量累积:过阈值才翻页,过滤触摸板细碎增量
-  let lastTs = 0              // 上个滚轮事件时间:识别新手势,防惯性尾连翻
+  let acc = 0                 // 滚轮增量累积:过阈值才翻页
   let settleUntil = 0         // 翻页结束后的静默期:吞掉触摸板惯性尾
+  let nudgeEl = null          // 正被"顶住"微位移的当前屏
+  let nudgeTimer = 0
+
+  const THRESHOLD = 130       // 累积增量阈值:约 1.5 个滚轮刻度/一小段触屏滑动
+  const PULL_RATE = 0.06      // 阻力位移比例:每单位增量顶住 0.06px
+  const MAX_PULL = 9          // 阻力位移上限
+  const DUR = 560             // 翻页动画时长
 
   const TOKEN = 'stella-glide-frame:' + Math.random().toString(36).slice(2)
   let rafId = 0
@@ -40,6 +48,38 @@ export function usePageGlide() {
     return best
   }
 
+  // 松开阻力:顶住的位移弹回;animated=弹簧过渡,否则立即复位
+  function releaseNudge(animated) {
+    clearTimeout(nudgeTimer)
+    const el = nudgeEl
+    nudgeEl = null
+    if (!el) return
+    if (!animated) {
+      el.style.transition = ''
+      el.style.transform = ''
+      return
+    }
+    el.style.transition = 'transform .18s cubic-bezier(.22,.61,.36,1)'
+    el.style.transform = 'translate3d(0,0,0)'
+    // 延迟清理内联样式;若该屏已被新一轮微位移接管则不清理
+    setTimeout(function () {
+      if (nudgeEl !== el) { el.style.transition = ''; el.style.transform = '' }
+    }, 220)
+  }
+
+  // 增量衰减链:输入停止 150ms 后开始衰减,直到归零。
+  // 只在闲置时衰减、事件间不衰减——否则滚轮"咔哒"节奏(>150ms/格)会被
+  // 双重衰减扣光,永远攒不过阈值。衰减链保证半截增量不会隔秒误触发。
+  function armDecay() {
+    clearTimeout(nudgeTimer)
+    nudgeTimer = setTimeout(function decay() {
+      releaseNudge(true)   // 输入已停:顶住的位移弹回(清的是已执行的定时器,无碍)
+      acc *= 0.35
+      if (Math.abs(acc) < 25) acc = 0
+      else nudgeTimer = setTimeout(decay, 150)
+    }, 150)
+  }
+
   function cancelDrive() {
     cancelAnimationFrame(rafId)
     if (onMsg) window.removeEventListener('message', onMsg)
@@ -53,6 +93,7 @@ export function usePageGlide() {
     // 必须显式 instant:html 的 scroll-behavior:smooth 会让无 behavior 的
     // scrollTo 变成平滑动画,在后台标签页/内嵌 webview 里被冻结成 no-op
     if (reduced() || !finePointer()) {
+      releaseNudge(false)
       window.scrollTo({ top: targetY, behavior: 'instant' })
       return
     }
@@ -61,9 +102,9 @@ export function usePageGlide() {
     const startY = window.scrollY
     const delta = targetY - startY
     if (!delta) { gliding = false; return }
-    const DUR = 850
+    releaseNudge(true)   // 弹回与翻页叠合,衔接成"松阻放行"
     const t0 = performance.now()
-    const ease = t => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2)   // easeInOutCubic
+    const ease = t => 1 - Math.pow(1 - t, 4)   // easeOutQuart:起步即快,尾段强减速
     let lastT = -1
     function tick(now) {
       cancelDrive()   // 双通道互斥:谁先触发就取消另一个,保证单链推进
@@ -98,16 +139,25 @@ export function usePageGlide() {
     if (e.ctrlKey || panelOpen() || reduced() || !finePointer()) return
     if (!e.deltaY) return
     e.preventDefault()
-    const now = performance.now()
-    if (now - lastTs > 120) acc = 0   // 与上次事件间隔较久 = 新手势,清零重累积
-    lastTs = now
-    if (gliding || now < settleUntil) return
+    if (gliding || performance.now() < settleUntil) return
     const d = e.deltaMode === 1 ? e.deltaY * 33 : e.deltaY   // 行模式的滚轮(如 Firefox)
     acc += d
-    if (Math.abs(acc) >= 60) {
+    // ① 阻力进入:内容随输入被"顶住"微幅位移,增量过阈值才放行翻页
+    const cur = sections[currentIndex()]
+    if (cur) {
+      if (nudgeEl && nudgeEl !== cur) releaseNudge(false)
+      nudgeEl = cur
+      cur.style.transition = 'none'
+      cur.style.transform = 'translate3d(0,' +
+        Math.max(-MAX_PULL, Math.min(MAX_PULL, -acc * PULL_RATE)).toFixed(1) + 'px,0)'
+    }
+    if (Math.abs(acc) >= THRESHOLD) {
       const dir = acc > 0 ? 1 : -1
       acc = 0
+      releaseNudge(true)
       turn(dir)
+    } else {
+      armDecay()
     }
   }
 
@@ -130,6 +180,7 @@ export function usePageGlide() {
   })
   onUnmounted(() => {
     cancelDrive()
+    releaseNudge(false)
     window.removeEventListener('wheel', onWheel)
     document.removeEventListener('keydown', onKey)
   })

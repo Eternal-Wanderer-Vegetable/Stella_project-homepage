@@ -25,6 +25,7 @@ status: active
 - [2026-10-05] 用户反馈瑕疵①「分页应不连续」已修:根节点 CSS scroll-snap(y mandatory + stop always),五屏一屏一页,手势不足一屏也吸附整屏边界;收尾屏 96svh 补成 100svh 使末页对齐滚动终点;`main > *, footer.foot` 的 scroll-margin-top:0 需压过全局 section 的 scroll-margin(故置于文件末尾)。实测手势序列 900→1800→2700→回退 1800→末页 3600 全部精确落界
 - [2026-10-05] 用户反馈瑕疵②「8192 的 2 右侧缺一小块」已修:background-clip:text 的涂色区=元素盒,斜体末笔墨迹伸出盒外即透明。给 .hook-num/.fd-num/.foot-brand 三个"斜体+渐变裁剪"元素加对称 `padding: 0 0.1em` 外扩涂色区(对称保证光学居中不变)。放大截图取证:修复前「2」右上为垂直切边,修复后钩形收笔完整
 - [2026-10-05] 用户反馈瑕疵③「页间切换不平滑」已修:新增 usePageGlide.js——滚轮/键盘接管为"一次手势=一整页",rAF 自绘 easeInOutCubic 850ms;CSS snap 收窄进 @media (pointer: coarse) 保留给触屏。两个关键坑:①内嵌 webview document.hidden 恒 true,rAF 整体冻结(800ms 0 帧),动画驱动用 rAF+postMessage 双通道互斥兜底;②html 的 scroll-behavior:smooth 会传染两参 scrollTo,平滑动画在隐藏页全部冻结成 no-op——动画帧必须显式 behavior:'instant'。轨迹采样验证 10→81→250→542→763→868→898→900;猛滑 2400px 惯性锁仍只翻一页;键盘 ↓/End 正常;面板打开完全放行;滚动暗示按钮共用 glideTo(1)
+- [2026-10-06] 用户反馈瑕疵④「翻页过慢 + 要三段式手感」已调:时长 850→560ms、缓动改 easeOutQuart(起步即快、尾段强减速);新增阻力进入——滚轮增量累积 <130 只把当前屏顶住微移(≤9px,transform)并弹回,过阈值才放行;增量衰减链只在闲置 150ms 后逐级衰减(事件间不衰减,否则滚轮咔哒节奏会被双重衰减扣光永远攒不过阈值——实测踩坑);轨迹实测 42→435→677→807→870→894→900(快中段+阻力落停),单刻度弹回不翻页,双刻度 220ms 间隔可放行
 - [2026-10-05] 合成事件探针坑:keydown 的 target 可能是 document(无 closest 方法,需判型);合成 WheelEvent 不触发原生滚动,只能验证处理器行为不能验证默认滚动;evaluate 参数是表达式,多语句要包 IIFE,且 async 有 3s 预算不能等 rAF Promise
 - [2026-10-05] IAB 截图二次踩坑:getBoundingClientRect().top 是视口坐标,滚动位置不对时 clip 会截到别的层;先 scrollTo 再量再截
 
