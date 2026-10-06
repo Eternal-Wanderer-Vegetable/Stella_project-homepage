@@ -13,9 +13,9 @@ import FlowDiagram from './FlowDiagram.vue'
         <b>而是让信息待在它该待的地方。</b>
       </p>
       <dl class="mech-trio" v-reveal style="transition-delay:.2s">
-        <div class="trio-row"><dt>Memory</dt><dd>记住重要的信息</dd></div>
-        <div class="trio-row"><dt>Tools</dt><dd>在上下文之外执行工具</dd></div>
-        <div class="trio-row"><dt>Compression</dt><dd>压缩已经结束的对话</dd></div>
+        <dt>Memory</dt><dd>记住重要的信息</dd>
+        <dt>Tools</dt><dd>在上下文之外执行工具</dd>
+        <dt>Compression</dt><dd>压缩已经结束的对话</dd>
       </dl>
     </div>
   </section>
@@ -47,25 +47,27 @@ import FlowDiagram from './FlowDiagram.vue'
 }
 .mech-line b { color: var(--text); font-weight: 700; }
 
+/* 两列网格:金色术语列(dt)右对齐,白色说明列(dd)左对齐——
+   dt/dd 必须是 dl 的直接子元素,行宽才能共用同一对列轨 */
 .mech-trio {
   margin: clamp(30px, 5vh, 48px) 0 0;
-  display: grid; gap: 10px;
+  display: inline-grid;
+  grid-template-columns: auto auto;
+  align-items: baseline;
+  gap: 10px 18px;
 }
-.trio-row {
-  display: flex; align-items: baseline; gap: 18px;
-  width: fit-content; margin: 0 auto;
-}
-.trio-row dt {
+.mech-trio dt {
   font-family: var(--mono); font-size: 0.78rem; font-weight: 600;
   letter-spacing: 0.18em; color: var(--gold);
-  width: 118px; text-align: right; flex: 0 0 auto;
+  text-align: right;
 }
-.trio-row dd { font-size: 0.86rem; color: var(--faint); margin: 0; }
+.mech-trio dd { margin: 0; font-size: 0.86rem; color: var(--faint); }
 
 @media (max-width: 880px) {
   .mech { padding-bottom: 48px; }
-  .trio-row { flex-direction: column; align-items: center; gap: 2px; }
-  .trio-row dt { width: auto; text-align: center; }
+  .mech-trio { grid-template-columns: 1fr; justify-items: center; gap: 12px; }
+  .mech-trio dt { text-align: center; }
+  .mech-trio dd { text-align: center; }
   .mech-line br { display: none; }
 }
 </style>
