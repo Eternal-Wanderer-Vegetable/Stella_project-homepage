@@ -53,9 +53,8 @@
 }
 .fd-label {
   font-size: 1.02rem; font-weight: 600; color: var(--text);
-  /* 固定宽 + 右对齐:白色标签宽度不一(记忆/旧对话/工具),
-     让金色动词集体左对齐成一列 */
-  min-width: 3.2em; text-align: right;
+  /* 固定宽标签盒:白色标签左对齐,金色动词越过它集体左对齐成一列 */
+  min-width: 3.2em;
 }
 .fd-verb { font-size: 0.8rem; color: var(--gold-2); letter-spacing: 0.05em; opacity: 0.9; }
 

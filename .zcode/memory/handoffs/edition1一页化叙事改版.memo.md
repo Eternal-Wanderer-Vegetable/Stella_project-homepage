@@ -28,6 +28,7 @@ status: active
 - [2026-10-06] 用户反馈瑕疵④「翻页过慢 + 要三段式手感」已调:时长 850→560ms、缓动改 easeOutQuart(起步即快、尾段强减速);新增阻力进入——滚轮增量累积过阈值才放行,不足则当前屏被"顶住"微移并弹回
 - [2026-10-06] 用户反馈瑕疵⑤「起始阻力过大」已调:阈值 130→85(单格滚轮即放行,轻扫半格仍弹回),顶住幅度 9px→7px。同时发现并修复深层坑:阻力弹回原用 setTimeout(150ms),内嵌 webview 对隐藏页定时器钳到 1s+,弹回滞后近秒——重构为 rAF+postMessage 双驱动的连续弹簧模拟(位移追随输入、松手弹回、增量指数衰减,全部无 setTimeout),内嵌环境实测 450ms 内归位。轨迹:单格放行 447→714→840→888→899→900
 - [2026-10-06] 用户反馈瑕疵⑥「第二屏文字对齐」已修:①流程图三来源药丸盒本就拉伸等宽,但金色动词跟在宽度不一的白色标签后起始 x 参差——.fd-label 加 min-width:3.2em + text-align:right,金色动词集体左对齐;②三行说明原是各自行 fit-content 独立居中,行宽不同拖动金色术语列参差——改为 dl 直接子元素的两列 inline-grid(金色 dt 列右对齐、白色 dd 列左对齐,align-items:baseline),移动端单列居中。DOM 探针量化验证:三组左/右缘离散度均为 0。注意探针坑:隐藏面板(visibility:hidden 保布局)里的代码块 span 会有越界 rect,但被 .page overflow-x 裁剪,不构成实际溢出,以 scrollWidth===clientWidth 为准
+- [2026-10-06] 用户反馈瑕疵⑦「白字被改成了右对齐」已修:瑕疵⑥的修法用了 text-align:right 让金色对齐,但白字应保持左对齐——改为仅 min-width:3.2em 固定盒(不设 text-align),白字左对齐、金字越过固定盒集体左对齐,两列同时成立。DOM 探针:labelSpread=0 且 verbSpread=0。另:截图陈旧帧问题加重(scrollY=900 画面仍停首屏),继续以探针为准;scrollIntoView 受全局 section scroll-margin-top(76px)影响落点为 offsetTop-76
 - [2026-10-05] 合成事件探针坑:keydown 的 target 可能是 document(无 closest 方法,需判型);合成 WheelEvent 不触发原生滚动,只能验证处理器行为不能验证默认滚动;evaluate 参数是表达式,多语句要包 IIFE,且 async 有 3s 预算不能等 rAF Promise
 - [2026-10-05] IAB 截图二次踩坑:getBoundingClientRect().top 是视口坐标,滚动位置不对时 clip 会截到别的层;先 scrollTo 再量再截
 
