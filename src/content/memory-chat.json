@@ -1,0 +1,9 @@
+{
+  "aria": "群聊示意:Vegetable 说准备把模块换 Rust,Stella 记得他上次的抱怨并反问,Vegetable 回了一个字。",
+  "messages": [
+    { "from": "vegetable", "text": "最近准备把那个模块换 Rust。" },
+    { "from": "stella", "text": "？" },
+    { "from": "stella", "text": "你上次迁移 Python 那块的时候不是还说“以后再也不干这种事了吗”", "recall": true },
+    { "from": "vegetable", "text": "草" }
+  ]
+}

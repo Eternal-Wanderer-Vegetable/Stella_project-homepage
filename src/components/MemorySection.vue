@@ -1,40 +1,44 @@
+<script setup>
+import { useEnterOnce } from '../composables/useEnterOnce.js'
+import chat from '../content/memory-chat.json'
+
+// 聊天内容外置:编辑 src/content/memory-chat.json 即可改写本屏对话,改完重新构建生效。
+// 字段:aria — 整卡读屏描述;messages[] —
+//   from: "vegetable"(右侧蓝 V)/ "stella"(左侧金 ✦),决定方向与头像
+//   text: 气泡正文;name: 可选,覆盖显示名;recall: true 时气泡金色高亮(「翻旧账」重点)
+
+// 首次入场编排:卡片浮起后气泡按条铺开(每条间隔 .4s),recall 落定后金光脉冲,
+// 「她记得。」等最后一条气泡落地才浮现——punchline 在证据之后
+const { root, entered } = useEnterOnce()
+
+const MSG_START = 0.25
+const MSG_STEP = 0.4
+const LAST = MSG_START + (chat.messages.length - 1) * MSG_STEP
+const msgDelay = (i) => (MSG_START + i * MSG_STEP).toFixed(2) + 's'
+const pulseDelay = (i) => (MSG_START + i * MSG_STEP + 0.55).toFixed(2) + 's'
+const asideDelay = (LAST + 0.5).toFixed(2) + 's'
+const asideWordsDelay = (LAST + 0.75).toFixed(2) + 's'
+</script>
+
 <template>
   <!-- 第三屏:证明她不是概念项目。一次真实群聊 + 一句"她记得。",不做任何解释 -->
-  <section id="memory" class="mem">
+  <section id="memory" ref="root" class="mem" :class="{ entered: entered }">
     <div class="container mem-grid">
-      <div class="chat" v-reveal role="img" aria-label="群聊示意:Vegetable 说准备把模块换 Rust,Stella 记得他上次的抱怨并反问,Vegetable 回了一个字。">
-        <div class="msg right">
-          <span class="ava v" aria-hidden="true">V</span>
+      <div class="chat" role="img" :aria-label="chat.aria">
+        <div v-for="(m, i) in chat.messages" :key="i"
+             class="msg" :class="m.from === 'stella' ? 'left' : 'right'"
+             :style="{ animationDelay: msgDelay(i) }">
+          <span class="ava" :class="m.from === 'stella' ? 's' : 'v'" aria-hidden="true">{{ m.from === 'stella' ? '✦' : 'V' }}</span>
           <div class="bubble-wrap">
-            <span class="name">Vegetable</span>
-            <div class="bubble">最近准备把那个模块换 Rust。</div>
-          </div>
-        </div>
-        <div class="msg left" style="transition-delay:.35s">
-          <span class="ava s" aria-hidden="true">✦</span>
-          <div class="bubble-wrap">
-            <span class="name">Stella</span>
-            <div class="bubble s">？</div>
-          </div>
-        </div>
-        <div class="msg left" style="transition-delay:.7s">
-          <span class="ava s" aria-hidden="true">✦</span>
-          <div class="bubble-wrap">
-            <span class="name">Stella</span>
-            <div class="bubble s recall">你上次迁移 Python 那块的时候不是还说“以后再也不干这种事了吗”</div>
-          </div>
-        </div>
-        <div class="msg right" style="transition-delay:1.05s">
-          <span class="ava v" aria-hidden="true">V</span>
-          <div class="bubble-wrap">
-            <span class="name">Vegetable</span>
-            <div class="bubble">草</div>
+            <span class="name">{{ m.name || (m.from === 'stella' ? 'Stella' : 'Vegetable') }}</span>
+            <div class="bubble" :class="{ s: m.from === 'stella', recall: m.recall }"
+                 :style="m.recall ? { '--pulse-delay': pulseDelay(i) } : null">{{ m.text }}</div>
           </div>
         </div>
       </div>
       <div class="aside">
-        <p class="aside-line" v-reveal style="transition-delay:.5s">她记得。</p>
-        <p class="aside-words" v-reveal style="transition-delay:.75s">长期记忆 · 群聊上下文 · 主动参与</p>
+        <p class="aside-line" :style="{ animationDelay: asideDelay }">她记得。</p>
+        <p class="aside-words" :style="{ animationDelay: asideWordsDelay }">长期记忆 · 群聊上下文 · 主动参与</p>
       </div>
     </div>
   </section>
@@ -64,8 +68,11 @@
   background: linear-gradient(160deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.012));
   box-shadow: 0 24px 70px rgba(0, 0, 0, 0.42);
 }
-.msg { display: flex; gap: 12px; align-items: flex-end; }
-.msg.right { flex-direction: row-reverse; }
+.msg {
+  display: flex; gap: 12px; align-items: flex-end;
+  transform-origin: left bottom;
+}
+.msg.right { flex-direction: row-reverse; transform-origin: right bottom; }
 .ava {
   flex: 0 0 auto;
   width: 34px; height: 34px; border-radius: 50%;
@@ -78,6 +85,7 @@
 .msg.right .bubble-wrap { align-items: flex-end; }
 .name { font-size: 0.7rem; letter-spacing: 0.08em; color: var(--faint); }
 .bubble {
+  position: relative;
   padding: 10px 16px;
   border-radius: 4px 16px 16px 16px;
   background: rgba(255, 255, 255, 0.055);
@@ -95,6 +103,13 @@
   background: linear-gradient(135deg, rgba(246, 201, 107, 0.13), rgba(246, 201, 107, 0.05));
   box-shadow: 0 0 26px rgba(246, 201, 107, 0.08);
 }
+/* 落定后的金色微光脉冲层:只动这张覆盖层,不碰气泡本体样式 */
+.bubble.recall::after {
+  content: ""; position: absolute; inset: -1px;
+  border-radius: inherit;
+  background: radial-gradient(130% 170% at 18% 25%, rgba(246, 201, 107, 0.3), transparent 62%);
+  opacity: 0; pointer-events: none;
+}
 
 .aside { text-align: center; }
 .aside-line {
@@ -110,6 +125,34 @@
   margin-top: 22px;
   font-size: 0.8rem; letter-spacing: 0.22em;
   color: var(--faint);
+}
+
+/* —— 首次入场:卡片浮起 → 气泡像收消息一样逐条弹出(间隔 .4s,由行内
+   animationDelay 按条数铺开)→ recall 落定后来一次金光脉冲 → 「她记得。」压轴 —— */
+@media (prefers-reduced-motion: no-preference) {
+  .chat, .msg, .aside-line, .aside-words { opacity: 0; }
+  .mem.entered .chat { animation: cardIn .5s cubic-bezier(.22,.61,.36,1) both; }
+  .mem.entered .msg { animation: bubbleIn .5s cubic-bezier(.34,1.45,.64,1) both; }
+  .mem.entered .aside-line { animation: asideIn .7s cubic-bezier(.22,.61,.36,1) both; }
+  .mem.entered .aside-words { animation: asideIn .7s cubic-bezier(.22,.61,.36,1) both; }
+  .mem.entered .bubble.recall::after { animation: recallPulse 1.2s ease-out both; animation-delay: var(--pulse-delay, 1.5s); }
+}
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(26px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes bubbleIn {
+  from { opacity: 0; transform: translateY(12px) scale(.92); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes asideIn {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes recallPulse {
+  0% { opacity: 0; }
+  45% { opacity: 0.85; }
+  100% { opacity: 0; }
 }
 
 @media (max-width: 880px) {

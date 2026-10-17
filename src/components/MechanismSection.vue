@@ -1,31 +1,10 @@
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
 import FlowDiagram from './FlowDiagram.vue'
+import { useEnterOnce } from '../composables/useEnterOnce.js'
 
 // 首次入场编排:整屏第一次进入视口时点亮 entered,图与文字按分镜依次就位;
 // 只播一次,离开再回来不重播。减弱动效/无 IntersectionObserver 时直接呈现完整画面。
-const root = ref(null)
-const entered = ref(false)
-let io = null
-
-onMounted(function () {
-  if (!('IntersectionObserver' in window) ||
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    entered.value = true
-    return
-  }
-  io = new IntersectionObserver(function (entries) {
-    entries.forEach(function (en) {
-      if (en.isIntersecting) {
-        entered.value = true
-        io.disconnect()
-        io = null
-      }
-    })
-  }, { threshold: 0.3 })
-  io.observe(root.value)
-})
-onUnmounted(function () { if (io) io.disconnect() })
+const { root, entered } = useEnterOnce()
 </script>
 
 <template>
