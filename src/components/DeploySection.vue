@@ -43,7 +43,6 @@ const emit = defineEmits(['open'])
       </div>
 
       <div class="dep-cta" v-reveal>
-        <button v-ripple class="btn btn-primary" type="button" @click="emit('open', 'quickstart')">一键安装 Stella</button>
         <button class="dep-more" type="button" @click="emit('open', 'docs')">Docker / Standalone / Advanced →</button>
       </div>
     </div>
@@ -68,18 +67,27 @@ const emit = defineEmits(['open'])
   margin-bottom: clamp(52px, 9vh, 92px);
 }
 
-/* 谱系图:Local ←— Hybrid —→ Online,Stella 挂在中心下方 */
+/* 谱系图:Local ←— Hybrid —→ Online,Stella 挂在中心下方。
+   两端标签绝对定位悬浮在药丸上方:行高即药丸高,连接线/箭头正好对准药丸中心;
+   两端列等宽(flex:1 1 0),宽度不同的 Local/Online 不再把 Hybrid 挤离中线,
+   悬挂的 Stella 竖线才能落在 Hybrid 正中 */
 .spectrum {
   position: relative;
   display: flex; align-items: center; justify-content: center;
   width: min(680px, 100%);
   margin-bottom: clamp(96px, 15vh, 128px);   /* 给下方悬挂的 Stella 留位 */
 }
-.spec-end { display: flex; flex-direction: column; align-items: center; gap: 9px; }
+.spec-end {
+  position: relative;
+  flex: 1 1 0;
+  display: flex; flex-direction: column; align-items: center;
+}
 .spec-side {
+  position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%);
   font-size: 0.64rem; font-weight: 600;
   letter-spacing: 0.32em; text-transform: uppercase;
   color: var(--faint);
+  white-space: nowrap;
 }
 .spec-node {
   display: inline-flex; align-items: center;
@@ -132,7 +140,7 @@ const emit = defineEmits(['open'])
   display: grid; grid-template-columns: repeat(3, 1fr);
   gap: 26px;
   width: min(860px, 100%);
-  margin-bottom: clamp(40px, 7vh, 60px);
+  margin-bottom: clamp(48px, 8vh, 72px);
 }
 .dep-col {
   padding-top: 18px;
@@ -141,16 +149,21 @@ const emit = defineEmits(['open'])
 .dep-col h4 { font-size: 1rem; font-weight: 700; margin-bottom: 6px; color: var(--text); }
 .dep-col p { font-size: 0.9rem; color: var(--muted); }
 
-.dep-cta { display: flex; flex-direction: column; align-items: center; gap: 16px; }
-.dep-cta .btn { font-size: 1.08rem; padding: 14px 34px; }
+/* 唯一出口:进阶部署文档。一键安装已并去尾屏的 Get Stella */
 .dep-more {
-  border: none; background: none; cursor: pointer;
-  font-family: var(--mono); font-size: 0.8rem; letter-spacing: 0.06em;
-  color: var(--faint);
-  padding: 4px 8px;
-  transition: color .25s;
+  border: 1px solid var(--border); border-radius: 999px;
+  background: rgba(255, 255, 255, 0.03);
+  cursor: pointer;
+  font-family: var(--mono); font-size: 0.9rem; letter-spacing: 0.05em;
+  color: var(--muted);
+  padding: 12px 30px;
+  transition: color .25s, border-color .25s, background .25s;
 }
-.dep-more:hover { color: var(--gold-2); }
+.dep-more:hover {
+  color: var(--gold-2);
+  border-color: rgba(246, 201, 107, 0.4);
+  background: rgba(255, 255, 255, 0.06);
+}
 
 @media (max-width: 880px) {
   .dep-grid { grid-template-columns: 1fr; gap: 18px; width: min(420px, 100%); }
