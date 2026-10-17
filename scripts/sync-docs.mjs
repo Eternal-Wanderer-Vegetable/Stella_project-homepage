@@ -15,8 +15,10 @@ const REF = 'main'
 const SRC_PREFIX = 'docs/'
 const OUT = join(dirname(fileURLToPath(import.meta.url)), '..', 'docs-content')
 
-// 展示顺序(与 README「文档」表一致,新特性文档排其后);未列出的按文件名追加
+// 展示顺序(与 README「文档」表一致,新特性文档排其后);未列出的按文件名追加。
+// README(上游 docs 总览/入口)置顶。
 const CORE_ORDER = [
+  'README',
   'architecture', 'memory-system', 'capability-system', 'plugin-spec', 'configuration',
   'deployment-docker', 'development', 'cometa', 'scheduling', 'skills',
   'knowledge-base', 'webui', 'memory-rust-backend',

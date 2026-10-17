@@ -1,68 +1,21 @@
-# Rust Memory Backend
+# Rust 记忆后端
 
-Stella keeps the existing `memory/` Python engine as the default and fallback.
-The optional Rust distribution is installed independently as
-`stella-memory-rust`; it uses the `memory_rust` namespace and targets memory
-schema 14 with backend API version 1.
+此路径保留以兼容旧链接。当前正文请读[Rust 记忆后端](architecture/memory-rust-backend.md).
 
-## Runtime Modes
+下方保留原章节锚点并指向新位置；维护时修改目标正文。
 
-Set `MEMORY_BACKEND` before starting Stella:
+<a id="运行模式"></a>
 
-- `python`: existing Python implementation, the default.
-- `rust`: use the native Rust retrieval backend; incompatibility or runtime
-  errors are surfaced.
-- `auto`: use Rust when available and compatible, then fall back to Python.
-- `shadow`: run Rust read-only beside Python, record parity diagnostics, and
-  return the Python result. Rust performs no write or post-commit side effect.
-- `strict`: require the Rust backend and surface load or contract failures.
+- [运行模式](architecture/memory-rust-backend.md#运行模式)
 
-For compatibility with earlier rollout scripts, `MEMORY_RUST_SHADOW=true`
-selects `shadow` and `MEMORY_RUST_STRICT=true` selects `strict` when
-`MEMORY_BACKEND` is unset. If both flags are enabled, strict wins. An explicit
-`MEMORY_BACKEND` value always takes precedence.
+<a id="兼容矩阵"></a>
 
-The first rollout keeps `python` as the recommended setting. Returning to the
-Python engine is an environment-only change:
+- [兼容矩阵](architecture/memory-rust-backend.md#兼容矩阵)
 
-```text
-MEMORY_BACKEND=python
-```
+<a id="发布资产"></a>
 
-Rust does not own embedding HTTP, LLM consolidation, schema migration,
-Python async locks, scheduler work, cache invalidation, or compressor
-side effects.
+- [发布资产](architecture/memory-rust-backend.md#发布资产)
 
-## Compatibility Matrix
+<a id="验收边界"></a>
 
-| Rust distribution | Backend API | Memory schema | Python |
-| --- | ---: | ---: | --- |
-| `stella-memory-rust 0.1.x` | 1 | 14 | 3.10+ (`abi3`) |
-
-The native loader rejects API or schema mismatches before selecting Rust. The
-main Stella package keeps the Python engine and does not require this
-distribution.
-
-## Release Assets
-
-The Rust engine ships through three of the six Windows product assets, published
-in the same `vX.Y.Z` GitHub Release as the Python products:
-
-```text
-Stella-OneClick-Rust-vX.Y.Z-windows-amd64.exe           # installer prepares the engine during installation
-Stella-OneClick-Rust-Offline-vX.Y.Z-windows-amd64.exe   # offline installer, same engine, fully bundled payload
-Stella-Standalone-Rust-vX.Y.Z-windows-amd64.zip         # Stella-only archive bundling the wheel
-```
-
-The Standalone-Rust archive includes the normal `start.bat` bootstrap and one
-bundled `stella-memory-rust` wheel under `wheels/`. Running `start.bat` (or
-`Stella.exe`) follows the same first-run setup as the Python archive, then
-installs the local wheel into the application directory without downloading
-it and selects `MEMORY_BACKEND=rust`. The OneClick-Rust installer performs the
-same preparation during the installation stage; the plain Python products have
-no `wheels/` directory and keep the Python engine. Installing beside the bundled
-`memory_rust` package keeps the native extension importable from the embedded
-Python runtime. `VERSION.txt` and `SHA256SUMS.txt` describe the native engine
-payload. The wheel package version remains independent of the Stella
-application version, while the asset filename always uses the exact main
-Release tag.
+- [验收边界](architecture/memory-rust-backend.md#验收边界)

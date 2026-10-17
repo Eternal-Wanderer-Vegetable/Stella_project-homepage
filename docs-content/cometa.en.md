@@ -1,120 +1,45 @@
 # Cometa External Agent Task Layer: Installation & Authentication
 
-[中文](cometa.md) | English
+This path is kept for existing links. Read the maintained [Cometa External Agent Task Layer: Installation & Authentication](guides/cometa.en.md).
 
-> Note: This version of the document was translated from the Chinese version by GPT-5.6 luna.
+Section links below route to the new pages; edit the target page.
 
-Cometa lets Stella delegate long-running tasks (coding, research) to an
-external coding agent (currently [OpenAI Codex](https://github.com/openai/codex)).
-Tasks go through a deterministic admission gate into the local task store;
-progress and results are delivered back to the originating conversation
-(QQ/WebChat). Authentication and permissions stay fully under the admin's
-control.
+<a id="installation"></a>
 
-## Installation
+- [Installation](guides/cometa.en.md#installation)
 
-The Codex adapter depends on the official Python SDK (optional dependency;
-the rest of Stella works without it):
+<a id="authentication-two-webui-routes--legacy-migration"></a>
 
-```bash
-pip install -e ".[cometa]"          # source deployment
-# or install standalone (official index required - mirrors lack this package):
-pip install openai-codex==0.159.2 -i https://pypi.org/simple
-```
+- [Authentication (two WebUI routes + legacy migration)](guides/cometa.en.md#authentication-two-webui-routes--legacy-migration)
 
-The version is the **frozen M0 matrix** (SDK 0.159.2 + bundled cli-bin):
-Codex's event contract drifts between releases (0.147.0 was rejected by the
-account backend for every model), so re-run the protocol probe before
-upgrading - never loosen the pin.
+<a id="1-chatgpt-account-login-device-code-recommended"></a>
 
-Enable via `.env`: `COMETA_ENABLED=true` (optionally
-`COMETA_DELEGATION_MODE=auto` for the auto-delegation rollout) and declare
-the backend in `STELLA_HOME/config/cometa.toml`:
+- [1. ChatGPT account login (device code, recommended)](guides/cometa.en.md#1-chatgpt-account-login-device-code-recommended)
 
-```toml
-[backends.codex_local]
-type = "codex"
-enabled = true
+<a id="2-openai-api-key"></a>
 
-[backends.codex_local.env]
-# Proxies are passed through to the codex app-server subprocess.
-HTTP_PROXY = "http://127.0.0.1:7890"
-HTTPS_PROXY = "http://127.0.0.1:7890"
-```
+- [2. OpenAI API key](guides/cometa.en.md#2-openai-api-key)
 
-Restart the bot after changing toml/env; **authentication does not need a
-restart** (see below).
+<a id="3-custom-endpoint-openai-compatible--relay"></a>
 
-## Authentication (two WebUI routes + legacy migration)
+- [3. Custom endpoint (OpenAI-compatible / relay)](guides/cometa.en.md#3-custom-endpoint-openai-compatible--relay)
 
-Entry: WebUI -> "External Agent Tasks" -> "Backend Authentication (Codex)".
-All routes take effect **immediately, no restart** - auth state is read at
-probe/task start.
+<a id="legacy-migration"></a>
 
-### 1. ChatGPT account login (device code, recommended)
+- [Legacy migration](guides/cometa.en.md#legacy-migration)
 
-Click "Initiate login" -> the page shows a verification URL and device code
--> open the URL in a browser, enter the code, authorize -> the page confirms
-completion within ~2 seconds. Stella's process never needs a local browser,
-so headless/remote deployments work. Billing uses the ChatGPT subscription.
+<a id="where-credentials-live"></a>
 
-### 2. OpenAI API key
+- [Where credentials live](guides/cometa.en.md#where-credentials-live)
 
-Paste the key and click "Login". Billing uses **OpenAI platform credits**
-(not the ChatGPT subscription) - for users with API-only accounts.
+<a id="permissions"></a>
 
-### 3. Custom endpoint (OpenAI-compatible / relay)
+- [Permissions](guides/cometa.en.md#permissions)
 
-Fill in Base URL, model name, and API key (leave the key empty when editing
-to keep the existing one); use "Test" first to fetch the model list. The
-endpoint **must implement the OpenAI Responses API** - Codex 0.159.2 removed
-the chat completions protocol, so relays offering only `/chat/completions`
-cannot be used. Local LM Studio's Responses implementation may drop the
-stream when function tools are involved (known limitation; most online
-relays already support it).
+<a id="troubleshooting"></a>
 
-### Legacy migration
+- [Troubleshooting](guides/cometa.en.md#troubleshooting)
 
-On machines previously logged in via `codex login`: the auth card shows a
-"legacy login detected" banner; click "one-click migrate" to copy
-`~/.codex/auth.json` into the managed home (refused if the managed home
-already has credentials - log out first).
+<a id="conversation-delivery-and-runtime-boundaries-in-610"></a>
 
-## Where credentials live
-
-One managed home per codex backend:
-`STELLA_HOME/cometa/codex_home/<backend_id>/`
-
-| File | Content |
-| --- | --- |
-| `auth.json` | Codex login credential (account tokens or API key), written by Codex itself |
-| `config.toml` | Custom endpoint declaration (generated by Stella, native codex format) |
-| `stella_credentials.json` | Custom endpoint API key (Stella-managed, 0600) |
-
-Design constraints: credentials deliberately stay **out of**
-`config/cometa.toml`, hence out of `config_hash` - changing auth never
-touches in-flight tasks; keys/tokens never appear in WebUI responses, audit
-logs, or the task database; logout deletes `auth.json` (custom endpoint
-configuration is kept).
-
-## Permissions
-
-- QQ side: `[access]` allowlists in `cometa.toml` (users/groups/operators);
-  an empty list means unauthorized.
-- WebUI side: the existing admin login authorizes; auth changes are admin
-  operations and audited per call.
-- The sub-agent's filesystem/network boundaries come from `[profiles.*]`
-  (`allow_workspace_write` / `allow_network`); unenforceable profiles are
-  refused at start rather than silently widened.
-
-## Troubleshooting
-
-| Symptom | Fix |
-| --- | --- |
-| probe says "no auth configured" | Configure any route on the auth card |
-| probe mentions "legacy login detected" | Click one-click migrate, or reconfigure |
-| probe says SDK missing | `pip install openai-codex==0.159.2 -i https://pypi.org/simple` |
-| Device-code login fails to start | Check proxy passthrough in toml `env` (OpenAI domains must be reachable) |
-| Device session disappeared | Sessions are in-memory; re-initiate after a bot restart |
-| Custom endpoint stream drops mid-task | Endpoint must support the Responses API incl. function tools; set `NO_PROXY` for local endpoints |
-| Version mismatch ("model requires a newer client") | Don't point at an old PATH codex.exe; the SDK bundles a matched cli-bin |
+- [Conversation delivery and runtime boundaries in 6.1.0](guides/cometa.en.md#conversation-delivery-and-runtime-boundaries-in-610)

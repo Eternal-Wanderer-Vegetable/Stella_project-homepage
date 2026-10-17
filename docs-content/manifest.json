@@ -2,7 +2,7 @@
   "source": {
     "repo": "Eternal-Wanderer-Vegetable/Stella_project",
     "ref": "main",
-    "syncedAt": "2026-10-01T14:09:37.186Z"
+    "syncedAt": "2026-10-17T23:43:22.388Z"
   },
   "githubBase": "https://github.com/Eternal-Wanderer-Vegetable/Stella_project/blob/main/",
   "categories": [
@@ -11,90 +11,102 @@
       "label": "核心文档",
       "items": [
         {
+          "path": "docs/README.md",
+          "file": "README.md",
+          "size": 2107,
+          "title": "Stella 文档总览",
+          "en": "docs/README.en.md"
+        },
+        {
           "path": "docs/architecture.md",
           "file": "architecture.md",
-          "size": 60484,
+          "size": 3208,
           "title": "架构说明",
           "en": "docs/architecture.en.md"
         },
         {
           "path": "docs/memory-system.md",
           "file": "memory-system.md",
-          "size": 22148,
+          "size": 3919,
           "title": "记忆系统",
           "en": "docs/memory-system.en.md"
         },
         {
           "path": "docs/capability-system.md",
           "file": "capability-system.md",
-          "size": 31903,
+          "size": 2934,
           "title": "能力系统（Capability Router 与 Comes）",
           "en": "docs/capability-system.en.md"
         },
         {
           "path": "docs/plugin-spec.md",
           "file": "plugin-spec.md",
-          "size": 38752,
+          "size": 3528,
           "title": "插件接入规范 v1.0",
           "en": "docs/plugin-spec.en.md"
         },
         {
           "path": "docs/configuration.md",
           "file": "configuration.md",
-          "size": 103076,
+          "size": 8578,
           "title": "配置参考",
           "en": "docs/configuration.en.md"
         },
         {
           "path": "docs/deployment-docker.md",
           "file": "deployment-docker.md",
-          "size": 13518,
+          "size": 1474,
           "title": "Docker 部署指南",
           "en": "docs/deployment-docker.en.md"
         },
         {
           "path": "docs/development.md",
           "file": "development.md",
-          "size": 51634,
+          "size": 3629,
           "title": "开发指南",
           "en": "docs/development.en.md"
         },
         {
           "path": "docs/cometa.md",
           "file": "cometa.md",
-          "size": 4629,
+          "size": 1318,
           "title": "Cometa 外部 Agent 任务层：安装与认证",
           "en": "docs/cometa.en.md"
         },
         {
           "path": "docs/scheduling.md",
           "file": "scheduling.md",
-          "size": 7846,
-          "title": "定时任务：群级 Cron 提醒与有界主动 Agent"
+          "size": 1411,
+          "title": "定时任务：群级 Cron 提醒与有界主动 Agent",
+          "en": "docs/scheduling.en.md"
         },
         {
           "path": "docs/skills.md",
           "file": "skills.md",
-          "size": 7004,
-          "title": "Anthropic 风格 Skills 与受控沙盒"
+          "size": 1046,
+          "title": "Anthropic 风格 Skills 与受控沙盒",
+          "en": "docs/skills.en.md"
         },
         {
           "path": "docs/knowledge-base.md",
           "file": "knowledge-base.md",
-          "size": 9458,
-          "title": "独立知识库（Knowledge Base）"
+          "size": 1285,
+          "title": "独立知识库（Knowledge Base）",
+          "en": "docs/knowledge-base.en.md"
         },
         {
           "path": "docs/webui.md",
           "file": "webui.md",
-          "size": 2864,
-          "title": "WebUI（v2 控制面）"
+          "size": 635,
+          "title": "WebUI（v2 控制面）",
+          "en": "docs/webui.en.md"
         },
         {
           "path": "docs/memory-rust-backend.md",
           "file": "memory-rust-backend.md",
-          "size": 3075,
-          "title": "Rust Memory Backend"
+          "size": 593,
+          "title": "Rust 记忆后端",
+          "en": "docs/memory-rust-backend.en.md"
         }
       ]
     }
