@@ -1,10 +1,18 @@
+<script setup>
+import { useEnterOnce } from '../composables/useEnterOnce.js'
+
+// 首次入场编排:标题先立,Hybrid 从中心弹出,连线向两侧画开,两端药丸就位,
+// 竖线垂下把 Stella 送到谱系中心,三列说明错峰跟上。只播一次,减弱动效直接呈现。
+const { root, entered } = useEnterOnce()
+</script>
+
 <template>
   <!-- 第四屏:部署方式一眼解决。安装行动统一收在尾屏 Get Stella,此处不再放跳转 -->
-  <section id="deploy" class="dep">
+  <section id="deploy" ref="root" class="dep" :class="{ entered: entered }">
     <div class="container dep-inner">
-      <h2 class="dep-title" v-reveal>Stella 跑在哪里，由你决定。</h2>
+      <h2 class="dep-title">Stella 跑在哪里，由你决定。</h2>
 
-      <div class="spectrum" v-reveal role="img"
+      <div class="spectrum" role="img"
            aria-label="部署谱系:完全本地与在线运行两个极端,混合运行居中,Stella 位于中心。">
         <div class="spec-end">
           <span class="spec-side">Your PC</span>
@@ -24,15 +32,15 @@
       </div>
 
       <div class="dep-grid">
-        <div class="dep-col" v-reveal>
+        <div class="dep-col">
           <h4>完全本地</h4>
           <p>聊天和记忆都留在电脑上。</p>
         </div>
-        <div class="dep-col" v-reveal style="transition-delay:.12s">
+        <div class="dep-col">
           <h4>混合运行</h4>
           <p>记忆留在本地，聊天交给更强的模型。</p>
         </div>
-        <div class="dep-col" v-reveal style="transition-delay:.24s">
+        <div class="dep-col">
           <h4>在线运行</h4>
           <p>让轻量设备也可以运行 Stella。</p>
         </div>
@@ -103,9 +111,10 @@
   border-color: rgba(246, 201, 107, 0.45);
   background: rgba(246, 201, 107, 0.08);
 }
-.spec-link { position: relative; flex: 1; height: 1.5px; max-width: 150px; }
-.spec-link.to-local { background: linear-gradient(90deg, rgba(158, 206, 106, 0.5), rgba(246, 201, 107, 0.5)); }
-.spec-link.to-cloud { background: linear-gradient(90deg, rgba(246, 201, 107, 0.5), rgba(122, 162, 247, 0.5)); }
+/* 连线从 Hybrid 侧向外画开:动画走 background-size,箭头是子元素不会被压扁 */
+.spec-link { position: relative; flex: 1; height: 1.5px; max-width: 150px; background-repeat: no-repeat; }
+.spec-link.to-local { background-image: linear-gradient(90deg, rgba(158, 206, 106, 0.5), rgba(246, 201, 107, 0.5)); background-position: 100% 0; }
+.spec-link.to-cloud { background-image: linear-gradient(90deg, rgba(246, 201, 107, 0.5), rgba(122, 162, 247, 0.5)); background-position: 0 0; }
 /* 箭头指向两端:部署谱系可双向选择 */
 .spec-link i {
   position: absolute; top: 50%;
@@ -125,7 +134,11 @@
   position: absolute; top: calc(100% + 2px); left: 50%; transform: translateX(-50%);
   display: flex; flex-direction: column; align-items: center;
 }
-.spec-drop i { width: 1.5px; height: 30px; background: linear-gradient(180deg, rgba(246, 201, 107, 0.55), rgba(246, 201, 107, 0.25)); }
+.spec-drop i {
+  width: 1.5px; height: 30px;
+  transform-origin: top;
+  background: linear-gradient(180deg, rgba(246, 201, 107, 0.55), rgba(246, 201, 107, 0.25));
+}
 .spec-drop .spec-node { margin-top: 2px; }
 
 .dep-grid {
@@ -139,6 +152,44 @@
 }
 .dep-col h4 { font-size: 1rem; font-weight: 700; margin-bottom: 6px; color: var(--text); }
 .dep-col p { font-size: 0.9rem; color: var(--muted); }
+
+/* —— 首次入场:中心开花。Hybrid 弹出(.25s)→ 连线向两侧画开(.55s)→
+   箭头亮起(.9s)→ Local/Online 就位(1s)→ 竖线垂下(1.15s)→
+   Stella 落到谱系中心(1.4s),三列说明错峰跟上(1.25s 起) —— */
+@media (prefers-reduced-motion: no-preference) {
+  .dep-title, .spec-node, .spec-end, .spec-link, .spec-link i,
+  .spec-drop .spec-node, .spec-drop i, .dep-col { opacity: 0; }
+
+  .dep.entered .dep-title { animation: depRise .6s cubic-bezier(.22,.61,.36,1) both; }
+  .dep.entered .spec-node.hybrid { animation: depPop .55s cubic-bezier(.34,1.45,.64,1) .25s both; }
+  .dep.entered .spec-link { animation: depWire .5s ease-out .55s both; }
+  .dep.entered .spec-link i { animation: depFade .3s ease-out .9s both; }
+  .dep.entered .spec-end { animation: depRise .5s cubic-bezier(.22,.61,.36,1) 1s both; }
+  .dep.entered .spec-drop i { animation: depDrop .4s ease-out 1.15s both; }
+  .dep.entered .spec-drop .spec-node { animation: depPop .5s cubic-bezier(.34,1.45,.64,1) 1.4s both; }
+  .dep.entered .dep-col { animation: depRise .6s cubic-bezier(.22,.61,.36,1) both; }
+  .dep.entered .dep-col:nth-child(1) { animation-delay: 1.25s; }
+  .dep.entered .dep-col:nth-child(2) { animation-delay: 1.4s; }
+  .dep.entered .dep-col:nth-child(3) { animation-delay: 1.55s; }
+}
+@keyframes depRise {
+  from { opacity: 0; transform: translateY(22px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes depPop {
+  from { opacity: 0; transform: scale(.7); }
+  to { opacity: 1; transform: scale(1); }
+}
+/* 连线画开:0% 即显形(尺寸为零不可见),背景从 Hybrid 侧长向两端 */
+@keyframes depWire {
+  0% { background-size: 0 100%; opacity: 1; }
+  100% { background-size: 100% 100%; opacity: 1; }
+}
+@keyframes depFade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes depDrop {
+  from { transform: scaleY(0); opacity: 1; }
+  to { transform: scaleY(1); opacity: 1; }
+}
 
 @media (max-width: 880px) {
   .dep-grid { grid-template-columns: 1fr; gap: 18px; width: min(420px, 100%); }
