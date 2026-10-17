@@ -156,16 +156,19 @@ const { root, entered } = useEnterOnce()
 /* —— 首次入场:中心开花。Hybrid 弹出(.15s)→ 连线向两侧画开(.35s)→
    箭头亮起(.6s)→ Local/Online 就位(.7s)→ 竖线垂下(.85s)→
    Stella 落到谱系中心(1.05s),三列说明错峰跟上(.9s 起)。
-   整体前压、全屏 1.7s 内落定:两端药丸是视觉锚点,晚到会被当成缺失 —— */
+   注意:藏谁就动画谁——两端药丸和标签必须各自持有入场动画,
+   只动 .spec-end 外壳救不了被 .spec-node 基础规则压透明的子元素 —— */
 @media (prefers-reduced-motion: no-preference) {
-  .dep-title, .spec-node, .spec-end, .spec-link, .spec-link i,
+  .dep-title, .spec-node, .spec-side, .spec-link, .spec-link i,
   .spec-drop .spec-node, .spec-drop i, .dep-col { opacity: 0; }
 
   .dep.entered .dep-title { animation: depRise .6s cubic-bezier(.22,.61,.36,1) both; }
   .dep.entered .spec-node.hybrid { animation: depPop .5s cubic-bezier(.34,1.45,.64,1) .15s both; }
   .dep.entered .spec-link { animation: depWire .45s ease-out .35s both; }
   .dep.entered .spec-link i { animation: depFade .25s ease-out .6s both; }
-  .dep.entered .spec-end { animation: depRise .45s cubic-bezier(.22,.61,.36,1) .7s both; }
+  .dep.entered .spec-node.local,
+  .dep.entered .spec-node.online { animation: depRise .45s cubic-bezier(.22,.61,.36,1) .7s both; }
+  .dep.entered .spec-side { animation: depFade .4s ease-out .75s both; }
   .dep.entered .spec-drop i { animation: depDrop .35s ease-out .85s both; }
   .dep.entered .spec-drop .spec-node { animation: depPop .45s cubic-bezier(.34,1.45,.64,1) 1.05s both; }
   .dep.entered .dep-col { animation: depRise .55s cubic-bezier(.22,.61,.36,1) both; }
