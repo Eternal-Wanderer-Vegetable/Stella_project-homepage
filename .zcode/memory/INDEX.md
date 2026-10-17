@@ -15,10 +15,11 @@ status: active
 - [2026-10-01] Vue 3 + Vite 改写并上线 | 已完成 | https://eternal-wanderer-vegetable.github.io/Stella_project-homepage/
 - [2026-10-01] 文档页(docs 展示)上线 | 已完成 | 39 篇上游文档快照展示,rail「文档」直达
 - [2026-10-05] edition_1 一页化叙事改版 | 已完成 | handoffs/edition1一页化叙事改版.memo.md;8192 首屏钩子 + 四屏滚动叙事,设计稿 docs/design/edition_1.md
+- [2026-10-18] 文档页分节改版 + 递归同步 | 已完成 | sync-docs 递归拉上游子目录正文(6 节 38 篇+EN),侧栏=分节索引、右栏=完整正文;plans/reports/migration 档案不入站;入口 8192 勾子屏与部署屏各有一/二次入场编排
 
 ## 下一步
 
-- 已知环境项:内嵌浏览器截图会出陈旧帧(顶栏/正文层不同步),以 DOM 探针为准;真实浏览器无此问题
+- 已知环境项:内嵌浏览器截图会出陈旧帧(顶栏/正文层不同步),以 DOM 探针为准(探针须打叶子元素,隐藏组与动画组要一一对应);真实浏览器无此问题
 - 可选:Actions 定时自动 sync-docs;docs 页 h2 TOC 与 mermaid 渲染
 - 可选:OG 卡片配图(og:image)目前只有文字卡;深链分享可再美化
 
