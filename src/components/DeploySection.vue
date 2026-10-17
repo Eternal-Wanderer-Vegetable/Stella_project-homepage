@@ -153,24 +153,25 @@ const { root, entered } = useEnterOnce()
 .dep-col h4 { font-size: 1rem; font-weight: 700; margin-bottom: 6px; color: var(--text); }
 .dep-col p { font-size: 0.9rem; color: var(--muted); }
 
-/* —— 首次入场:中心开花。Hybrid 弹出(.25s)→ 连线向两侧画开(.55s)→
-   箭头亮起(.9s)→ Local/Online 就位(1s)→ 竖线垂下(1.15s)→
-   Stella 落到谱系中心(1.4s),三列说明错峰跟上(1.25s 起) —— */
+/* —— 首次入场:中心开花。Hybrid 弹出(.15s)→ 连线向两侧画开(.35s)→
+   箭头亮起(.6s)→ Local/Online 就位(.7s)→ 竖线垂下(.85s)→
+   Stella 落到谱系中心(1.05s),三列说明错峰跟上(.9s 起)。
+   整体前压、全屏 1.7s 内落定:两端药丸是视觉锚点,晚到会被当成缺失 —— */
 @media (prefers-reduced-motion: no-preference) {
   .dep-title, .spec-node, .spec-end, .spec-link, .spec-link i,
   .spec-drop .spec-node, .spec-drop i, .dep-col { opacity: 0; }
 
   .dep.entered .dep-title { animation: depRise .6s cubic-bezier(.22,.61,.36,1) both; }
-  .dep.entered .spec-node.hybrid { animation: depPop .55s cubic-bezier(.34,1.45,.64,1) .25s both; }
-  .dep.entered .spec-link { animation: depWire .5s ease-out .55s both; }
-  .dep.entered .spec-link i { animation: depFade .3s ease-out .9s both; }
-  .dep.entered .spec-end { animation: depRise .5s cubic-bezier(.22,.61,.36,1) 1s both; }
-  .dep.entered .spec-drop i { animation: depDrop .4s ease-out 1.15s both; }
-  .dep.entered .spec-drop .spec-node { animation: depPop .5s cubic-bezier(.34,1.45,.64,1) 1.4s both; }
-  .dep.entered .dep-col { animation: depRise .6s cubic-bezier(.22,.61,.36,1) both; }
-  .dep.entered .dep-col:nth-child(1) { animation-delay: 1.25s; }
-  .dep.entered .dep-col:nth-child(2) { animation-delay: 1.4s; }
-  .dep.entered .dep-col:nth-child(3) { animation-delay: 1.55s; }
+  .dep.entered .spec-node.hybrid { animation: depPop .5s cubic-bezier(.34,1.45,.64,1) .15s both; }
+  .dep.entered .spec-link { animation: depWire .45s ease-out .35s both; }
+  .dep.entered .spec-link i { animation: depFade .25s ease-out .6s both; }
+  .dep.entered .spec-end { animation: depRise .45s cubic-bezier(.22,.61,.36,1) .7s both; }
+  .dep.entered .spec-drop i { animation: depDrop .35s ease-out .85s both; }
+  .dep.entered .spec-drop .spec-node { animation: depPop .45s cubic-bezier(.34,1.45,.64,1) 1.05s both; }
+  .dep.entered .dep-col { animation: depRise .55s cubic-bezier(.22,.61,.36,1) both; }
+  .dep.entered .dep-col:nth-child(1) { animation-delay: .9s; }
+  .dep.entered .dep-col:nth-child(2) { animation-delay: 1.05s; }
+  .dep.entered .dep-col:nth-child(3) { animation-delay: 1.2s; }
 }
 @keyframes depRise {
   from { opacity: 0; transform: translateY(22px); }
