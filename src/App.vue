@@ -95,7 +95,7 @@ onUnmounted(function () {
     <HeroSection :glide-to="glideTo" @open="openPanel" />
     <MechanismSection />
     <MemorySection />
-    <DeploySection @open="openPanel" />
+    <DeploySection />
   </main>
   <FootSection @open="openPanel" />
   <DetailPanel :open="panelOpen" :current="current" @close="closePanel" />

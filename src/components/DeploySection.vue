@@ -1,9 +1,5 @@
-<script setup>
-const emit = defineEmits(['open'])
-</script>
-
 <template>
-  <!-- 第四屏:部署方式一眼解决,然后给出行动 -->
+  <!-- 第四屏:部署方式一眼解决。安装行动统一收在尾屏 Get Stella,此处不再放跳转 -->
   <section id="deploy" class="dep">
     <div class="container dep-inner">
       <h2 class="dep-title" v-reveal>Stella 跑在哪里，由你决定。</h2>
@@ -40,10 +36,6 @@ const emit = defineEmits(['open'])
           <h4>在线运行</h4>
           <p>让轻量设备也可以运行 Stella。</p>
         </div>
-      </div>
-
-      <div class="dep-cta" v-reveal>
-        <button class="dep-more" type="button" @click="emit('open', 'docs')">Docker / Standalone / Advanced →</button>
       </div>
     </div>
   </section>
@@ -140,7 +132,6 @@ const emit = defineEmits(['open'])
   display: grid; grid-template-columns: repeat(3, 1fr);
   gap: 26px;
   width: min(860px, 100%);
-  margin-bottom: clamp(48px, 8vh, 72px);
 }
 .dep-col {
   padding-top: 18px;
@@ -148,22 +139,6 @@ const emit = defineEmits(['open'])
 }
 .dep-col h4 { font-size: 1rem; font-weight: 700; margin-bottom: 6px; color: var(--text); }
 .dep-col p { font-size: 0.9rem; color: var(--muted); }
-
-/* 唯一出口:进阶部署文档。一键安装已并去尾屏的 Get Stella */
-.dep-more {
-  border: 1px solid var(--border); border-radius: 999px;
-  background: rgba(255, 255, 255, 0.03);
-  cursor: pointer;
-  font-family: var(--mono); font-size: 0.9rem; letter-spacing: 0.05em;
-  color: var(--muted);
-  padding: 12px 30px;
-  transition: color .25s, border-color .25s, background .25s;
-}
-.dep-more:hover {
-  color: var(--gold-2);
-  border-color: rgba(246, 201, 107, 0.4);
-  background: rgba(255, 255, 255, 0.06);
-}
 
 @media (max-width: 880px) {
   .dep-grid { grid-template-columns: 1fr; gap: 18px; width: min(420px, 100%); }
