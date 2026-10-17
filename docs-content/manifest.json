@@ -2,111 +2,300 @@
   "source": {
     "repo": "Eternal-Wanderer-Vegetable/Stella_project",
     "ref": "main",
-    "syncedAt": "2026-10-17T23:43:22.388Z"
+    "syncedAt": "2026-10-17T23:56:33.706Z"
   },
   "githubBase": "https://github.com/Eternal-Wanderer-Vegetable/Stella_project/blob/main/",
   "categories": [
     {
-      "id": "core",
-      "label": "核心文档",
+      "id": "guides",
+      "label": "使用指南",
       "items": [
         {
-          "path": "docs/README.md",
-          "file": "README.md",
-          "size": 2107,
-          "title": "Stella 文档总览",
-          "en": "docs/README.en.md"
-        },
-        {
-          "path": "docs/architecture.md",
-          "file": "architecture.md",
-          "size": 3208,
-          "title": "架构说明",
-          "en": "docs/architecture.en.md"
-        },
-        {
-          "path": "docs/memory-system.md",
-          "file": "memory-system.md",
-          "size": 3919,
-          "title": "记忆系统",
-          "en": "docs/memory-system.en.md"
-        },
-        {
-          "path": "docs/capability-system.md",
-          "file": "capability-system.md",
-          "size": 2934,
-          "title": "能力系统（Capability Router 与 Comes）",
-          "en": "docs/capability-system.en.md"
-        },
-        {
-          "path": "docs/plugin-spec.md",
-          "file": "plugin-spec.md",
-          "size": 3528,
-          "title": "插件接入规范 v1.0",
-          "en": "docs/plugin-spec.en.md"
-        },
-        {
-          "path": "docs/configuration.md",
-          "file": "configuration.md",
-          "size": 8578,
-          "title": "配置参考",
-          "en": "docs/configuration.en.md"
-        },
-        {
-          "path": "docs/deployment-docker.md",
-          "file": "deployment-docker.md",
-          "size": 1474,
-          "title": "Docker 部署指南",
-          "en": "docs/deployment-docker.en.md"
-        },
-        {
-          "path": "docs/development.md",
-          "file": "development.md",
-          "size": 3629,
-          "title": "开发指南",
-          "en": "docs/development.en.md"
-        },
-        {
-          "path": "docs/cometa.md",
-          "file": "cometa.md",
-          "size": 1318,
+          "path": "docs/guides/cometa.md",
+          "file": "guides/cometa.md",
+          "size": 5370,
           "title": "Cometa 外部 Agent 任务层：安装与认证",
-          "en": "docs/cometa.en.md"
+          "en": "docs/guides/cometa.en.md"
         },
         {
-          "path": "docs/scheduling.md",
-          "file": "scheduling.md",
-          "size": 1411,
+          "path": "docs/guides/deployment-docker.md",
+          "file": "guides/deployment-docker.md",
+          "size": 14600,
+          "title": "Docker 部署指南",
+          "en": "docs/guides/deployment-docker.en.md"
+        },
+        {
+          "path": "docs/guides/scheduling.md",
+          "file": "guides/scheduling.md",
+          "size": 7916,
           "title": "定时任务：群级 Cron 提醒与有界主动 Agent",
-          "en": "docs/scheduling.en.md"
+          "en": "docs/guides/scheduling.en.md"
         },
         {
-          "path": "docs/skills.md",
-          "file": "skills.md",
-          "size": 1046,
+          "path": "docs/guides/skills.md",
+          "file": "guides/skills.md",
+          "size": 7431,
           "title": "Anthropic 风格 Skills 与受控沙盒",
-          "en": "docs/skills.en.md"
+          "en": "docs/guides/skills.en.md"
         },
         {
-          "path": "docs/knowledge-base.md",
-          "file": "knowledge-base.md",
-          "size": 1285,
-          "title": "独立知识库（Knowledge Base）",
-          "en": "docs/knowledge-base.en.md"
-        },
-        {
-          "path": "docs/webui.md",
-          "file": "webui.md",
-          "size": 635,
+          "path": "docs/guides/webui.md",
+          "file": "guides/webui.md",
+          "size": 4130,
           "title": "WebUI（v2 控制面）",
-          "en": "docs/webui.en.md"
+          "en": "docs/guides/webui.en.md"
+        }
+      ]
+    },
+    {
+      "id": "architecture",
+      "label": "架构导航",
+      "items": [
+        {
+          "path": "docs/architecture/capability-system.md",
+          "file": "architecture/capability-system.md",
+          "size": 32665,
+          "title": "能力系统（Capability Router 与 Comes）",
+          "en": "docs/architecture/capability-system.en.md"
         },
         {
-          "path": "docs/memory-rust-backend.md",
-          "file": "memory-rust-backend.md",
-          "size": 593,
+          "path": "docs/architecture/code-map.md",
+          "file": "architecture/code-map.md",
+          "size": 17488,
+          "title": "目录结构",
+          "en": "docs/architecture/code-map.en.md"
+        },
+        {
+          "path": "docs/architecture/data-boundaries.md",
+          "file": "architecture/data-boundaries.md",
+          "size": 6866,
+          "title": "关键数据结构",
+          "en": "docs/architecture/data-boundaries.en.md"
+        },
+        {
+          "path": "docs/architecture/integrations.md",
+          "file": "architecture/integrations.md",
+          "size": 9709,
+          "title": "AstrBot 插件兼容层",
+          "en": "docs/architecture/integrations.en.md"
+        },
+        {
+          "path": "docs/architecture/knowledge-base.md",
+          "file": "architecture/knowledge-base.md",
+          "size": 9703,
+          "title": "独立知识库（Knowledge Base）",
+          "en": "docs/architecture/knowledge-base.en.md"
+        },
+        {
+          "path": "docs/architecture/llm-budget.md",
+          "file": "architecture/llm-budget.md",
+          "size": 5520,
+          "title": "LLM 成本控制",
+          "en": "docs/architecture/llm-budget.en.md"
+        },
+        {
+          "path": "docs/architecture/memory-rust-backend.md",
+          "file": "architecture/memory-rust-backend.md",
+          "size": 3046,
           "title": "Rust 记忆后端",
-          "en": "docs/memory-rust-backend.en.md"
+          "en": "docs/architecture/memory-rust-backend.en.md"
+        },
+        {
+          "path": "docs/architecture/memory-system.md",
+          "file": "architecture/memory-system.md",
+          "size": 24933,
+          "title": "记忆系统",
+          "en": "docs/architecture/memory-system.en.md"
+        },
+        {
+          "path": "docs/architecture/message-lifecycle.md",
+          "file": "architecture/message-lifecycle.md",
+          "size": 20208,
+          "title": "一次消息的处理流程",
+          "en": "docs/architecture/message-lifecycle.en.md"
+        },
+        {
+          "path": "docs/architecture/overview.md",
+          "file": "architecture/overview.md",
+          "size": 4474,
+          "title": "6.1.0 当前架构增补",
+          "en": "docs/architecture/overview.en.md"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "label": "配置与接口参考",
+      "items": [
+        {
+          "path": "docs/reference/configuration.md",
+          "file": "reference/configuration.md",
+          "size": 110739,
+          "title": "配置参考",
+          "en": "docs/reference/configuration.en.md"
+        },
+        {
+          "path": "docs/reference/migration-report-template.md",
+          "file": "reference/migration-report-template.md",
+          "size": 2038,
+          "title": "Stella 配置导入报告（模板）",
+          "en": "docs/reference/migration-report-template.en.md"
+        },
+        {
+          "path": "docs/reference/plugin-spec.md",
+          "file": "reference/plugin-spec.md",
+          "size": 39310,
+          "title": "插件接入规范 v1.0",
+          "en": "docs/reference/plugin-spec.en.md"
+        }
+      ]
+    },
+    {
+      "id": "development",
+      "label": "开发导航",
+      "items": [
+        {
+          "path": "docs/development/ci.md",
+          "file": "development/ci.md",
+          "size": 2710,
+          "title": "CI",
+          "en": "docs/development/ci.en.md"
+        },
+        {
+          "path": "docs/development/contracts.md",
+          "file": "development/contracts.md",
+          "size": 2644,
+          "title": "当前分支合同与发布边界",
+          "en": "docs/development/contracts.en.md"
+        },
+        {
+          "path": "docs/development/conventions.md",
+          "file": "development/conventions.md",
+          "size": 3835,
+          "title": "代码约定",
+          "en": "docs/development/conventions.en.md"
+        },
+        {
+          "path": "docs/development/database.md",
+          "file": "development/database.md",
+          "size": 5504,
+          "title": "数据库",
+          "en": "docs/development/database.en.md"
+        },
+        {
+          "path": "docs/development/deployment.md",
+          "file": "development/deployment.md",
+          "size": 7845,
+          "title": "部署工具",
+          "en": "docs/development/deployment.en.md"
+        },
+        {
+          "path": "docs/development/design-records.md",
+          "file": "development/design-records.md",
+          "size": 978,
+          "title": "设计记录",
+          "en": "docs/development/design-records.en.md"
+        },
+        {
+          "path": "docs/development/environment.md",
+          "file": "development/environment.md",
+          "size": 2948,
+          "title": "环境准备",
+          "en": "docs/development/environment.en.md"
+        },
+        {
+          "path": "docs/development/probes.md",
+          "file": "development/probes.md",
+          "size": 12624,
+          "title": "探针脚本",
+          "en": "docs/development/probes.en.md"
+        },
+        {
+          "path": "docs/development/release.md",
+          "file": "development/release.md",
+          "size": 7828,
+          "title": "发布流程",
+          "en": "docs/development/release.en.md"
+        },
+        {
+          "path": "docs/development/testing.md",
+          "file": "development/testing.md",
+          "size": 11124,
+          "title": "提交前检查",
+          "en": "docs/development/testing.en.md"
+        },
+        {
+          "path": "docs/development/troubleshooting.md",
+          "file": "development/troubleshooting.md",
+          "size": 3615,
+          "title": "排查问题",
+          "en": "docs/development/troubleshooting.en.md"
+        }
+      ]
+    },
+    {
+      "id": "agent",
+      "label": "Agent 工作文档",
+      "items": [
+        {
+          "path": "docs/agent/boundaries.md",
+          "file": "agent/boundaries.md",
+          "size": 2307,
+          "title": "数据与模块边界"
+        },
+        {
+          "path": "docs/agent/documentation.md",
+          "file": "agent/documentation.md",
+          "size": 3236,
+          "title": "文档维护规则"
+        },
+        {
+          "path": "docs/agent/gitnexus.md",
+          "file": "agent/gitnexus.md",
+          "size": 2798,
+          "title": "GitNexus 使用门禁"
+        },
+        {
+          "path": "docs/agent/verification.md",
+          "file": "agent/verification.md",
+          "size": 2428,
+          "title": "验证门禁"
+        },
+        {
+          "path": "docs/agent/workflow.md",
+          "file": "agent/workflow.md",
+          "size": 1718,
+          "title": "任务状态与会话交接"
+        }
+      ]
+    },
+    {
+      "id": "examples-astrbot_plugin_stella_template",
+      "label": "插件模板",
+      "items": [
+        {
+          "path": "docs/examples/astrbot_plugin_stella_template/_conf_schema.json",
+          "file": "examples/astrbot_plugin_stella_template/_conf_schema.json",
+          "size": 486,
+          "title": "_conf_schema.json"
+        },
+        {
+          "path": "docs/examples/astrbot_plugin_stella_template/capability.toml",
+          "file": "examples/astrbot_plugin_stella_template/capability.toml",
+          "size": 2590,
+          "title": "capability.toml"
+        },
+        {
+          "path": "docs/examples/astrbot_plugin_stella_template/main.py",
+          "file": "examples/astrbot_plugin_stella_template/main.py",
+          "size": 4845,
+          "title": "main.py"
+        },
+        {
+          "path": "docs/examples/astrbot_plugin_stella_template/metadata.yaml",
+          "file": "examples/astrbot_plugin_stella_template/metadata.yaml",
+          "size": 783,
+          "title": "metadata.yaml"
         }
       ]
     }

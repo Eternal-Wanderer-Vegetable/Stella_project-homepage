@@ -10,7 +10,9 @@ const root = ref(null)
 const mainEl = ref(null)
 
 const allItems = computed(() => manifest.categories.flatMap((c) => c.items))
-const currentPath = ref(manifest.categories[0].items[0].path)   // 默认:架构说明
+// 默认落地:配置参考(查阅频率最高),缺失时退回首篇
+const defaultPath = (manifest.categories.flatMap((c) => c.items).find((i) => i.path === 'docs/reference/configuration.md') || manifest.categories[0].items[0]).path
+const currentPath = ref(defaultPath)
 const currentItem = computed(() => allItems.value.find((i) => i.path === currentPath.value))
 const lang = ref('zh')                                          // 'zh' | 'en'
 const loading = ref(false)
