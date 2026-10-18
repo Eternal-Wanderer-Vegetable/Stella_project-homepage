@@ -21,13 +21,13 @@ const OUT = join(dirname(fileURLToPath(import.meta.url)), '..', 'docs-content')
 
 // 站内分节(与上游 docs/README.md 总览表一致,顺序即侧栏顺序)。
 // label 优先取该节 README 的一级标题,取不到时用 fallback。
-// 插件模板(examples/)刻意不入站:代码模板请读者直接看上游仓库。
+// 插件模板(examples/)与 Agent 工作文档(agent/)刻意不入站:
+// 前者是代码模板请读者直接看上游仓库,后者是给 AI 的工作规则,不是给人读的文档。
 const SECTIONS = [
   { dir: 'guides', label: '使用指南' },
   { dir: 'architecture', label: '架构' },
   { dir: 'reference', label: '配置与接口参考' },
   { dir: 'development', label: '开发' },
-  { dir: 'agent', label: 'Agent 工作文档' },
 ]
 
 function getToken() {

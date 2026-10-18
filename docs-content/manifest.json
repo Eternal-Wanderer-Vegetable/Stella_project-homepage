@@ -2,7 +2,7 @@
   "source": {
     "repo": "Eternal-Wanderer-Vegetable/Stella_project",
     "ref": "main",
-    "syncedAt": "2026-10-18T01:06:30.143Z"
+    "syncedAt": "2026-10-18T01:38:06.397Z"
   },
   "githubBase": "https://github.com/Eternal-Wanderer-Vegetable/Stella_project/blob/main/",
   "categories": [
@@ -230,42 +230,6 @@
           "size": 3615,
           "title": "排查问题",
           "en": "docs/development/troubleshooting.en.md"
-        }
-      ]
-    },
-    {
-      "id": "agent",
-      "label": "Agent 工作文档",
-      "items": [
-        {
-          "path": "docs/agent/boundaries.md",
-          "file": "agent/boundaries.md",
-          "size": 2307,
-          "title": "数据与模块边界"
-        },
-        {
-          "path": "docs/agent/documentation.md",
-          "file": "agent/documentation.md",
-          "size": 3236,
-          "title": "文档维护规则"
-        },
-        {
-          "path": "docs/agent/gitnexus.md",
-          "file": "agent/gitnexus.md",
-          "size": 2798,
-          "title": "GitNexus 使用门禁"
-        },
-        {
-          "path": "docs/agent/verification.md",
-          "file": "agent/verification.md",
-          "size": 2428,
-          "title": "验证门禁"
-        },
-        {
-          "path": "docs/agent/workflow.md",
-          "file": "agent/workflow.md",
-          "size": 1718,
-          "title": "任务状态与会话交接"
         }
       ]
     }
