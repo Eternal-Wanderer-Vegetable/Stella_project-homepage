@@ -24,6 +24,14 @@ export function setLocale(l) {
   locale.value = l
   try { localStorage.setItem('stella-lang', l) } catch (e) {}
   applyLangAttr()
+  // 语言切换衔接:挂 body.lang-swap 触发各屏文案容器的淡入动画(纯 CSS,内嵌安全)。
+  // 先移除再强制重排后加回,连续快速切换也会重播动画
+  const body = document.body
+  body.classList.remove('lang-swap')
+  void body.offsetWidth
+  body.classList.add('lang-swap')
+  clearTimeout(setLocale._t)
+  setLocale._t = setTimeout(() => body.classList.remove('lang-swap'), 700)
 }
 
 function applyLangAttr() {

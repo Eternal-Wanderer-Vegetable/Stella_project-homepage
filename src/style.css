@@ -280,6 +280,32 @@
     html { scroll-behavior: auto; }
   }
 
+  /* 语言切换衔接:新语言文案在各屏容器里快速上浮淡入(i18n.setLocale 挂 body.lang-swap 触发) */
+  @keyframes langSwap {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  body.lang-swap .hero-stack,
+  body.lang-swap .mech-inner,
+  body.lang-swap .mem-grid,
+  body.lang-swap .dep-inner,
+  body.lang-swap .foot-inner,
+  body.lang-swap .nav-pages,
+  body.lang-swap .docs-side,
+  body.lang-swap .md-body {
+    animation: langSwap .42s cubic-bezier(.22,.61,.36,1) both;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    body.lang-swap .hero-stack,
+    body.lang-swap .mech-inner,
+    body.lang-swap .mem-grid,
+    body.lang-swap .dep-inner,
+    body.lang-swap .foot-inner,
+    body.lang-swap .nav-pages,
+    body.lang-swap .docs-side,
+    body.lang-swap .md-body { animation: none; }
+  }
+
   /* ================= 分页滚动:一屏一页,不连续游走 ================= */
   /* 触屏设备:原生 scroll-snap 惯性翻页。
      精确指针设备(桌面)由 usePageGlide.js 接管滚轮/键盘做整页缓动——
