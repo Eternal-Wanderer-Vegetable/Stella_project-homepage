@@ -107,7 +107,8 @@
 a.doc-link { color: var(--gold-2); border-bottom: 1px dotted var(--gold); }
 
 /* ---------- markdown 正文排版 ---------- */
-.md-body { font-size: 0.93rem; color: var(--text); line-height: 1.85; max-width: 860px; }
+/* 正文列居中保持舒适行宽;宽屏下由表格/代码块向两侧出血吃掉剩余空白(见下方宽屏适配) */
+.md-body { font-size: 0.93rem; color: var(--text); line-height: 1.85; max-width: 860px; margin-inline: auto; }
 .md-body > :first-child { margin-top: 4px; }
 .md-body h1, .md-body h2, .md-body h3, .md-body h4, .md-body h5 {
   font-family: var(--serif); font-weight: 600; color: var(--text);
@@ -156,6 +157,19 @@ a.doc-link { color: var(--gold-2); border-bottom: 1px dotted var(--gold); }
 
 .md-body table { min-width: 0; font-size: 0.87rem; }
 .md-body th, .md-body td { padding: 10px 16px; }
+
+/* ---------- 宽屏适配:正文列居中,宽元素出血 ----------
+   散文行宽不宜无限拉长(中文一行 ~60 字为舒适上限),继续加宽只伤可读性;
+   因此 ≥1400px 起正文列小幅加宽,表格/代码块用负边距向两侧伸展,
+   恰好填进正文列两侧的余白,数值按断点核算过不会横向溢出 */
+@media (min-width: 1400px) {
+  .md-body { max-width: 940px; }
+  .md-body > pre, .md-body > table { width: calc(100% + 96px); margin-left: -48px; margin-right: -48px; }
+}
+@media (min-width: 1760px) {
+  .md-body { max-width: 1000px; }
+  .md-body > pre, .md-body > table { width: calc(100% + 320px); margin-left: -160px; margin-right: -160px; }
+}
 
 /* ---------- 移动端目录折叠 ---------- */
 .docs-toggle { display: none; }
