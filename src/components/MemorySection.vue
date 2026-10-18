@@ -130,21 +130,20 @@ function onChatScroll() {
 .mem.entered .scroll-hint { opacity: 1; transition-delay: .9s; }
 .mem.entered .scroll-hint.gone { opacity: 0; transition-delay: 0s; }
 .scroll-hint .chev { color: var(--gold); }
-/* 两行注释:标签列取「注:」实际宽度,第二条空标签占位,首词随之对齐 */
+/* 两行注释:标签列取「注:」实际宽度,第二条空标签占位,首词随之对齐;
+   字体样式放容器上,标签与正文统一 */
 .chat-notes {
   display: grid;
   grid-template-columns: max-content 1fr;
   column-gap: 0;
   row-gap: 4px;
   margin: 14px 6px 0;
-}
-.chat-note {
-  margin: 0;
   font-size: 0.68rem;
   line-height: 1.6;
   letter-spacing: 0.02em;
   color: var(--faint);
 }
+.chat-note { margin: 0; }
 .msg {
   display: flex; gap: 12px; align-items: flex-start;
   transform-origin: left bottom;
