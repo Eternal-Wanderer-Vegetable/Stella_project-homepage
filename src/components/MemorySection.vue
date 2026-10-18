@@ -55,8 +55,12 @@ function onChatScroll() {
             <span class="chev">↓</span>{{ t('mem.scrollHint') }}
           </span>
         </div>
-        <p class="chat-note">{{ t('mem.note1') }}</p>
-        <p class="chat-note">{{ t('mem.note2') }}</p>
+        <div class="chat-notes">
+          <span class="note-tag" aria-hidden="true">{{ t('mem.noteTag') }}</span>
+          <p class="chat-note">{{ t('mem.note1') }}</p>
+          <span class="note-tag" aria-hidden="true"></span>
+          <p class="chat-note">{{ t('mem.note2') }}</p>
+        </div>
       </div>
       <div class="aside">
         <p class="aside-line" :style="{ animationDelay: asideDelay }">{{ t('mem.aside') }}</p>
@@ -126,14 +130,21 @@ function onChatScroll() {
 .mem.entered .scroll-hint { opacity: 1; transition-delay: .9s; }
 .mem.entered .scroll-hint.gone { opacity: 0; transition-delay: 0s; }
 .scroll-hint .chev { color: var(--gold); }
-.chat-note {
+/* 两行注释:标签列取「注:」实际宽度,第二条空标签占位,首词随之对齐 */
+.chat-notes {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  column-gap: 0;
+  row-gap: 4px;
   margin: 14px 6px 0;
+}
+.chat-note {
+  margin: 0;
   font-size: 0.68rem;
   line-height: 1.6;
   letter-spacing: 0.02em;
   color: var(--faint);
 }
-.chat-note + .chat-note { margin-top: 4px; }
 .msg {
   display: flex; gap: 12px; align-items: flex-start;
   transform-origin: left bottom;
@@ -197,12 +208,12 @@ function onChatScroll() {
    行内 animationDelay 按条数铺开)→ recall 落定后来一次金光脉冲;
    「可向下滚动」提示在窗口落定后淡入,一开始滚动即收起 —— */
 @media (prefers-reduced-motion: no-preference) {
-  .chat, .msg, .aside-line, .aside-words, .chat-note { opacity: 0; }
+  .chat, .msg, .aside-line, .aside-words, .chat-notes { opacity: 0; }
   .mem.entered .chat { animation: cardIn .5s cubic-bezier(.22,.61,.36,1) both; }
   .mem.entered .msg { animation: bubbleIn .5s cubic-bezier(.34,1.45,.64,1) both; }
   .mem.entered .aside-line { animation: asideIn .7s cubic-bezier(.22,.61,.36,1) both; }
   .mem.entered .aside-words { animation: asideIn .7s cubic-bezier(.22,.61,.36,1) both; }
-  .mem.entered .chat-note { animation: asideIn .7s cubic-bezier(.22,.61,.36,1) both; animation-delay: .55s; }
+  .mem.entered .chat-notes { animation: asideIn .7s cubic-bezier(.22,.61,.36,1) both; animation-delay: .55s; }
   .mem.entered .bubble.recall::after { animation: recallPulse 1.2s ease-out both; animation-delay: var(--pulse-delay, 1.5s); }
   .mem.entered .scroll-hint .chev { animation: chevBob 1.6s ease-in-out infinite; }
 }
