@@ -87,7 +87,6 @@ function onChatScroll() {
   width: 100%;
   max-height: min(72vh, 660px);
   overflow-y: auto;
-  overscroll-behavior: contain;
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.16) transparent;
   padding: clamp(22px, 3.4vw, 38px);
@@ -99,6 +98,11 @@ function onChatScroll() {
 .chat::-webkit-scrollbar { width: 6px; }
 .chat::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.16); border-radius: 3px; }
 .chat:focus-visible { outline: 1px solid rgba(246, 201, 107, 0.45); outline-offset: 3px; }
+/* 精细指针:聊天窗边界由整页翻页接管(见 usePageGlide),不放行链式滚动;
+   触屏设备保留自然链式,避免近全宽的聊天窗困住触摸翻页 */
+@media (pointer: fine) {
+  .chat { overscroll-behavior: contain; }
+}
 .scroll-hint {
   position: absolute; left: 50%; bottom: 12px; transform: translateX(-50%);
   display: flex; align-items: center; gap: 7px;

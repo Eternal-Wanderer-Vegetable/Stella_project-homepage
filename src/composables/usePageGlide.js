@@ -13,7 +13,8 @@ import { onMounted, onUnmounted } from 'vue'
    rAF + postMessage 双通道驱动的弹簧模拟(两通道互相取消,postMessage
    已实证不被节流);CSS 过渡动画本身不受节流,视觉无碍。
 
-   触屏设备保留 CSS scroll-snap 原生翻页;面板打开/减弱动效时不接管。
+   触屏设备保留 CSS scroll-snap 原生翻页;面板打开/减弱动效时不接管;
+   滚轮/键盘落在可滚动子区域(如第三屏聊天窗)时放行原生滚动,滚到边界再翻页。
    所有滚动显式 instant,避免被 html 的 scroll-behavior:smooth 冻结。
    ================================================================ */
 export function usePageGlide() {
@@ -176,10 +177,25 @@ export function usePageGlide() {
 
   function turn(dir) { glideTo(currentIndex() + dir) }
 
+  // 光标/焦点落在内部滚动区(聊天窗等)且该方向还能滚:原生滚动接管,不翻页;
+  // 滚到边界后此处不再命中,翻页自然接手。body 本身不算"内部"。
+  function overInnerScroller(el, deltaY) {
+    for (; el && el !== document.body; el = el.parentElement) {
+      if (el.nodeType !== 1) continue
+      if (!/(auto|scroll)/.test(getComputedStyle(el).overflowY)) continue
+      if (el.scrollHeight <= el.clientHeight) continue
+      if (deltaY > 0 ? el.scrollTop + el.clientHeight < el.scrollHeight - 1
+                     : el.scrollTop > 0) return true
+    }
+    return false
+  }
+
   function onWheel(e) {
-    // ctrl+滚轮是缩放手势;面板打开时面板内部自滚动;减弱动效/触屏走原生——均不接管
+    // ctrl+滚轮是缩放手势;面板打开时面板内部自滚动;减弱动效/触屏走原生;
+    // 悬停在聊天窗等内部滚动区上时滚的是对话框——均不接管
     if (e.ctrlKey || panelOpen() || reduced() || !finePointer()) return
     if (!e.deltaY) return
+    if (overInnerScroller(e.target, e.deltaY)) return
     e.preventDefault()
     if (gliding || performance.now() < settleUntil) return
     const d = e.deltaMode === 1 ? e.deltaY * 33 : e.deltaY   // 行模式的滚轮(如 Firefox)
@@ -210,6 +226,8 @@ export function usePageGlide() {
     // 无焦点时 target 是 document,没有 closest,需先判型
     const t = e.target
     if (t && typeof t.closest === 'function' && t.closest('a, button, input, textarea, select, [contenteditable]')) return
+    // 焦点在可滚动子区域(聊天窗)里:方向键/Home/End 保持原生滚动
+    if (t && (overInnerScroller(t, 1) || overInnerScroller(t, -1))) return
     if (e.key === 'Home') { e.preventDefault(); glideTo(0) }
     else if (e.key === 'End') { e.preventDefault(); glideTo(sections.length - 1) }
     else if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ' || e.key === 'Spacebar') { e.preventDefault(); turn(1) }
