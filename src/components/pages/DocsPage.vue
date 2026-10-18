@@ -77,9 +77,25 @@ async function refresh() {
   if (mainEl.value) mainEl.value.scrollTop = 0
 }
 
-// 渲染后处理:站内文档链接转接内部导航,其余链接新窗口打开
+// 渲染后处理:移除上游自带的首行索引导航;站内文档链接转接内部导航,其余链接新窗口打开
 function postProcess() {
   if (!mainEl.value) return
+  // 上游文档每篇开头都有纯导航行(「中文 | English · 文档总览」「Agent 导航 · 架构导航」等):
+  // 站内工具栏已有 EN 开关、左侧栏已是完整索引,整行冗余。识别特征:
+  // 顶层段落里所有可见片段都是链接本身、分隔符(| ·)或中文/English 标签
+  mainEl.value.querySelectorAll('.md-body > p').forEach((p) => {
+    if (!p.querySelector('a')) return
+    const parts = []
+    p.childNodes.forEach((n) => {
+      if (n.nodeType === Node.TEXT_NODE) parts.push({ text: n.textContent.trim(), link: false })
+      else parts.push({ text: (n.textContent || '').trim(), link: !!n.querySelector('a') || n.tagName === 'A' })
+    })
+    if (!parts.length) return
+    // 文本片段剔除分隔符与中英文标签后应一无所剩(如「| English ·」这类混合节点)
+    const allNav = parts.every((x) =>
+      x.link || x.text.replace(/[|·]/g, "").replace(/中文|English/g, "").trim() === "")
+    if (allNav) p.remove()
+  })
   mainEl.value.querySelectorAll('a[href]').forEach((a) => {
     const href = a.getAttribute('href') || ''
     if (/^(https?:|mailto:)/.test(href)) {
