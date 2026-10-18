@@ -36,23 +36,27 @@ function onChatScroll() {
   <!-- 第三屏:证明她不是概念项目。一段真实聊天记录 + 一句"她记得。",不做任何解释 -->
   <section id="memory" ref="root" class="mem" :class="{ entered: entered }">
     <div class="container mem-grid">
-      <div class="chat-wrap">
-        <div class="chat" role="log" tabindex="0" :aria-label="chat.aria"
-             ref="chatEl" @scroll="onChatScroll">
-          <div v-for="(m, i) in chat.messages" :key="i"
-               class="msg" :class="m.from === 'stella' ? 'left' : 'right'"
-               :style="{ animationDelay: msgDelay(i) }">
-            <span class="ava" :class="m.from === 'stella' ? 's' : 'v'" aria-hidden="true">{{ m.from === 'stella' ? '✦' : 'V' }}</span>
-            <div class="bubble-wrap">
-              <span class="name">{{ m.name || (m.from === 'stella' ? 'Stella' : 'Vegetable') }}</span>
-              <div class="bubble" :class="{ s: m.from === 'stella', recall: m.recall }"
-                   :style="m.recall ? { '--pulse-delay': pulseDelay(i) } : null">{{ m.text }}</div>
+      <div class="chat-col">
+        <div class="chat-wrap">
+          <div class="chat" role="log" tabindex="0" :aria-label="chat.aria"
+               ref="chatEl" @scroll="onChatScroll">
+            <div v-for="(m, i) in chat.messages" :key="i"
+                 class="msg" :class="m.from === 'stella' ? 'left' : 'right'"
+                 :style="{ animationDelay: msgDelay(i) }">
+              <span class="ava" :class="m.from === 'stella' ? 's' : 'v'" aria-hidden="true">{{ m.from === 'stella' ? '✦' : 'V' }}</span>
+              <div class="bubble-wrap">
+                <span class="name">{{ m.name || (m.from === 'stella' ? 'Stella' : 'Vegetable') }}</span>
+                <div class="bubble" :class="{ s: m.from === 'stella', recall: m.recall }"
+                     :style="m.recall ? { '--pulse-delay': pulseDelay(i) } : null">{{ m.text }}</div>
+              </div>
             </div>
           </div>
+          <span class="scroll-hint" :class="{ gone: hintGone }" aria-hidden="true">
+            <span class="chev">↓</span>{{ t('mem.scrollHint') }}
+          </span>
         </div>
-        <span class="scroll-hint" :class="{ gone: hintGone }" aria-hidden="true">
-          <span class="chev">↓</span>{{ t('mem.scrollHint') }}
-        </span>
+        <p class="chat-note">{{ t('mem.note1') }}</p>
+        <p class="chat-note">{{ t('mem.note2') }}</p>
       </div>
       <div class="aside">
         <p class="aside-line" :style="{ animationDelay: asideDelay }">{{ t('mem.aside') }}</p>
@@ -77,10 +81,12 @@ function onChatScroll() {
 }
 
 /* 聊天窗口:定高滚动,像真的聊天界面;Stella 靠左金调,Vegetable 靠右中性。
-   外层 wrap 承载定位与限宽,滚动提示悬浮在窗口下缘 */
+   列容器限宽,wrap 承载滚动提示定位,卡片下方两行小字注释 */
+.chat-col {
+  max-width: 520px;
+}
 .chat-wrap {
   position: relative;
-  max-width: 520px;
 }
 .chat {
   display: flex; flex-direction: column; gap: 12px;
@@ -120,6 +126,14 @@ function onChatScroll() {
 .mem.entered .scroll-hint { opacity: 1; transition-delay: .9s; }
 .mem.entered .scroll-hint.gone { opacity: 0; transition-delay: 0s; }
 .scroll-hint .chev { color: var(--gold); }
+.chat-note {
+  margin: 14px 6px 0;
+  font-size: 0.68rem;
+  line-height: 1.6;
+  letter-spacing: 0.02em;
+  color: var(--faint);
+}
+.chat-note + .chat-note { margin-top: 4px; }
 .msg {
   display: flex; gap: 12px; align-items: flex-start;
   transform-origin: left bottom;
@@ -183,11 +197,12 @@ function onChatScroll() {
    行内 animationDelay 按条数铺开)→ recall 落定后来一次金光脉冲;
    「可向下滚动」提示在窗口落定后淡入,一开始滚动即收起 —— */
 @media (prefers-reduced-motion: no-preference) {
-  .chat, .msg, .aside-line, .aside-words { opacity: 0; }
+  .chat, .msg, .aside-line, .aside-words, .chat-note { opacity: 0; }
   .mem.entered .chat { animation: cardIn .5s cubic-bezier(.22,.61,.36,1) both; }
   .mem.entered .msg { animation: bubbleIn .5s cubic-bezier(.34,1.45,.64,1) both; }
   .mem.entered .aside-line { animation: asideIn .7s cubic-bezier(.22,.61,.36,1) both; }
   .mem.entered .aside-words { animation: asideIn .7s cubic-bezier(.22,.61,.36,1) both; }
+  .mem.entered .chat-note { animation: asideIn .7s cubic-bezier(.22,.61,.36,1) both; animation-delay: .55s; }
   .mem.entered .bubble.recall::after { animation: recallPulse 1.2s ease-out both; animation-delay: var(--pulse-delay, 1.5s); }
   .mem.entered .scroll-hint .chev { animation: chevBob 1.6s ease-in-out infinite; }
 }
@@ -215,7 +230,7 @@ function onChatScroll() {
 
 @media (max-width: 880px) {
   .mem-grid { grid-template-columns: 1fr; gap: 40px; }
-  .chat-wrap { margin: 0 auto; width: 100%; }
+  .chat-col { margin: 0 auto; width: 100%; }
   .bubble-wrap { max-width: 86%; }
 }
 </style>
