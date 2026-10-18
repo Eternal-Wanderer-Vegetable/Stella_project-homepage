@@ -36,18 +36,21 @@ function escapeHtml(s) {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 }
 
-// 把文档内的相对链接解析成站内文档;解析不到的回退到上游 GitHub 地址
+// posix 路径拼接(处理 ../ 与 ./);供文内链接按上游真实位置展开
+function joinPosix(a, b) {
+  const parts = (a ? a.split('/') : []).concat(b.split('/'))
+  const out = []
+  for (const p of parts) {
+    if (p === '..') out.pop()
+    else if (p !== '.') out.push(p)
+  }
+  return out.join('/')
+}
+
+// 把文档内的相对链接解析成站内文档;解析不到的回退到上游 GitHub 地址。
+// dir(currentPath 去文件名)已带 docs/ 前缀,候选取「同目录相对」与「docs/ 根相对」两种写法
 function resolveDoc(clean) {
   const dir = currentPath.value.split('/').slice(0, -1).join('/')
-  const joinPosix = (a, b) => {
-    const parts = (a ? a.split('/') : []).concat(b.split('/'))
-    const out = []
-    for (const p of parts) {
-      if (p === '..') out.pop()
-      else if (p !== '.') out.push(p)
-    }
-    return out.join('/')
-  }
   const candidates = [clean, joinPosix(dir, clean), joinPosix('docs', clean)]
   for (const c of candidates) {
     const hit = allItems.value.find((i) => i.path === c)
@@ -126,7 +129,7 @@ function postProcess() {
       a.classList.add('doc-link')
     } else {
       const dir = currentPath.value.split('/').slice(0, -1).join('/')
-      a.setAttribute('href', manifest.githubBase + (clean.startsWith('docs/') || clean.startsWith('../') ? clean : `${dir}/${clean}`.replace('docs/../', '')))
+      a.setAttribute('href', manifest.githubBase + joinPosix(dir, clean))
       a.setAttribute('target', '_blank')
       a.setAttribute('rel', 'noopener')
     }
@@ -162,6 +165,16 @@ const filteredCats = computed(() => {
   return manifest.categories
     .map((c) => ({ ...c, items: q ? c.items.filter((i) => (i.title + ' ' + i.file).toLowerCase().includes(q)) : c.items }))
     .filter((c) => c.items.length > 0)
+})
+
+// 该文档对应的静态分享页(构建时由 docs-content 生成,可直达/可收录);英文缺译文时指向中文页。
+// href 必须是运行时绝对地址:postProcess 会把非 http 的站内链接当作文档内相对链接改写
+const staticHref = computed(() => {
+  const it = currentItem.value
+  if (!it) return ''
+  const useEn = lang.value === 'en' && it.en
+  const rel = (useEn ? it.en : it.path).slice('docs/'.length).replace(/\.en\.md$/, '').replace(/\.md$/, '')
+  return location.origin + import.meta.env.BASE_URL + 'docs/' + (useEn ? 'en' : 'zh') + '/' + rel + '/'
 })
 </script>
 
@@ -209,6 +222,8 @@ const filteredCats = computed(() => {
         <h3 class="docs-title">{{ (locale === 'en' && currentItem?.titleEn) ? currentItem.titleEn : currentItem?.title || '' }}</h3>
         <div class="docs-tools">
           <span v-if="loading" class="docs-loading">{{ t('docs.loading') }}</span>
+          <a v-if="staticHref" class="docs-permalink" :href="staticHref" target="_blank" rel="noopener"
+             :title="t('docs.permalink')" :aria-label="t('docs.permalink')">{{ t('docs.permalink') }}</a>
         </div>
       </div>
       <!-- 文档内容来自本仓库同步的受信快照,marked 渲染后注入 -->

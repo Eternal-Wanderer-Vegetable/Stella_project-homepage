@@ -6,7 +6,7 @@
   "description": "Stella 项目主页 — Vue 3 单页静态站",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && node scripts/generate-static-pages.mjs && node scripts/check-seo.mjs",
     "preview": "vite preview",
     "sync-docs": "node scripts/sync-docs.mjs"
   },

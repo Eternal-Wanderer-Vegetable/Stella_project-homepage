@@ -130,6 +130,8 @@
 }
 .docs-tools { flex: 0 0 auto; display: flex; align-items: center; gap: 8px; }
 .docs-loading { font-size: 0.78rem; color: var(--faint); }
+.docs-permalink { font-size: 0.78rem; color: var(--faint); white-space: nowrap; padding: 3px 9px; border-radius: 999px; }
+.docs-permalink:hover { color: var(--gold-2); background: var(--gold-dim); text-decoration: none; }
 a.doc-link { color: var(--gold-2); border-bottom: 1px dotted var(--gold); }
 
 /* ---------- markdown 正文排版 ---------- */

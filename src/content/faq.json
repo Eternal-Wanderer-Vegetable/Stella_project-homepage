@@ -1,0 +1,66 @@
+{
+  "llmsTitle": "Stella",
+  "llmsDesc": "An open-source, model-agnostic QQ-group AI agent built around an ~8K-token context window: long-term memory, capability routing, and tool execution outside the context window. Powered by NoneBot 2 + OneBot V11; runs locally, hybrid or online; compatible with the AstrBot plugin ecosystem.",
+  "zh": {
+    "title": "Stella 常见问题",
+    "intro": "关于 Stella 的简短回答:它是什么、怎么部署、记忆如何管理。全部回答只陈述当前文档快照中可核对的事实。",
+    "items": [
+      {
+        "q": "Stella 和普通的 QQ 聊天机器人有什么不同?",
+        "a": "Stella 把记忆管理、能力路由、工具执行与对话生成分成独立层次,而不是把消息直接转发给语言模型。记忆在需要时才取出,工具在上下文外执行,旧对话滚出即压缩,因此能用约 8192 tokens 的上下文预算支撑群聊里的长期持续对话。",
+        "link": "docs/architecture/overview.md"
+      },
+      {
+        "q": "Stella 必须使用云端大模型吗?",
+        "a": "不必须。Stella 通过统一的模型接入层同时支持本地模型与在线模型,可以完全本地、混合或在线运行,由部署者决定;选择在线模式时,相应处理所需的信息才会发送到所配置的模型服务商。",
+        "link": "docs/guides/deployment-docker.md"
+      },
+      {
+        "q": "Stella 只能使用 8192 tokens 吗?",
+        "a": "不是。8192 tokens 是 Stella 重点优化的设计预算,不是模型可用上下文的硬上限。架构依靠外部记忆检索、工具隔离与对话压缩把单轮上下文占用控制在这个量级,小上下文模型也能长期稳定运行。",
+        "link": "docs/architecture/llm-budget.md"
+      },
+      {
+        "q": "Stella 能使用现有的 AstrBot 插件吗?",
+        "a": "能。内置的 AstrBot 插件兼容层让生态里的插件不改源码直接运行:插件放进 data/plugins/ 即被发现并加载,指令由分发通路处理,@llm_tool 注册的工具经能力层按需调用;未实现的上游接口会显式报错而不是静默返回假值。",
+        "link": "docs/architecture/integrations.md"
+      },
+      {
+        "q": "群里的记忆是共享的吗?谁能看到?",
+        "a": "记忆按归属与受众划分:群共享空间(SPACE)的记忆对群里可见,个人相关事实默认仅本人与 Bot 的私聊可见;个人记忆的写入与对外分享出厂默认关闭,分享需要本人、来源消息与具体事实的核验,并且可以撤回。",
+        "link": "docs/architecture/memory-system.md"
+      }
+    ]
+  },
+  "en": {
+    "title": "Stella FAQ",
+    "intro": "Short answers about Stella: what it is, how to deploy it, and how its memory works. Every answer states facts verifiable in the current docs snapshot.",
+    "items": [
+      {
+        "q": "How is Stella different from a typical QQ chatbot?",
+        "a": "Stella separates memory management, capability routing, tool execution and dialogue generation into independent layers instead of forwarding messages straight to the LLM. Memory is retrieved only when needed, tools run outside the context window, and old turns are compressed as they scroll out — so about 8192 tokens of context budget can sustain long-running group conversations.",
+        "link": "docs/architecture/overview.md"
+      },
+      {
+        "q": "Does Stella require a cloud LLM?",
+        "a": "No. A unified model integration layer supports both local and online models: Stella can run fully local, hybrid or online, decided by the deployer. In online mode, only the information required for the chosen processing is sent to the configured model provider.",
+        "link": "docs/guides/deployment-docker.md"
+      },
+      {
+        "q": "Is Stella limited to 8192 tokens?",
+        "a": "No. 8192 tokens is the design budget Stella optimizes for, not a hard ceiling on model context. The architecture keeps per-turn context usage at that scale through external memory retrieval, tool isolation and conversation compression, so even small-context models can run stably over long sessions.",
+        "link": "docs/architecture/llm-budget.md"
+      },
+      {
+        "q": "Can Stella use existing AstrBot plugins?",
+        "a": "Yes. A built-in compatibility layer runs AstrBot ecosystem plugins without source changes: plugins dropped into data/plugins/ are discovered and loaded, commands go through the dispatch path, and @llm_tool functions are invoked on demand by the capability layer. Unsupported upstream APIs raise explicit errors instead of silently returning fake values.",
+        "link": "docs/architecture/integrations.md"
+      },
+      {
+        "q": "Is memory in a group shared? Who can see it?",
+        "a": "Memory is scoped by ownership and audience: facts in a group's shared space (SPACE) are visible to that group, while personal facts default to private chats between the person and the bot only. Personal-memory writing and sharing are disabled by default; sharing requires verification of the person, the source message and the specific fact, and can be revoked.",
+        "link": "docs/architecture/memory-system.md"
+      }
+    ]
+  }
+}

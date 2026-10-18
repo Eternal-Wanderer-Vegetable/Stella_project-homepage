@@ -20,12 +20,14 @@ status: active
 - [2026-10-18] 第三屏换真实聊天记录 | 已完成 | memory-chat.json 换 42 条脱敏实录(中/英,Alice→Vegetable);MemorySection 改定高滚动聊天窗,左右两栏同时入场,不自动跟随,底部「向下滚动查看完整对话」提示滚动即收;节奏自适应总时长封顶 ~7s;recall 高亮在首条「又熬夜」
 - [2026-10-18] 整页翻页放行内部滚动区 | 已完成 | usePageGlide:滚轮/焦点落在可滚动子区域(聊天窗)且该方向还能滚时不翻页,滚到边界交还翻页;overscroll-behavior contain 仅 pointer:fine,触屏保留自然链式
 - [2026-10-18] 聊天记录双注释 | 已完成 | 聊天窗下两行小字(i18n mem.noteTag/note1/note2,网格标签列对齐,空标签占位):①真实群聊记录已脱敏 ②在 qwen3.8-flash-next-iq2_xs 模型下生成、不保证其他模型同效;卡片入场 0.55s 后淡入
+- [2026-10-18] SEO/GEO 静态索引层 | 已完成 | docs/design/seo-geo.md;构建生成 60 静态页(docs/zh|en/… + faq)+sitemap(61 URLs,hreflang 配对)+llms.txt,check-seo 串入 build(即 CI);首页 head 补 canonical/og:image(public/og-cover.png,1200×630)/JSON-LD,搜索标题带产品类别;文档工具栏加「独立分享页」直链静态页
 
 ## 下一步
 
-- 已知环境项:内嵌浏览器截图会出陈旧帧(顶栏/正文层不同步),以 DOM 探针为准(探针须打叶子元素,隐藏组与动画组要一一对应);真实浏览器无此问题
+- 已知环境项:内嵌浏览器截图会出陈旧帧(顶栏/正文层不同步),以 DOM 探针为准(探针须打叶子元素,隐藏组与动画组要一一对应);真实浏览器无此问题;python http.server 在本机发错 .js MIME 致 SPA 不挂载,验证一律用 vite preview
+- 人工:Google Search Console / Bing Webmaster Tools 提交 https://eternal-wanderer-vegetable.github.io/Stella_project-homepage/sitemap.xml(需账号);观察收录后再议独立域名 robots.txt
 - 可选:Actions 定时自动 sync-docs;docs 页 h2 TOC 与 mermaid 渲染
-- 可选:OG 卡片配图(og:image)目前只有文字卡;深链分享可再美化
+- 可选:GEO 评测集(定期用真实提问检验各 AI 是否找到并正确描述 Stella);SoftwareApplication.offers 待核实分发条款
 
 ## 最近快照
 

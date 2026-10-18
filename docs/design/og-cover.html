@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>og-cover</title>
+<style>
+  /* og 分享图设计稿:1200×630,深色 + 星芒 + 8192 tokens 视觉语言(与站点一致),静态无动画 */
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1200px; height: 630px; overflow: hidden; }
+  body {
+    background: #070a14;
+    color: #e8eaf2;
+    font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .glow {
+    position: absolute; width: 900px; height: 900px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(246,201,107,0.10) 0%, rgba(246,201,107,0.03) 40%, transparent 68%);
+    top: 50%; left: 50%; transform: translate(-50%, -50%);
+  }
+  .star { position: absolute; color: #f6c96b; text-shadow: 0 0 18px rgba(246,201,107,0.55); }
+  .s1 { font-size: 15px; top: 96px;  left: 168px; opacity: .5; }
+  .s2 { font-size: 10px; top: 175px; right: 205px; opacity: .4; }
+  .s3 { font-size: 12px; bottom: 130px; left: 262px; opacity: .45; }
+  .s4 { font-size: 9px;  bottom: 205px; right: 320px; opacity: .35; }
+  .s5 { font-size: 11px; top: 92px; right: 445px; opacity: .3; }
+  .card { position: relative; text-align: center; z-index: 1; }
+  .mark { font-size: 88px; line-height: 1; color: #f6c96b; text-shadow: 0 0 42px rgba(246,201,107,0.45); }
+  .name {
+    font-family: Georgia, "Times New Roman", serif; font-style: italic; font-weight: 600;
+    font-size: 96px; letter-spacing: 0.02em; margin-top: 18px; color: #f2f4fa;
+  }
+  .tagline {
+    margin-top: 26px; font-family: Georgia, serif; font-size: 40px; color: #f6c96b; letter-spacing: 0.01em;
+  }
+  .sub {
+    margin-top: 24px; font-size: 25px; color: #9aa3ba; letter-spacing: 0.14em;
+  }
+  .rule { width: 76px; height: 2px; margin: 26px auto 0; background: linear-gradient(90deg, transparent, rgba(246,201,107,0.7), transparent); }
+</style>
+</head>
+<body>
+  <div class="glow"></div>
+  <span class="star s1">✦</span><span class="star s2">✦</span><span class="star s3">✦</span><span class="star s4">✦</span><span class="star s5">✦</span>
+  <div class="card">
+    <div class="mark">✦</div>
+    <div class="name">Stella</div>
+    <div class="tagline">8192 tokens. Enough to remember you.</div>
+    <div class="rule"></div>
+    <div class="sub">开源 QQ 群聊 AI Agent · 长期记忆 · 本地部署</div>
+  </div>
+</body>
+</html>
