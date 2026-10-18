@@ -10,7 +10,7 @@
 
 /* ---------- 双栏布局 ---------- */
 .docs-side {
-  flex: 0 0 262px; min-width: 0;
+  flex: 0 0 300px; min-width: 0;
   display: flex; flex-direction: column; gap: 10px;
   background: var(--card);
   border: 1px solid var(--border-soft);
@@ -44,7 +44,7 @@
 .docs-cat:first-child { margin-top: 2px; }
 .docs-item {
   display: flex; align-items: baseline; gap: 6px;
-  width: 100%; text-align: left;
+  width: calc(100% - 12px); margin-left: 12px; text-align: left;
   background: none; border: none; cursor: pointer;
   font-family: inherit;
   color: var(--muted); font-size: 0.87rem; line-height: 1.5;
@@ -66,6 +66,28 @@
 /* 无译文:徽标置灰提示,鼠标悬停可见“暂无英文版” */
 .docs-item .en-flag.off { opacity: 0.32; }
 .docs-empty { color: var(--faint); font-size: 0.85rem; padding: 12px 10px; }
+
+/* 当前文档展开的内部标题索引(文本内的三级标题):比篇目再深一层 */
+.docs-toc {
+  display: flex; flex-direction: column; gap: 1px;
+  margin: 1px 0 7px 26px;
+  padding-left: 8px;
+  border-left: 1px solid var(--border-soft);
+}
+.docs-toc-item {
+  display: block; width: 100%; text-align: left;
+  background: none; border: none; cursor: pointer;
+  font-family: inherit;
+  color: var(--faint); font-size: 0.78rem; line-height: 1.5;
+  padding: 4px 8px; border-radius: 7px;
+  transition: color .2s, background .2s;
+}
+.docs-toc-item .t {
+  display: block;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.docs-toc-item:hover { color: var(--gold-2); background: rgba(255, 255, 255, 0.05); }
+.docs-toc-item.lv3 { margin-left: 12px; width: calc(100% - 12px); font-size: 0.74rem; }
 
 /* ---------- 正文区 ---------- */
 .docs-main {
@@ -116,6 +138,8 @@ a.doc-link { color: var(--gold-2); border-bottom: 1px dotted var(--gold); }
 }
 .md-body h1 { font-size: 1.5rem; color: var(--gold-2); }
 .md-body h1::after { content: ""; display: block; width: 68px; height: 2px; margin-top: 10px; border-radius: 1px; background: linear-gradient(90deg, var(--gold), transparent); }
+/* 侧栏索引点击跳转:给吸附工具栏预留高度 */
+.md-body h2, .md-body h3, .md-body h4 { scroll-margin-top: 64px; }
 .md-body h2 { font-size: 1.22rem; padding-left: 12px; border-left: 3px solid var(--gold); }
 .md-body h3 { font-size: 1.05rem; color: var(--gold-2); }
 .md-body h4, .md-body h5 { font-size: 0.96rem; }

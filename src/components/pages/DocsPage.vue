@@ -19,6 +19,7 @@ const loading = ref(false)
 const html = ref('')
 const filter = ref('')
 const sideOpen = ref(false)   // 移动端目录折叠开关
+const toc = ref([])           // 当前文档的内部标题索引(渲染后处理时收集)
 
 // 按需懒加载:每篇文档单独成 chunk,首次打开才下载
 const mdModules = import.meta.glob('../../../docs-content/**/*.md', { query: '?raw', import: 'default' })
@@ -59,6 +60,7 @@ async function refresh() {
   if (!item) return
   const path = lang.value === 'en' && item.en ? item.en : item.path
   loading.value = true
+  toc.value = []
   try {
     const mdLoader = mdModules[docHref(path)]
     const codeLoader = !mdLoader ? codeModules[docHref(path)] : null
@@ -75,6 +77,13 @@ async function refresh() {
   await nextTick()
   postProcess()
   if (mainEl.value) mainEl.value.scrollTop = 0
+}
+
+// 侧栏索引:点击文档内标题,正文滚动到对应小节(工具栏吸附高度已用 scroll-margin 预留)。
+// 必须 instant:内嵌 webview 里 smooth 滚动会被冻结成 no-op(与 usePageGlide 同一坑)
+function scrollToHeading(id) {
+  const el = mainEl.value && mainEl.value.querySelector('#' + CSS.escape(id))
+  if (el) el.scrollIntoView({ behavior: 'instant', block: 'start' })
 }
 
 // 渲染后处理:移除上游自带的首行索引导航;站内文档链接转接内部导航,其余链接新窗口打开
@@ -118,6 +127,13 @@ function postProcess() {
       a.setAttribute('target', '_blank')
       a.setAttribute('rel', 'noopener')
     }
+  })
+  // 收集文档内部标题(h2/h3)供侧栏索引;顺序编号作锚点
+  const heads = mainEl.value.querySelectorAll('.md-body h2, .md-body h3')
+  toc.value = [...heads].map((h, i) => {
+    const id = 'sec-' + i
+    h.id = id
+    return { id, text: h.textContent.trim(), level: h.tagName === 'H2' ? 2 : 3 }
   })
 }
 
@@ -164,13 +180,22 @@ const ghUrl = computed(() => manifest.githubBase + (lang.value === 'en' && curre
       <div class="docs-nav" role="navigation" aria-label="文档目录">
         <template v-for="cat in filteredCats" :key="cat.id">
           <div class="docs-cat">{{ cat.label }}</div>
-          <button v-for="it in cat.items" :key="it.path"
-                  type="button" class="docs-item" :class="{ on: it.path === currentPath }"
-                  :title="it.title" @click="open(it)">
-            <span class="t">{{ it.title }}</span>
-            <span v-if="it.en" class="en-flag" aria-hidden="true">EN</span>
-            <span v-else class="en-flag off" aria-hidden="true" title="暂无英文版">EN</span>
-          </button>
+          <template v-for="it in cat.items" :key="it.path">
+            <button type="button" class="docs-item" :class="{ on: it.path === currentPath }"
+                    :title="it.title" @click="open(it)">
+              <span class="t">{{ it.title }}</span>
+              <span v-if="it.en" class="en-flag" aria-hidden="true">EN</span>
+              <span v-else class="en-flag off" aria-hidden="true" title="暂无英文版">EN</span>
+            </button>
+            <!-- 当前文档在侧栏内展开内部标题(文本内的三级标题),点击滚动到对应小节 -->
+            <div v-if="it.path === currentPath && toc.length" class="docs-toc">
+              <button v-for="h in toc" :key="h.id" type="button"
+                      class="docs-toc-item" :class="'lv' + h.level"
+                      :title="h.text" @click="scrollToHeading(h.id)">
+                <span class="t">{{ h.text }}</span>
+              </button>
+            </div>
+          </template>
         </template>
         <div v-if="!filteredCats.length" class="docs-empty">没有匹配的文档</div>
       </div>
