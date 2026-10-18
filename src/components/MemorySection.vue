@@ -10,8 +10,7 @@ import chatData from '../content/memory-chat.json'
 //   text: 气泡正文;name: 可选,覆盖显示名;recall: true 时气泡金色高亮(记忆的证据)
 // en 块为英文版对话(可选),缺失时回退中文。
 
-// 首次入场编排:卡片浮起后气泡按条铺开,recall 落定后金光脉冲,
-// 「她记得。」等最后一条气泡落地才浮现——punchline 在证据之后。
+// 首次入场编排:左右两栏同时浮起,左栏气泡按条铺开,recall 落定后金光脉冲。
 // 间隔随条数自适应(总时长封顶约 7s):短对话仍 .4s/条,长对话压缩节奏。
 const { root, entered } = useEnterOnce()
 
@@ -19,32 +18,17 @@ const chat = computed(() => (locale.value === 'en' && chatData.en) ? chatData.en
 
 const MSG_START = 0.25
 const MSG_STEP = Math.min(0.4, 7 / Math.max(1, chatData.messages.length - 1))
-const LAST = MSG_START + (chatData.messages.length - 1) * MSG_STEP
 const msgDelay = (i) => (MSG_START + i * MSG_STEP).toFixed(2) + 's'
 const pulseDelay = (i) => (MSG_START + i * MSG_STEP + 0.55).toFixed(2) + 's'
-const asideDelay = (LAST + 0.5).toFixed(2) + 's'
-const asideWordsDelay = (LAST + 0.75).toFixed(2) + 's'
+const asideDelay = '0.1s'
+const asideWordsDelay = '0.35s'
 
-// 真实聊天窗口是定高滚动的:播放时视口跟随最新气泡,像在收消息;
-// 用户向上滚动即暂停跟随,重新滚回底部自动恢复。
+// 聊天窗可滚动但不自动跟随;入场后给一个「可向下滚动」的提示,一开始滚动就收掉。
 const chatEl = ref(null)
-const follow = ref(true)
-let programmaticUntil = 0
-function onBubbleIn(e) {
-  if (!e.target.classList || !e.target.classList.contains('msg')) return
-  const el = chatEl.value
-  if (!el || !follow.value) return
-  const overflow = e.target.getBoundingClientRect().bottom + 14 - el.getBoundingClientRect().bottom
-  if (overflow > 0) {
-    programmaticUntil = performance.now() + 600
-    el.scrollTo({ top: el.scrollTop + overflow, behavior: 'smooth' })
-  }
-}
+const hintGone = ref(false)
 function onChatScroll() {
   const el = chatEl.value
-  if (!el) return
-  if (el.scrollHeight - el.scrollTop - el.clientHeight < 48) follow.value = true
-  else if (performance.now() > programmaticUntil) follow.value = false
+  if (el && el.scrollTop > 8) hintGone.value = true
 }
 </script>
 
@@ -52,18 +36,23 @@ function onChatScroll() {
   <!-- 第三屏:证明她不是概念项目。一段真实聊天记录 + 一句"她记得。",不做任何解释 -->
   <section id="memory" ref="root" class="mem" :class="{ entered: entered }">
     <div class="container mem-grid">
-      <div class="chat" role="log" tabindex="0" :aria-label="chat.aria"
-           ref="chatEl" @animationstart="onBubbleIn" @scroll="onChatScroll">
-        <div v-for="(m, i) in chat.messages" :key="i"
-             class="msg" :class="m.from === 'stella' ? 'left' : 'right'"
-             :style="{ animationDelay: msgDelay(i) }">
-          <span class="ava" :class="m.from === 'stella' ? 's' : 'v'" aria-hidden="true">{{ m.from === 'stella' ? '✦' : 'V' }}</span>
-          <div class="bubble-wrap">
-            <span class="name">{{ m.name || (m.from === 'stella' ? 'Stella' : 'Vegetable') }}</span>
-            <div class="bubble" :class="{ s: m.from === 'stella', recall: m.recall }"
-                 :style="m.recall ? { '--pulse-delay': pulseDelay(i) } : null">{{ m.text }}</div>
+      <div class="chat-wrap">
+        <div class="chat" role="log" tabindex="0" :aria-label="chat.aria"
+             ref="chatEl" @scroll="onChatScroll">
+          <div v-for="(m, i) in chat.messages" :key="i"
+               class="msg" :class="m.from === 'stella' ? 'left' : 'right'"
+               :style="{ animationDelay: msgDelay(i) }">
+            <span class="ava" :class="m.from === 'stella' ? 's' : 'v'" aria-hidden="true">{{ m.from === 'stella' ? '✦' : 'V' }}</span>
+            <div class="bubble-wrap">
+              <span class="name">{{ m.name || (m.from === 'stella' ? 'Stella' : 'Vegetable') }}</span>
+              <div class="bubble" :class="{ s: m.from === 'stella', recall: m.recall }"
+                   :style="m.recall ? { '--pulse-delay': pulseDelay(i) } : null">{{ m.text }}</div>
+            </div>
           </div>
         </div>
+        <span class="scroll-hint" :class="{ gone: hintGone }" aria-hidden="true">
+          <span class="chev">↓</span>{{ t('mem.scrollHint') }}
+        </span>
       </div>
       <div class="aside">
         <p class="aside-line" :style="{ animationDelay: asideDelay }">{{ t('mem.aside') }}</p>
@@ -87,10 +76,15 @@ function onChatScroll() {
   width: 100%;
 }
 
-/* 聊天窗口:定高滚动,像真的聊天界面;Stella 靠左金调,Vegetable 靠右中性 */
+/* 聊天窗口:定高滚动,像真的聊天界面;Stella 靠左金调,Vegetable 靠右中性。
+   外层 wrap 承载定位与限宽,滚动提示悬浮在窗口下缘 */
+.chat-wrap {
+  position: relative;
+  max-width: 520px;
+}
 .chat {
   display: flex; flex-direction: column; gap: 12px;
-  max-width: 520px;
+  width: 100%;
   max-height: min(72vh, 660px);
   overflow-y: auto;
   overscroll-behavior: contain;
@@ -105,6 +99,23 @@ function onChatScroll() {
 .chat::-webkit-scrollbar { width: 6px; }
 .chat::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.16); border-radius: 3px; }
 .chat:focus-visible { outline: 1px solid rgba(246, 201, 107, 0.45); outline-offset: 3px; }
+.scroll-hint {
+  position: absolute; left: 50%; bottom: 12px; transform: translateX(-50%);
+  display: flex; align-items: center; gap: 7px;
+  padding: 5px 14px;
+  border: 1px solid var(--border-soft);
+  border-radius: 999px;
+  background: rgba(10, 12, 18, 0.82);
+  font-size: 0.72rem; letter-spacing: 0.08em;
+  color: var(--faint);
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .4s ease;
+}
+.mem.entered .scroll-hint { opacity: 1; transition-delay: .9s; }
+.mem.entered .scroll-hint.gone { opacity: 0; transition-delay: 0s; }
+.scroll-hint .chev { color: var(--gold); }
 .msg {
   display: flex; gap: 12px; align-items: flex-start;
   transform-origin: left bottom;
@@ -164,9 +175,9 @@ function onChatScroll() {
   color: var(--faint);
 }
 
-/* —— 首次入场:卡片浮起 → 气泡像收消息一样逐条弹出(间隔自适应,行内
-   animationDelay 按条数铺开,滚动窗口跟随最新气泡)→ recall 落定后来一次
-   金光脉冲 → 「她记得。」压轴 —— */
+/* —— 首次入场:左右两栏同时浮起 → 左栏气泡像收消息一样逐条弹出(间隔自适应,
+   行内 animationDelay 按条数铺开)→ recall 落定后来一次金光脉冲;
+   「可向下滚动」提示在窗口落定后淡入,一开始滚动即收起 —— */
 @media (prefers-reduced-motion: no-preference) {
   .chat, .msg, .aside-line, .aside-words { opacity: 0; }
   .mem.entered .chat { animation: cardIn .5s cubic-bezier(.22,.61,.36,1) both; }
@@ -174,6 +185,7 @@ function onChatScroll() {
   .mem.entered .aside-line { animation: asideIn .7s cubic-bezier(.22,.61,.36,1) both; }
   .mem.entered .aside-words { animation: asideIn .7s cubic-bezier(.22,.61,.36,1) both; }
   .mem.entered .bubble.recall::after { animation: recallPulse 1.2s ease-out both; animation-delay: var(--pulse-delay, 1.5s); }
+  .mem.entered .scroll-hint .chev { animation: chevBob 1.6s ease-in-out infinite; }
 }
 @keyframes cardIn {
   from { opacity: 0; transform: translateY(26px); }
@@ -192,10 +204,14 @@ function onChatScroll() {
   45% { opacity: 0.85; }
   100% { opacity: 0; }
 }
+@keyframes chevBob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(3px); }
+}
 
 @media (max-width: 880px) {
   .mem-grid { grid-template-columns: 1fr; gap: 40px; }
-  .chat { margin: 0 auto; width: 100%; }
+  .chat-wrap { margin: 0 auto; width: 100%; }
   .bubble-wrap { max-width: 86%; }
 }
 </style>
