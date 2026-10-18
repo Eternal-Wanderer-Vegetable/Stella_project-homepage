@@ -184,8 +184,6 @@ const ghUrl = computed(() => manifest.githubBase + (lang.value === 'en' && curre
             <button type="button" class="docs-item" :class="{ on: it.path === currentPath }"
                     :title="it.title" @click="open(it)">
               <span class="t">{{ it.title }}</span>
-              <span v-if="it.en" class="en-flag" aria-hidden="true">EN</span>
-              <span v-else class="en-flag off" aria-hidden="true" title="暂无英文版">EN</span>
             </button>
             <!-- 当前文档在侧栏内展开内部标题(文本内的三级标题),点击滚动到对应小节 -->
             <div v-if="it.path === currentPath && toc.length" class="docs-toc">

@@ -2,7 +2,7 @@
   "source": {
     "repo": "Eternal-Wanderer-Vegetable/Stella_project",
     "ref": "main",
-    "syncedAt": "2026-10-17T23:56:33.706Z"
+    "syncedAt": "2026-10-18T01:06:30.143Z"
   },
   "githubBase": "https://github.com/Eternal-Wanderer-Vegetable/Stella_project/blob/main/",
   "categories": [
@@ -266,36 +266,6 @@
           "file": "agent/workflow.md",
           "size": 1718,
           "title": "任务状态与会话交接"
-        }
-      ]
-    },
-    {
-      "id": "examples-astrbot_plugin_stella_template",
-      "label": "插件模板",
-      "items": [
-        {
-          "path": "docs/examples/astrbot_plugin_stella_template/_conf_schema.json",
-          "file": "examples/astrbot_plugin_stella_template/_conf_schema.json",
-          "size": 486,
-          "title": "_conf_schema.json"
-        },
-        {
-          "path": "docs/examples/astrbot_plugin_stella_template/capability.toml",
-          "file": "examples/astrbot_plugin_stella_template/capability.toml",
-          "size": 2590,
-          "title": "capability.toml"
-        },
-        {
-          "path": "docs/examples/astrbot_plugin_stella_template/main.py",
-          "file": "examples/astrbot_plugin_stella_template/main.py",
-          "size": 4845,
-          "title": "main.py"
-        },
-        {
-          "path": "docs/examples/astrbot_plugin_stella_template/metadata.yaml",
-          "file": "examples/astrbot_plugin_stella_template/metadata.yaml",
-          "size": 783,
-          "title": "metadata.yaml"
         }
       ]
     }

@@ -21,16 +21,14 @@ const OUT = join(dirname(fileURLToPath(import.meta.url)), '..', 'docs-content')
 
 // 站内分节(与上游 docs/README.md 总览表一致,顺序即侧栏顺序)。
 // label 优先取该节 README 的一级标题,取不到时用 fallback。
-// 代码文件仅插件模板一节会出现,站内按代码块渲染。
+// 插件模板(examples/)刻意不入站:代码模板请读者直接看上游仓库。
 const SECTIONS = [
   { dir: 'guides', label: '使用指南' },
   { dir: 'architecture', label: '架构' },
   { dir: 'reference', label: '配置与接口参考' },
   { dir: 'development', label: '开发' },
   { dir: 'agent', label: 'Agent 工作文档' },
-  { dir: 'examples/astrbot_plugin_stella_template', label: '插件模板' },
 ]
-const CODE_RE = /\.(py|toml|yaml|yml|json)$/
 
 function getToken() {
   if (process.env.GITHUB_TOKEN) return process.env.GITHUB_TOKEN
@@ -76,7 +74,7 @@ const wanted = new Map()   // 'dir/' → blobs[]
 for (const s of SECTIONS) wanted.set(s.dir + '/', [])
 for (const t of tree.tree) {
   if (t.type !== 'blob' || !t.path.startsWith(SRC_PREFIX)) continue
-  if (!t.path.endsWith('.md') && !CODE_RE.test(t.path)) continue
+  if (!t.path.endsWith('.md')) continue
   const rel = t.path.slice(SRC_PREFIX.length)
   for (const [prefix, list] of wanted) {
     if (rel.startsWith(prefix)) list.push(t)

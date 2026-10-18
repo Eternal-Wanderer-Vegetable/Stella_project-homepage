@@ -58,13 +58,6 @@
 }
 .docs-item:hover { color: var(--text); background: rgba(255, 255, 255, 0.06); }
 .docs-item.on { color: var(--gold-2); background: var(--gold-dim); }
-.docs-item .en-flag {
-  flex: 0 0 auto; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.08em;
-  color: var(--blue); border: 1px solid rgba(122, 162, 247, 0.35);
-  border-radius: 5px; padding: 0 4px; line-height: 1.5;
-}
-/* 无译文:徽标置灰提示,鼠标悬停可见“暂无英文版” */
-.docs-item .en-flag.off { opacity: 0.32; }
 .docs-empty { color: var(--faint); font-size: 0.85rem; padding: 12px 10px; }
 
 /* 当前文档展开的内部标题索引(文本内的三级标题):比篇目再深一层 */
