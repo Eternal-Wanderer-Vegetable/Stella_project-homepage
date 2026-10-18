@@ -74,7 +74,7 @@ const asideWordsDelay = (LAST + 0.75).toFixed(2) + 's'
   box-shadow: 0 24px 70px rgba(0, 0, 0, 0.42);
 }
 .msg {
-  display: flex; gap: 12px; align-items: flex-end;
+  display: flex; gap: 12px; align-items: flex-start;
   transform-origin: left bottom;
 }
 .msg.right { flex-direction: row-reverse; transform-origin: right bottom; }
