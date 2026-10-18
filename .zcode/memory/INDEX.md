@@ -17,6 +17,7 @@ status: active
 - [2026-10-05] edition_1 一页化叙事改版 | 已完成 | handoffs/edition1一页化叙事改版.memo.md;8192 首屏钩子 + 四屏滚动叙事,设计稿 docs/design/edition_1.md
 - [2026-10-18] 文档页分节改版 + 递归同步 | 已完成 | sync-docs 递归拉上游子目录正文(4 节 29 篇+EN;examples/agent 档案不入站),侧栏=分节索引+篇内标题 TOC,右栏=完整正文
 - [2026-10-18] 全站中/英 i18n | 已完成 | src/i18n.js:首次访问按 navigator.languages 检测(任何 zh→简体,其他→英文),手动切换存 localStorage;顶栏中/EN 切换器;文档内容语言跟随全站
+- [2026-10-18] 第三屏换真实聊天记录 | 已完成 | memory-chat.json 换 42 条脱敏实录(中/英,Alice→Vegetable);MemorySection 改定高滚动回放窗(播放跟随+上滚暂停),节奏自适应总时长封顶 ~7s;recall 高亮在首条「又熬夜」
 
 ## 下一步
 
