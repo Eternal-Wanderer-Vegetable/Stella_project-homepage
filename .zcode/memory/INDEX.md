@@ -15,7 +15,8 @@ status: active
 - [2026-10-01] Vue 3 + Vite 改写并上线 | 已完成 | https://eternal-wanderer-vegetable.github.io/Stella_project-homepage/
 - [2026-10-01] 文档页(docs 展示)上线 | 已完成 | 39 篇上游文档快照展示,rail「文档」直达
 - [2026-10-05] edition_1 一页化叙事改版 | 已完成 | handoffs/edition1一页化叙事改版.memo.md;8192 首屏钩子 + 四屏滚动叙事,设计稿 docs/design/edition_1.md
-- [2026-10-18] 文档页分节改版 + 递归同步 | 已完成 | sync-docs 递归拉上游子目录正文(6 节 38 篇+EN),侧栏=分节索引、右栏=完整正文;plans/reports/migration 档案不入站;入口 8192 勾子屏与部署屏各有一/二次入场编排
+- [2026-10-18] 文档页分节改版 + 递归同步 | 已完成 | sync-docs 递归拉上游子目录正文(4 节 29 篇+EN;examples/agent 档案不入站),侧栏=分节索引+篇内标题 TOC,右栏=完整正文
+- [2026-10-18] 全站中/英 i18n | 已完成 | src/i18n.js:首次访问按 navigator.languages 检测(任何 zh→简体,其他→英文),手动切换存 localStorage;顶栏中/EN 切换器;文档内容语言跟随全站
 
 ## 下一步
 
