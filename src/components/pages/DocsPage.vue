@@ -157,16 +157,12 @@ function open(it) {
   if (lang.value === 'en' && !it.en) lang.value = 'zh'
   sideOpen.value = false   // 移动端选完自动收起目录,正文立即可读
 }
-function switchLang(v) {
-  lang.value = v
-}
 const filteredCats = computed(() => {
   const q = filter.value.trim().toLowerCase()
   return manifest.categories
     .map((c) => ({ ...c, items: q ? c.items.filter((i) => (i.title + ' ' + i.file).toLowerCase().includes(q)) : c.items }))
     .filter((c) => c.items.length > 0)
 })
-const ghUrl = computed(() => manifest.githubBase + (lang.value === 'en' && currentItem.value?.en ? currentItem.value.en : currentPath.value))
 </script>
 
 <template>
@@ -213,11 +209,6 @@ const ghUrl = computed(() => manifest.githubBase + (lang.value === 'en' && curre
         <h3 class="docs-title">{{ (locale === 'en' && currentItem?.titleEn) ? currentItem.titleEn : currentItem?.title || '' }}</h3>
         <div class="docs-tools">
           <span v-if="loading" class="docs-loading">{{ t('docs.loading') }}</span>
-          <template v-if="currentItem?.en">
-            <button type="button" class="lang-btn" :class="{ on: lang === 'zh' }" @click="switchLang('zh')">中</button>
-            <button type="button" class="lang-btn" :class="{ on: lang === 'en' }" @click="switchLang('en')">EN</button>
-          </template>
-          <a class="gh-link" :href="ghUrl" target="_blank" rel="noopener">{{ t('docs.opengh') }}</a>
         </div>
       </div>
       <!-- 文档内容来自本仓库同步的受信快照,marked 渲染后注入 -->

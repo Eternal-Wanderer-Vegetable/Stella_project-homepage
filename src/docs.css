@@ -130,17 +130,6 @@
 }
 .docs-tools { flex: 0 0 auto; display: flex; align-items: center; gap: 8px; }
 .docs-loading { font-size: 0.78rem; color: var(--faint); }
-.lang-btn {
-  width: 30px; height: 26px;
-  border: 1px solid var(--border); border-radius: 8px;
-  background: rgba(255, 255, 255, 0.04); color: var(--muted);
-  font-size: 0.74rem; font-family: inherit; cursor: pointer;
-  transition: all .2s;
-}
-.lang-btn:hover { color: var(--text); border-color: rgba(246, 201, 107, 0.4); }
-.lang-btn.on { color: #241a05; background: linear-gradient(135deg, #f9d98c, #eeb54d); border-color: transparent; font-weight: 700; }
-.gh-link { font-size: 0.78rem; color: var(--muted); border-bottom: 1px dotted var(--faint); transition: color .2s; white-space: nowrap; }
-.gh-link:hover { color: var(--gold-2); }
 a.doc-link { color: var(--gold-2); border-bottom: 1px dotted var(--gold); }
 
 /* ---------- markdown 正文排版 ---------- */
