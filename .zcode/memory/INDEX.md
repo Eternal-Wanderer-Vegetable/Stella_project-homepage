@@ -18,6 +18,8 @@ status: active
 - [2026-10-18] 文档页分节改版 + 递归同步 | 已完成 | sync-docs 递归拉上游子目录正文(4 节 29 篇+EN;examples/agent 档案不入站),侧栏=分节索引+篇内标题 TOC,右栏=完整正文
 - [2026-10-18] 全站中/英 i18n | 已完成 | src/i18n.js:首次访问按 navigator.languages 检测(任何 zh→简体,其他→英文),手动切换存 localStorage;顶栏中/EN 切换器;文档内容语言跟随全站
 - [2026-10-18] 第三屏换真实聊天记录 | 已完成 | memory-chat.json 换 42 条脱敏实录(中/英,Alice→Vegetable);MemorySection 改定高滚动聊天窗,左右两栏同时入场,不自动跟随,底部「向下滚动查看完整对话」提示滚动即收;节奏自适应总时长封顶 ~7s;recall 高亮在首条「又熬夜」
+- [2026-10-18] 整页翻页放行内部滚动区 | 已完成 | usePageGlide:滚轮/焦点落在可滚动子区域(聊天窗)且该方向还能滚时不翻页,滚到边界交还翻页;overscroll-behavior contain 仅 pointer:fine,触屏保留自然链式
+- [2026-10-18] 聊天记录双注释 | 已完成 | 聊天窗下两行小字(i18n mem.note1/note2):①真实群聊记录已脱敏 ②在 qwen3.8-flash-next-iq2_xs 模型下生成、不保证其他模型同效;卡片入场 0.55s 后淡入
 
 ## 下一步
 
