@@ -22,6 +22,27 @@ nav { z-index: 300; }
 .nav-pages button:hover { color: var(--text); background: rgba(255, 255, 255, 0.06); }
 .nav-pages button.active { color: var(--gold-2); background: var(--gold-dim); }
 
+/* 「首页」按钮的出现/收起:横向 0fr→1fr 宽度过渡 + 淡入,纯 CSS(部分内嵌环境 JS/rAF 被冻结)。
+   收起态以负边距抵消多出的一个 flex gap,展开/收起全程相邻页签零位移;
+   visibility 过渡让收起态退出 Tab 焦点序与无障碍树 */
+.nav-home-slot {
+  display: grid; grid-template-columns: minmax(0, 0fr);
+  overflow: hidden;
+  visibility: hidden; opacity: 0;
+  margin-right: -2px;
+  transition: grid-template-columns .3s cubic-bezier(.22,.61,.36,1), opacity .22s ease,
+              visibility .3s, margin-right .3s cubic-bezier(.22,.61,.36,1);
+}
+.nav-home-slot.open {
+  grid-template-columns: minmax(0, 1fr);
+  visibility: visible; opacity: 1;
+  margin-right: 0;
+}
+.nav-home-slot > button { min-width: 0; overflow: hidden; white-space: nowrap; }
+@media (prefers-reduced-motion: reduce) {
+  .nav-home-slot { transition: none; }
+}
+
 /* GitHub 组紧跟页签之后,不再另起自动边距 */
 .nav-inner > .nav-links { margin-left: 8px; }
 

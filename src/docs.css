@@ -64,13 +64,13 @@
    展开/收起用 grid-rows 0fr→1fr 的纯 CSS 高度过渡(JS/rAF 动画在部分内嵌环境被冻结);
    子项随展开依次滑入(--i 错峰),切换文档时旧节收起、新节展开自然衔接 */
 .docs-toc {
-  display: grid; grid-template-rows: 0fr;
+  display: grid; grid-template-rows: minmax(0, 0fr);
   margin: 1px 0 0 26px;
   opacity: 0;
   transition: grid-template-rows .32s cubic-bezier(.22,.61,.36,1), opacity .24s ease,
               margin-bottom .32s cubic-bezier(.22,.61,.36,1);
 }
-.docs-toc.open { grid-template-rows: 1fr; opacity: 1; margin-bottom: 7px; }
+.docs-toc.open { grid-template-rows: minmax(0, 1fr); opacity: 1; margin-bottom: 7px; }
 .docs-toc-in {
   overflow: hidden; min-height: 0;
   display: flex; flex-direction: column; gap: 1px;

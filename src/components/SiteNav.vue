@@ -13,8 +13,11 @@ defineEmits(['select', 'close'])
     <div class="nav-inner">
       <a class="brand" href="#top"><span class="star">✦</span><b>Stella</b></a>
       <div class="nav-pages">
-        <!-- 「首页」只在详情面板打开时出现:点击返回主页,回主页后此按钮同步隐藏 -->
-        <button v-if="open" type="button" aria-label="返回首页" @click="$emit('close')">首页</button>
+        <!-- 「首页」只在详情面板打开时出现:点击返回主页,回主页后此按钮同步隐藏。
+             按钮常驻占位、宽度横向过渡展开(见 topnav.css),相邻页签零位移 -->
+        <span class="nav-home-slot" :class="{ open: open }">
+          <button type="button" aria-label="返回首页" @click="$emit('close')">首页</button>
+        </span>
         <button v-for="(p, i) in PAGES" :key="p.id" type="button"
                 :class="{ active: open && i === current }"
                 :aria-current="open && i === current ? 'page' : undefined"

@@ -25,7 +25,8 @@
     --mono: "JetBrains Mono", "Cascadia Code", Consolas, "Courier New", monospace;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
+  /* 稳定滚动条槽位:面板打开时 body 溢出被裁,滚动条消失会让居中布局整体横移半条宽度 */
+  html { scroll-behavior: smooth; scrollbar-gutter: stable; }
   body {
     background:
       radial-gradient(1200px 620px at 78% -160px, rgba(122, 162, 247, 0.06), transparent 62%),
