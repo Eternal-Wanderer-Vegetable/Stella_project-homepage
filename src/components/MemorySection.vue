@@ -1,19 +1,24 @@
 <script setup>
+import { computed } from 'vue'
 import { useEnterOnce } from '../composables/useEnterOnce.js'
-import chat from '../content/memory-chat.json'
+import { t, locale } from '../i18n.js'
+import chatData from '../content/memory-chat.json'
 
 // 聊天内容外置:编辑 src/content/memory-chat.json 即可改写本屏对话,改完重新构建生效。
 // 字段:aria — 整卡读屏描述;messages[] —
 //   from: "vegetable"(右侧蓝 V)/ "stella"(左侧金 ✦),决定方向与头像
 //   text: 气泡正文;name: 可选,覆盖显示名;recall: true 时气泡金色高亮(「翻旧账」重点)
+// en 块为英文版对话(可选),缺失时回退中文。
 
 // 首次入场编排:卡片浮起后气泡按条铺开(每条间隔 .4s),recall 落定后金光脉冲,
 // 「她记得。」等最后一条气泡落地才浮现——punchline 在证据之后
 const { root, entered } = useEnterOnce()
 
+const chat = computed(() => (locale.value === 'en' && chatData.en) ? chatData.en : chatData)
+
 const MSG_START = 0.25
 const MSG_STEP = 0.4
-const LAST = MSG_START + (chat.messages.length - 1) * MSG_STEP
+const LAST = MSG_START + (chatData.messages.length - 1) * MSG_STEP
 const msgDelay = (i) => (MSG_START + i * MSG_STEP).toFixed(2) + 's'
 const pulseDelay = (i) => (MSG_START + i * MSG_STEP + 0.55).toFixed(2) + 's'
 const asideDelay = (LAST + 0.5).toFixed(2) + 's'
@@ -37,8 +42,8 @@ const asideWordsDelay = (LAST + 0.75).toFixed(2) + 's'
         </div>
       </div>
       <div class="aside">
-        <p class="aside-line" :style="{ animationDelay: asideDelay }">她记得。</p>
-        <p class="aside-words" :style="{ animationDelay: asideWordsDelay }">长期记忆 · 群聊上下文 · 主动参与</p>
+        <p class="aside-line" :style="{ animationDelay: asideDelay }">{{ t('mem.aside') }}</p>
+        <p class="aside-words" :style="{ animationDelay: asideWordsDelay }">{{ t('mem.words') }}</p>
       </div>
     </div>
   </section>

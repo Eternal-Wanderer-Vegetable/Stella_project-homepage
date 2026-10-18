@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, watch, nextTick } from 'vue'
 import { marked } from 'marked'
+import { t, locale, setLocale as setGlobalLocale } from '../../i18n.js'
 import manifest from '../../../docs-content/manifest.json'
 
 marked.setOptions({ gfm: true, breaks: false })
@@ -14,7 +15,9 @@ const allItems = computed(() => manifest.categories.flatMap((c) => c.items))
 const defaultPath = (manifest.categories.flatMap((c) => c.items).find((i) => i.path === 'docs/reference/configuration.md') || manifest.categories[0].items[0]).path
 const currentPath = ref(defaultPath)
 const currentItem = computed(() => allItems.value.find((i) => i.path === currentPath.value))
-const lang = ref('zh')                                          // 'zh' | 'en'
+const lang = ref(locale.value)                                  // 'zh' | 'en',随全站语言初始化
+// 全站语言切换时,文档内容语言跟随(单篇的中/EN 按钮仍可临时覆盖)
+watch(locale, (v) => { lang.value = v })
 const loading = ref(false)
 const html = ref('')
 const filter = ref('')
@@ -69,7 +72,7 @@ async function refresh() {
     } else if (codeLoader) {
       html.value = `<pre class="doc-code"><code>${escapeHtml(await codeLoader())}</code></pre>`
     } else {
-      html.value = '<p class="doc-missing">文档内容缺失,请重跑 <code>npm run sync-docs</code> 同步。</p>'
+      html.value = t('docs.missing')
     }
   } finally {
     loading.value = false
@@ -175,15 +178,15 @@ const ghUrl = computed(() => manifest.githubBase + (lang.value === 'en' && curre
       <span aria-hidden="true">☰</span> 文档目录<em v-if="currentItem"> · {{ currentItem.title }}</em>
     </button>
     <aside id="docsSide" class="docs-side" :class="{ open: sideOpen }">
-      <input v-model="filter" class="docs-search" type="text" placeholder="筛选文档…" aria-label="筛选文档">
+      <input v-model="filter" class="docs-search" type="text" :placeholder="t('docs.filter')" :aria-label="t('docs.filter')">
       <!-- 用 div 而非 nav:原版 style.css 的裸元素选择器 nav{position:fixed} 会劫持文档侧栏 -->
-      <div class="docs-nav" role="navigation" aria-label="文档目录">
+      <div class="docs-nav" role="navigation" :aria-label="t('docs.dir')">
         <template v-for="cat in filteredCats" :key="cat.id">
-          <div class="docs-cat">{{ cat.label }}</div>
+          <div class="docs-cat">{{ locale === 'en' ? (cat.labelEn || cat.label) : cat.label }}</div>
           <template v-for="it in cat.items" :key="it.path">
             <button type="button" class="docs-item" :class="{ on: it.path === currentPath }"
                     :title="it.title" @click="open(it)">
-              <span class="t">{{ it.title }}</span>
+              <span class="t">{{ locale === 'en' && it.titleEn ? it.titleEn : it.title }}</span>
             </button>
             <!-- 当前文档在侧栏内展开内部标题(文本内的三级标题),点击滚动到对应小节。
                  容器常驻、按 open 状态过渡高度,切换文档时展开/收起顺滑衔接 -->
@@ -201,20 +204,20 @@ const ghUrl = computed(() => manifest.githubBase + (lang.value === 'en' && curre
             </div>
           </template>
         </template>
-        <div v-if="!filteredCats.length" class="docs-empty">没有匹配的文档</div>
+        <div v-if="!filteredCats.length" class="docs-empty">{{ t('docs.none') }}</div>
       </div>
     </aside>
 
     <div class="docs-main" ref="mainEl">
       <div class="docs-toolbar">
-        <h3 class="docs-title">{{ currentItem?.title || '' }}</h3>
+        <h3 class="docs-title">{{ (locale === 'en' && currentItem?.titleEn) ? currentItem.titleEn : currentItem?.title || '' }}</h3>
         <div class="docs-tools">
-          <span v-if="loading" class="docs-loading">加载中…</span>
+          <span v-if="loading" class="docs-loading">{{ t('docs.loading') }}</span>
           <template v-if="currentItem?.en">
             <button type="button" class="lang-btn" :class="{ on: lang === 'zh' }" @click="switchLang('zh')">中</button>
             <button type="button" class="lang-btn" :class="{ on: lang === 'en' }" @click="switchLang('en')">EN</button>
           </template>
-          <a class="gh-link" :href="ghUrl" target="_blank" rel="noopener">在 GitHub 打开 ↗</a>
+          <a class="gh-link" :href="ghUrl" target="_blank" rel="noopener">{{ t('docs.opengh') }}</a>
         </div>
       </div>
       <!-- 文档内容来自本仓库同步的受信快照,marked 渲染后注入 -->

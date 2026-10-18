@@ -2,234 +2,267 @@
   "source": {
     "repo": "Eternal-Wanderer-Vegetable/Stella_project",
     "ref": "main",
-    "syncedAt": "2026-10-18T01:38:06.397Z"
+    "syncedAt": "2026-10-18T02:29:05.625Z"
   },
   "githubBase": "https://github.com/Eternal-Wanderer-Vegetable/Stella_project/blob/main/",
   "categories": [
     {
       "id": "guides",
       "label": "使用指南",
+      "labelEn": "Guides",
       "items": [
         {
           "path": "docs/guides/cometa.md",
           "file": "guides/cometa.md",
           "size": 5370,
           "title": "Cometa 外部 Agent 任务层：安装与认证",
-          "en": "docs/guides/cometa.en.md"
+          "en": "docs/guides/cometa.en.md",
+          "titleEn": "Cometa External Agent Task Layer: Installation & Authentication"
         },
         {
           "path": "docs/guides/deployment-docker.md",
           "file": "guides/deployment-docker.md",
           "size": 14600,
           "title": "Docker 部署指南",
-          "en": "docs/guides/deployment-docker.en.md"
+          "en": "docs/guides/deployment-docker.en.md",
+          "titleEn": "Docker Deployment Guide"
         },
         {
           "path": "docs/guides/scheduling.md",
           "file": "guides/scheduling.md",
           "size": 7916,
           "title": "定时任务：群级 Cron 提醒与有界主动 Agent",
-          "en": "docs/guides/scheduling.en.md"
+          "en": "docs/guides/scheduling.en.md",
+          "titleEn": "Scheduling: Group Cron Reminders and Bounded Agents"
         },
         {
           "path": "docs/guides/skills.md",
           "file": "guides/skills.md",
           "size": 7431,
           "title": "Anthropic 风格 Skills 与受控沙盒",
-          "en": "docs/guides/skills.en.md"
+          "en": "docs/guides/skills.en.md",
+          "titleEn": "Anthropic-style Skills and Controlled Sandboxes"
         },
         {
           "path": "docs/guides/webui.md",
           "file": "guides/webui.md",
           "size": 4130,
           "title": "WebUI（v2 控制面）",
-          "en": "docs/guides/webui.en.md"
+          "en": "docs/guides/webui.en.md",
+          "titleEn": "WebUI: v2 Control Plane"
         }
       ]
     },
     {
       "id": "architecture",
       "label": "架构导航",
+      "labelEn": "Architecture",
       "items": [
         {
           "path": "docs/architecture/capability-system.md",
           "file": "architecture/capability-system.md",
           "size": 32665,
           "title": "能力系统（Capability Router 与 Comes）",
-          "en": "docs/architecture/capability-system.en.md"
+          "en": "docs/architecture/capability-system.en.md",
+          "titleEn": "Capability System (Capability Router and Comes)"
         },
         {
           "path": "docs/architecture/code-map.md",
           "file": "architecture/code-map.md",
           "size": 17488,
           "title": "目录结构",
-          "en": "docs/architecture/code-map.en.md"
+          "en": "docs/architecture/code-map.en.md",
+          "titleEn": "Directory Structure"
         },
         {
           "path": "docs/architecture/data-boundaries.md",
           "file": "architecture/data-boundaries.md",
           "size": 6866,
           "title": "关键数据结构",
-          "en": "docs/architecture/data-boundaries.en.md"
+          "en": "docs/architecture/data-boundaries.en.md",
+          "titleEn": "Key Data Structures"
         },
         {
           "path": "docs/architecture/integrations.md",
           "file": "architecture/integrations.md",
           "size": 9709,
           "title": "AstrBot 插件兼容层",
-          "en": "docs/architecture/integrations.en.md"
+          "en": "docs/architecture/integrations.en.md",
+          "titleEn": "AstrBot Plugin Compatibility Layer"
         },
         {
           "path": "docs/architecture/knowledge-base.md",
           "file": "architecture/knowledge-base.md",
           "size": 9703,
           "title": "独立知识库（Knowledge Base）",
-          "en": "docs/architecture/knowledge-base.en.md"
+          "en": "docs/architecture/knowledge-base.en.md",
+          "titleEn": "Independent Knowledge Base"
         },
         {
           "path": "docs/architecture/llm-budget.md",
           "file": "architecture/llm-budget.md",
           "size": 5520,
           "title": "LLM 成本控制",
-          "en": "docs/architecture/llm-budget.en.md"
+          "en": "docs/architecture/llm-budget.en.md",
+          "titleEn": "LLM Cost Control"
         },
         {
           "path": "docs/architecture/memory-rust-backend.md",
           "file": "architecture/memory-rust-backend.md",
           "size": 3046,
           "title": "Rust 记忆后端",
-          "en": "docs/architecture/memory-rust-backend.en.md"
+          "en": "docs/architecture/memory-rust-backend.en.md",
+          "titleEn": "Rust Memory Backend"
         },
         {
           "path": "docs/architecture/memory-system.md",
           "file": "architecture/memory-system.md",
           "size": 24933,
           "title": "记忆系统",
-          "en": "docs/architecture/memory-system.en.md"
+          "en": "docs/architecture/memory-system.en.md",
+          "titleEn": "Memory System"
         },
         {
           "path": "docs/architecture/message-lifecycle.md",
           "file": "architecture/message-lifecycle.md",
           "size": 20208,
           "title": "一次消息的处理流程",
-          "en": "docs/architecture/message-lifecycle.en.md"
+          "en": "docs/architecture/message-lifecycle.en.md",
+          "titleEn": "Message Processing Flow"
         },
         {
           "path": "docs/architecture/overview.md",
           "file": "architecture/overview.md",
           "size": 4474,
           "title": "6.1.0 当前架构增补",
-          "en": "docs/architecture/overview.en.md"
+          "en": "docs/architecture/overview.en.md",
+          "titleEn": "Current architecture additions in 6.1.0"
         }
       ]
     },
     {
       "id": "reference",
       "label": "配置与接口参考",
+      "labelEn": "Reference",
       "items": [
         {
           "path": "docs/reference/configuration.md",
           "file": "reference/configuration.md",
           "size": 110739,
           "title": "配置参考",
-          "en": "docs/reference/configuration.en.md"
+          "en": "docs/reference/configuration.en.md",
+          "titleEn": "Configuration Reference"
         },
         {
           "path": "docs/reference/migration-report-template.md",
           "file": "reference/migration-report-template.md",
           "size": 2038,
           "title": "Stella 配置导入报告（模板）",
-          "en": "docs/reference/migration-report-template.en.md"
+          "en": "docs/reference/migration-report-template.en.md",
+          "titleEn": "Stella Migration Report Template"
         },
         {
           "path": "docs/reference/plugin-spec.md",
           "file": "reference/plugin-spec.md",
           "size": 39310,
           "title": "插件接入规范 v1.0",
-          "en": "docs/reference/plugin-spec.en.md"
+          "en": "docs/reference/plugin-spec.en.md",
+          "titleEn": "Plugin Integration Specification v1.0"
         }
       ]
     },
     {
       "id": "development",
       "label": "开发导航",
+      "labelEn": "Development",
       "items": [
         {
           "path": "docs/development/ci.md",
           "file": "development/ci.md",
           "size": 2710,
           "title": "CI",
-          "en": "docs/development/ci.en.md"
+          "en": "docs/development/ci.en.md",
+          "titleEn": "CI"
         },
         {
           "path": "docs/development/contracts.md",
           "file": "development/contracts.md",
           "size": 2644,
           "title": "当前分支合同与发布边界",
-          "en": "docs/development/contracts.en.md"
+          "en": "docs/development/contracts.en.md",
+          "titleEn": "Current branch contracts and release boundaries"
         },
         {
           "path": "docs/development/conventions.md",
           "file": "development/conventions.md",
           "size": 3835,
           "title": "代码约定",
-          "en": "docs/development/conventions.en.md"
+          "en": "docs/development/conventions.en.md",
+          "titleEn": "Code Conventions"
         },
         {
           "path": "docs/development/database.md",
           "file": "development/database.md",
           "size": 5504,
           "title": "数据库",
-          "en": "docs/development/database.en.md"
+          "en": "docs/development/database.en.md",
+          "titleEn": "Database"
         },
         {
           "path": "docs/development/deployment.md",
           "file": "development/deployment.md",
           "size": 7845,
           "title": "部署工具",
-          "en": "docs/development/deployment.en.md"
+          "en": "docs/development/deployment.en.md",
+          "titleEn": "Deployment Tools"
         },
         {
           "path": "docs/development/design-records.md",
           "file": "development/design-records.md",
           "size": 978,
           "title": "设计记录",
-          "en": "docs/development/design-records.en.md"
+          "en": "docs/development/design-records.en.md",
+          "titleEn": "Design Records"
         },
         {
           "path": "docs/development/environment.md",
           "file": "development/environment.md",
           "size": 2948,
           "title": "环境准备",
-          "en": "docs/development/environment.en.md"
+          "en": "docs/development/environment.en.md",
+          "titleEn": "Environment Setup"
         },
         {
           "path": "docs/development/probes.md",
           "file": "development/probes.md",
           "size": 12624,
           "title": "探针脚本",
-          "en": "docs/development/probes.en.md"
+          "en": "docs/development/probes.en.md",
+          "titleEn": "Probe Scripts"
         },
         {
           "path": "docs/development/release.md",
           "file": "development/release.md",
           "size": 7828,
           "title": "发布流程",
-          "en": "docs/development/release.en.md"
+          "en": "docs/development/release.en.md",
+          "titleEn": "Release Process"
         },
         {
           "path": "docs/development/testing.md",
           "file": "development/testing.md",
           "size": 11124,
           "title": "提交前检查",
-          "en": "docs/development/testing.en.md"
+          "en": "docs/development/testing.en.md",
+          "titleEn": "Pre-commit Checks"
         },
         {
           "path": "docs/development/troubleshooting.md",
           "file": "development/troubleshooting.md",
           "size": 3615,
           "title": "排查问题",
-          "en": "docs/development/troubleshooting.en.md"
+          "en": "docs/development/troubleshooting.en.md",
+          "titleEn": "Troubleshooting"
         }
       ]
     }

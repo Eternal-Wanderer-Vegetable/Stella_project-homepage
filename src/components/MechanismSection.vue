@@ -1,6 +1,7 @@
 <script setup>
 import FlowDiagram from './FlowDiagram.vue'
 import { useEnterOnce } from '../composables/useEnterOnce.js'
+import { t } from '../i18n.js'
 
 // 首次入场编排:整屏第一次进入视口时点亮 entered,图与文字按分镜依次就位;
 // 只播一次,离开再回来不重播。减弱动效/无 IntersectionObserver 时直接呈现完整画面。
@@ -11,16 +12,16 @@ const { root, entered } = useEnterOnce()
   <!-- 第二屏:解释为什么 8192 就够。图接管整屏,文字只留一句论点 + 三行小注 -->
   <section id="mechanism" ref="root" class="mech" :class="{ entered: entered }">
     <div class="container mech-inner">
-      <p class="mech-eyebrow">How · 8192 怎么够用</p>
+      <p class="mech-eyebrow">{{ t('mech.eyebrow') }}</p>
       <FlowDiagram :entered="entered" />
       <p class="mech-line">
-        不是把所有东西塞进 Context。<br>
-        <b>而是让信息待在它该待的地方。</b>
+        {{ t('mech.line1') }}<br>
+        <b>{{ t('mech.line2') }}</b>
       </p>
       <dl class="mech-trio">
-        <dt>Memory</dt><dd>记住重要的信息</dd>
-        <dt>Tools</dt><dd>在上下文之外执行工具</dd>
-        <dt>Compression</dt><dd>压缩已经结束的对话</dd>
+        <dt>Memory</dt><dd>{{ t('mech.t1') }}</dd>
+        <dt>Tools</dt><dd>{{ t('mech.t2') }}</dd>
+        <dt>Compression</dt><dd>{{ t('mech.t3') }}</dd>
       </dl>
     </div>
   </section>

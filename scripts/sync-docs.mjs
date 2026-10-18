@@ -24,10 +24,10 @@ const OUT = join(dirname(fileURLToPath(import.meta.url)), '..', 'docs-content')
 // 插件模板(examples/)与 Agent 工作文档(agent/)刻意不入站:
 // 前者是代码模板请读者直接看上游仓库,后者是给 AI 的工作规则,不是给人读的文档。
 const SECTIONS = [
-  { dir: 'guides', label: '使用指南' },
-  { dir: 'architecture', label: '架构' },
-  { dir: 'reference', label: '配置与接口参考' },
-  { dir: 'development', label: '开发' },
+  { dir: 'guides', label: '使用指南', labelEn: 'Guides' },
+  { dir: 'architecture', label: '架构', labelEn: 'Architecture' },
+  { dir: 'reference', label: '配置与接口参考', labelEn: 'Reference' },
+  { dir: 'development', label: '开发', labelEn: 'Development' },
 ]
 
 function getToken() {
@@ -91,6 +91,7 @@ for (const s of SECTIONS) {
   const blobs = wanted.get(s.dir + '/')
   const items = []
   const enByItem = new Map()   // item.path → en 相对路径(不带 docs/ 前缀)
+  const enTitles = new Map()   // item.path → 英文版一级标题
   let label = s.label
 
   for (const t of blobs) {
@@ -115,6 +116,7 @@ for (const s of SECTIONS) {
     const enMatch = rel.match(/^(.+)\.en\.md$/)
     if (enMatch) {
       enCount++
+      enTitles.set(SRC_PREFIX + enMatch[1] + '.md', titleFromMd(text, basename(enMatch[1], '.md')))
       continue   // 英文变体入快照但不单列条目,由对应中文条目的 EN 开关加载
     }
 
@@ -132,12 +134,16 @@ for (const s of SECTIONS) {
 
   for (const it of items) {
     const enRel = enByItem.get(it.path)
-    if (enRel) it.en = SRC_PREFIX + enRel
+    if (enRel) {
+      it.en = SRC_PREFIX + enRel
+      const et = enTitles.get(it.path)
+      if (et) it.titleEn = et
+    }
   }
   items.sort((a, b) => a.file.localeCompare(b.file))
 
   if (items.length) {
-    categories.push({ id: s.dir.replace(/\//g, '-'), label, items })
+    categories.push({ id: s.dir.replace(/\//g, '-'), label, labelEn: s.labelEn, items })
   }
 }
 

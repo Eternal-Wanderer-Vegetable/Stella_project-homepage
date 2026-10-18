@@ -22,6 +22,22 @@ nav { z-index: 300; }
 .nav-pages button:hover { color: var(--text); background: rgba(255, 255, 255, 0.06); }
 .nav-pages button.active { color: var(--gold-2); background: var(--gold-dim); }
 
+/* 全站语言切换(中/EN) */
+.lang-switch {
+  display: flex; align-items: center;
+  margin-right: 8px;
+  border: 1px solid var(--border); border-radius: 999px; overflow: hidden;
+}
+.lang-switch button {
+  border: none; background: none; cursor: pointer;
+  font-family: inherit; font-size: 0.78rem; line-height: 1.5;
+  color: var(--muted); padding: 5px 10px;
+  transition: color .2s, background .2s;
+}
+.lang-switch button + button { border-left: 1px solid var(--border-soft); }
+.lang-switch button:hover { color: var(--text); }
+.lang-switch button.on { color: #241a05; background: linear-gradient(135deg, #f9d98c, #eeb54d); font-weight: 700; }
+
 /* 「首页」按钮的出现/收起:横向 0fr→1fr 宽度过渡 + 淡入,纯 CSS(部分内嵌环境 JS/rAF 被冻结)。
    收起态以负边距抵消多出的一个 flex gap,展开/收起全程相邻页签零位移;
    visibility 过渡让收起态退出 Tab 焦点序与无障碍树 */

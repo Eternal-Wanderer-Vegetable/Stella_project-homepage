@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+import { t } from '../i18n.js'
 
 // 预算环:分段数据来自上游文档的真实预算表
 // 8192 = (人格 + 对话历史 + 工具结论 6342) + (记忆注入 500+150) + (输出 + 安全余量 1200)
@@ -10,11 +11,11 @@ const C = 2 * Math.PI * R
 const GAP = 3
 const TOTAL = 8192
 
-const SEGMENTS = [
-  { name: '人格 · 对话历史 · 工具', value: 6342, color: 'rgba(201,155,63,0.75)', width: 12 },
-  { name: '记忆注入', value: 650, color: '#f6c96b', width: 13, glow: true },
-  { name: '输出 + 安全余量', value: 1200, color: '#7aa2f7', width: 12 },
-]
+const SEGMENTS = computed(() => [
+  { name: t('ring.s1'), value: 6342, color: 'rgba(201,155,63,0.75)', width: 12 },
+  { name: t('ring.s2'), value: 650, color: '#f6c96b', width: 13, glow: true },
+  { name: t('ring.s3'), value: 1200, color: '#7aa2f7', width: 12 },
+])
 
 const reduced = typeof window !== 'undefined' &&
   window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -53,7 +54,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <figure class="ring-wrap" aria-label="Stella 的上下文预算:总共 8192 tokens,其中人格、对话历史与工具结论占 6342,记忆注入 650,输出与安全余量 1200">
+  <figure class="ring-wrap" :aria-label="t('ring.aria')">
     <svg viewBox="0 0 260 260" role="img" aria-hidden="true">
       <defs>
         <linearGradient id="ringNumGrad" x1="0" y1="0" x2="1" y2="1">
@@ -81,7 +82,7 @@ onMounted(() => {
       </g>
       <!-- 中心数字 -->
       <text class="ring-num" :x="CX" :y="CY + 4" text-anchor="middle">{{ shown }}</text>
-      <text class="ring-unit" :x="CX" :y="CY + 26" text-anchor="middle">tokens · 整个心智</text>
+      <text class="ring-unit" :x="CX" :y="CY + 26" text-anchor="middle">{{ t('ring.unit') }}</text>
     </svg>
   </figure>
 </template>

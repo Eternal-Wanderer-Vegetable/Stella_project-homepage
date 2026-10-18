@@ -1,5 +1,6 @@
 <script setup>
 import { useEnterOnce } from '../composables/useEnterOnce.js'
+import { t } from '../i18n.js'
 
 // 首次入场编排:标题先立,Hybrid 从中心弹出,连线向两侧画开,两端药丸就位,
 // 竖线垂下把 Stella 送到谱系中心,三列说明错峰跟上。只播一次,减弱动效直接呈现。
@@ -10,10 +11,9 @@ const { root, entered } = useEnterOnce()
   <!-- 第四屏:部署方式一眼解决。安装行动统一收在尾屏 Get Stella,此处不再放跳转 -->
   <section id="deploy" ref="root" class="dep" :class="{ entered: entered }">
     <div class="container dep-inner">
-      <h2 class="dep-title">Stella 跑在哪里，由你决定。</h2>
+      <h2 class="dep-title">{{ t('deploy.title') }}</h2>
 
-      <div class="spectrum" role="img"
-           aria-label="部署谱系:完全本地与在线运行两个极端,混合运行居中,Stella 位于中心。">
+      <div class="spectrum" role="img" :aria-label="t('deploy.aria')">
         <div class="spec-end">
           <span class="spec-side">Your PC</span>
           <span class="spec-node local">Local</span>
@@ -33,16 +33,16 @@ const { root, entered } = useEnterOnce()
 
       <div class="dep-grid">
         <div class="dep-col">
-          <h4>完全本地</h4>
-          <p>聊天和记忆都留在电脑上。</p>
+          <h4>{{ t('deploy.c1h') }}</h4>
+          <p>{{ t('deploy.c1p') }}</p>
         </div>
         <div class="dep-col">
-          <h4>混合运行</h4>
-          <p>记忆留在本地，聊天交给更强的模型。</p>
+          <h4>{{ t('deploy.c2h') }}</h4>
+          <p>{{ t('deploy.c2p') }}</p>
         </div>
         <div class="dep-col">
-          <h4>在线运行</h4>
-          <p>让轻量设备也可以运行 Stella。</p>
+          <h4>{{ t('deploy.c3h') }}</h4>
+          <p>{{ t('deploy.c3p') }}</p>
         </div>
       </div>
     </div>

@@ -5,5 +5,14 @@
     { "from": "stella", "text": "？" },
     { "from": "stella", "text": "你上次迁移 Python 那块的时候不是还说“以后再也不干这种事了吗”", "recall": true },
     { "from": "vegetable", "text": "草" }
-  ]
+  ],
+  "en": {
+    "aria": "Group-chat demo: Vegetable says he's rewriting a module in Rust, Stella remembers his last complaint and asks back, and Vegetable replies with a single word.",
+    "messages": [
+      { "from": "vegetable", "text": "Thinking of rewriting that module in Rust." },
+      { "from": "stella", "text": "?" },
+      { "from": "stella", "text": "Didn't you say “never again” the last time you migrated that Python module?", "recall": true },
+      { "from": "vegetable", "text": "Damn." }
+    ]
+  }
 }

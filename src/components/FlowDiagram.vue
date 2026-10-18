@@ -1,16 +1,17 @@
 <script setup>
 // entered:父屏(第二屏)首次进入视口时点亮,触发本图的一次性入场编排
+import { t } from '../i18n.js'
 defineProps({ entered: { type: Boolean, default: false } })
 </script>
 
 <template>
   <!-- 机制主图:三来源(记忆/旧对话/工具)从左侧汇入 8192 核心,产出回复。
        桌面为横向汇聚,窄屏退化为竖排:来源列表 → 8192 → 回复 -->
-  <figure class="fd" :class="{ entered: entered }" aria-label="Stella 的机制:记忆需要才取出、旧对话压缩掉、工具在上下文外执行,三条通路汇入 8192 tokens 的核心,产出回复。">
+  <figure class="fd" :class="{ entered: entered }" :aria-label="t('mech.aria')">
     <div class="fd-sources">
-      <div class="fd-node"><span class="fd-label">记忆</span><span class="fd-verb">需要才取出</span></div>
-      <div class="fd-node"><span class="fd-label">旧对话</span><span class="fd-verb">压缩掉</span></div>
-      <div class="fd-node"><span class="fd-label">工具</span><span class="fd-verb">上下文外执行</span></div>
+      <div class="fd-node"><span class="fd-label">{{ t('mech.n1') }}</span><span class="fd-verb">{{ t('mech.n1s') }}</span></div>
+      <div class="fd-node"><span class="fd-label">{{ t('mech.n2') }}</span><span class="fd-verb">{{ t('mech.n2s') }}</span></div>
+      <div class="fd-node"><span class="fd-label">{{ t('mech.n3') }}</span><span class="fd-verb">{{ t('mech.n3s') }}</span></div>
     </div>
     <!-- 汇聚连接线:三线收拢进入核心(桌面);pathLength=1 供描线动画归一化 -->
     <svg class="fd-merge" viewBox="0 0 64 192" width="64" height="192" aria-hidden="true" fill="none">
