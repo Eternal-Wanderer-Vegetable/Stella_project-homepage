@@ -22,21 +22,33 @@ nav { z-index: 300; }
 .nav-pages button:hover { color: var(--text); background: rgba(255, 255, 255, 0.06); }
 .nav-pages button.active { color: var(--gold-2); background: var(--gold-dim); }
 
-/* 全站语言切换(中/EN) */
+/* 全站语言切换(中/EN):金色滑块在两等宽选项间平滑滑动 */
 .lang-switch {
+  position: relative;
   display: flex; align-items: center;
   margin-right: 8px;
   border: 1px solid var(--border); border-radius: 999px; overflow: hidden;
 }
+.lang-thumb {
+  position: absolute; top: 0; bottom: 0; left: 0;
+  width: 50%; border-radius: 999px;
+  background: linear-gradient(135deg, #f9d98c, #eeb54d);
+  transform: translateX(0);
+  transition: transform .3s cubic-bezier(.22,.61,.36,1);
+}
+.lang-switch.en .lang-thumb { transform: translateX(100%); }
 .lang-switch button {
+  position: relative; z-index: 1;
+  width: 38px; text-align: center;
   border: none; background: none; cursor: pointer;
   font-family: inherit; font-size: 0.78rem; line-height: 1.5;
-  color: var(--muted); padding: 5px 10px;
-  transition: color .2s, background .2s;
+  color: var(--muted); padding: 5px 0;
+  transition: color .25s;
 }
-.lang-switch button + button { border-left: 1px solid var(--border-soft); }
-.lang-switch button:hover { color: var(--text); }
-.lang-switch button.on { color: #241a05; background: linear-gradient(135deg, #f9d98c, #eeb54d); font-weight: 700; }
+.lang-switch button.on { color: #241a05; font-weight: 700; }
+@media (prefers-reduced-motion: reduce) {
+  .lang-thumb { transition: none; }
+}
 
 /* 「首页」按钮的出现/收起:横向 0fr→1fr 宽度过渡 + 淡入,纯 CSS(部分内嵌环境 JS/rAF 被冻结)。
    收起态以负边距抵消多出的一个 flex gap,展开/收起全程相邻页签零位移;
