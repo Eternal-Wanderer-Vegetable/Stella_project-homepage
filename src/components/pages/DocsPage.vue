@@ -185,13 +185,19 @@ const ghUrl = computed(() => manifest.githubBase + (lang.value === 'en' && curre
                     :title="it.title" @click="open(it)">
               <span class="t">{{ it.title }}</span>
             </button>
-            <!-- 当前文档在侧栏内展开内部标题(文本内的三级标题),点击滚动到对应小节 -->
-            <div v-if="it.path === currentPath && toc.length" class="docs-toc">
-              <button v-for="h in toc" :key="h.id" type="button"
-                      class="docs-toc-item" :class="'lv' + h.level"
-                      :title="h.text" @click="scrollToHeading(h.id)">
-                <span class="t">{{ h.text }}</span>
-              </button>
+            <!-- 当前文档在侧栏内展开内部标题(文本内的三级标题),点击滚动到对应小节。
+                 容器常驻、按 open 状态过渡高度,切换文档时展开/收起顺滑衔接 -->
+            <div class="docs-toc" :class="{ open: it.path === currentPath && toc.length }">
+              <div class="docs-toc-in">
+                <template v-if="it.path === currentPath">
+                  <button v-for="(h, i) in toc" :key="h.id" type="button"
+                          class="docs-toc-item" :class="'lv' + h.level"
+                          :style="{ '--i': i }"
+                          :title="h.text" @click="scrollToHeading(h.id)">
+                    <span class="t">{{ h.text }}</span>
+                  </button>
+                </template>
+              </div>
             </div>
           </template>
         </template>

@@ -60,10 +60,20 @@
 .docs-item.on { color: var(--gold-2); background: var(--gold-dim); }
 .docs-empty { color: var(--faint); font-size: 0.85rem; padding: 12px 10px; }
 
-/* 当前文档展开的内部标题索引(文本内的三级标题):比篇目再深一层 */
+/* 当前文档展开的内部标题索引(文本内的三级标题):比篇目再深一层。
+   展开/收起用 grid-rows 0fr→1fr 的纯 CSS 高度过渡(JS/rAF 动画在部分内嵌环境被冻结);
+   子项随展开依次滑入(--i 错峰),切换文档时旧节收起、新节展开自然衔接 */
 .docs-toc {
+  display: grid; grid-template-rows: 0fr;
+  margin: 1px 0 0 26px;
+  opacity: 0;
+  transition: grid-template-rows .32s cubic-bezier(.22,.61,.36,1), opacity .24s ease,
+              margin-bottom .32s cubic-bezier(.22,.61,.36,1);
+}
+.docs-toc.open { grid-template-rows: 1fr; opacity: 1; margin-bottom: 7px; }
+.docs-toc-in {
+  overflow: hidden; min-height: 0;
   display: flex; flex-direction: column; gap: 1px;
-  margin: 1px 0 7px 26px;
   padding-left: 8px;
   border-left: 1px solid var(--border-soft);
 }
@@ -81,6 +91,18 @@
 }
 .docs-toc-item:hover { color: var(--gold-2); background: rgba(255, 255, 255, 0.05); }
 .docs-toc-item.lv3 { margin-left: 12px; width: calc(100% - 12px); font-size: 0.74rem; }
+.docs-toc.open .docs-toc-item {
+  animation: tocItemIn .34s cubic-bezier(.22,.61,.36,1) both;
+  animation-delay: calc(var(--i, 0) * 26ms);
+}
+@keyframes tocItemIn {
+  from { opacity: 0; transform: translateX(-8px); }
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .docs-toc { transition: none; }
+  .docs-toc-item { animation: none !important; }
+}
 
 /* ---------- 正文区 ---------- */
 .docs-main {
