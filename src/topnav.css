@@ -25,15 +25,6 @@ nav { z-index: 300; }
 /* GitHub 组紧跟页签之后,不再另起自动边距 */
 .nav-inner > .nav-links { margin-left: 8px; }
 
-/* 面板打开时显示的关闭按钮(样式沿用原 panel-close 观感) */
-.nav-close {
-  flex: 0 0 auto; width: 36px; height: 36px; border-radius: 50%;
-  border: 1px solid var(--border); background: rgba(255, 255, 255, 0.05);
-  color: var(--text); font-size: 0.95rem; cursor: pointer; line-height: 1;
-  transition: background .25s, border-color .25s, transform .25s;
-}
-.nav-close:hover { background: rgba(246, 201, 107, 0.14); border-color: rgba(246, 201, 107, 0.5); transform: rotate(90deg); }
-
 /* 面板自带头部(品牌 + 关闭)已由顶栏取代,隐藏并回收其占位 */
 .panel .panel-head { display: none; }
 
