@@ -38,7 +38,7 @@ defineProps({ entered: { type: Boolean, default: false } })
       <line x1="0" y1="6" x2="44" y2="6" stroke="rgba(246,201,107,0.5)" stroke-width="1.6"/>
       <path d="M44 1 L54 6 L44 11 z" fill="rgba(246,201,107,0.55)"/>
     </svg>
-    <div class="fd-out">回复</div>
+    <div class="fd-out">{{ t('mech.out') }}</div>
   </figure>
 </template>
 
